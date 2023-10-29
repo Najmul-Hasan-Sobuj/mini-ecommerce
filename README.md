@@ -74,15 +74,22 @@ This structure covers most of the essential features for a small yet robust e-co
             {
                 Schema::create('products', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('sub_category_id')->constrained()->index();  // Index foreign keys
-                    $table->string('name')->index();  // Index product names for quicker search
+                    $table->foreignId('sub_category_id')->constrained()->index();
+                    $table->string('name')->index();
+                    $table->string('sku')->unique()->nullable();  // Unique Stock Keeping Unit
                     $table->text('description');
                     $table->decimal('price', 8, 2);
+                    $table->integer('quantity');  // Quantity in stock
+                    $table->foreignId('created_by')->constrained('users')->nullable();  // Who created this product?
+                    $table->foreignId('updated_by')->constrained('users')->nullable();  // Who last updated this product?
                     $table->timestamps();
                 });
             }
 
-            // ... rest of the code
+            public function down()
+            {
+                Schema::dropIfExists('products');
+            }
         }
         ```
     - Categories
@@ -137,10 +144,6 @@ This structure covers most of the essential features for a small yet robust e-co
 
             // ... rest of the code
         }
-        ```
-    - Discounts
-        ```php
-         
         ```
     - Reviews
         ```php
