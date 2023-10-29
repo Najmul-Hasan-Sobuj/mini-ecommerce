@@ -373,22 +373,227 @@ This structure covers most of the essential features for a small yet robust e-co
         ```
 
 6. **Checkout Process**
-    - ShippingAddresses
-    - BillingAddresses
+    - Addresses
+        ```php
+        class CreateAddressesTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('addresses', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('user_id')->constrained()->onDelete('cascade');
+                    $table->enum('address_type', ['shipping', 'billing']);  // Enum column for address type
+                    $table->string('street_address');
+                    $table->string('city');
+                    $table->string('state');
+                    $table->string('country');
+                    $table->string('postal_code');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('addresses');
+            }
+        }
+        ```
     - PaymentMethods
+        ```php
+        class CreatePaymentMethodsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('payment_methods', function (Blueprint $table) {
+                    $table->id();
+                    $table->string('method_name');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('payment_methods');
+            }
+        }
+        ```
     - OrderReviews
+        ```php
+        class CreateOrderReviewsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('order_reviews', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('order_id')->constrained()->onDelete('cascade');
+                    $table->foreignId('user_id')->constrained()->onDelete('cascade');
+                    $table->text('review_text');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('order_reviews');
+            }
+        }
+        ```
     - Invoices
+        ```php
+        class CreateInvoicesTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('invoices', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('order_id')->constrained()->onDelete('cascade');
+                    $table->decimal('total_amount', 8, 2);
+                    $table->date('invoice_date');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('invoices');
+            }
+        }
+        ```
 
 7. **Payment Integration**
     - PaymentOptions
+        ```php
+        class CreatePaymentOptionsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('payment_options', function (Blueprint $table) {
+                    $table->id();
+                    $table->string('name')->unique();  // Unique payment option name
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('payment_options');
+            }
+        }
+        ```
     - PaymentTransactions
+        ```php
+        class CreatePaymentTransactionsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('payment_transactions', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('order_id')->constrained()->onDelete('cascade');  // Reference to Orders table, cascade deletes
+                    $table->foreignId('payment_option_id')->constrained('payment_options')->onDelete('cascade');  // Reference to PaymentOptions table, cascade deletes
+                    $table->decimal('amount', 8, 2);  // Transaction amount
+                    $table->string('transaction_id')->unique();  // Unique transaction identifier
+                    $table->enum('status', ['pending', 'completed', 'failed', 'refunded']);  // Transaction status
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('payment_transactions');
+            }
+        }
+        ```
 
 8. **Notifications & Alerts**
     - Notifications
 
 9. **Customer Support & Feedback**
     - FAQs
+        ```php
+        class CreateFaqsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('faqs', function (Blueprint $table) {
+                    $table->id();
+                    $table->string('question');
+                    $table->text('answer');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('faqs');
+            }
+        }
+        ```
     - Chats
+        ```php
+        class CreateChatsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('chats', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('user_id')
+                        ->constrained()
+                        ->onDelete('cascade');
+                    $table->foreignId('support_agent_id')
+                        ->constrained('users')
+                        ->onDelete('cascade');
+                    $table->text('chat_text');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('chats');
+            }
+        }
+        ```
     - Returns
+        ```php
+        class CreateReturnsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('returns', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('order_id')
+                        ->constrained()
+                        ->onDelete('cascade');
+                    $table->text('return_reason');
+                    $table->timestamp('return_date');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('returns');
+            }
+        }
+        ```
     - RefundPolicies
+        ```php
+        class CreateRefundPoliciesTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('refund_policies', function (Blueprint $table) {
+                    $table->id();
+                    $table->text('policy_text');
+                    $table->timestamp('last_updated');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('refund_policies');
+            }
+        }
+        ```
 
