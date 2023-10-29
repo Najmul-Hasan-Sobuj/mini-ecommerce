@@ -1,5 +1,7 @@
 # Mini E-commerce Project 
 
+# Project Structure
+
 1. **User Management**
     - User Registration & Login
     - Profile Management
@@ -54,3 +56,57 @@
 ---
 
 This structure covers most of the essential features for a small yet robust e-commerce platform. Depending on the specific requirements, some additional features might be added or existing ones further customized.
+
+
+# Project Database
+
+1. **User Management** `laravel breeze authentication system`
+    - Users
+    - Profiles
+    - PasswordRecoveries
+
+2. **Product Management**
+    - Products
+    - Categories
+    - SubCategories
+    - ProductImages
+    - Discounts
+    - Reviews
+    - Ratings
+
+3. **Search & Filtering**
+    - Brands
+    - (The other filtering functionalities like Product Search, Filter Products by Categories, Price Range, and Ratings can be achieved through queries without needing separate tables.)
+
+4. **Cart & Wishlist**
+    - Carts
+    - CartItems
+    - Wishlists
+    - WishlistItems
+
+5. **Order Management**
+    - Orders
+    - OrderItems
+    - OrderHistory
+    - OrderTracking
+
+6. **Checkout Process**
+    - ShippingAddresses
+    - BillingAddresses
+    - PaymentMethods
+    - OrderReviews
+    - Invoices
+
+7. **Payment Integration**
+    - PaymentOptions
+    - PaymentTransactions
+
+8. **Notifications & Alerts**
+    - Notifications
+
+9. **Customer Support & Feedback**
+    - FAQs
+    - Chats
+    - Returns
+    - RefundPolicies
+
