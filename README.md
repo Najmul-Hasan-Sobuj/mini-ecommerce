@@ -67,12 +67,118 @@ This structure covers most of the essential features for a small yet robust e-co
 
 2. **Product Management**
     - Products
+        ```php
+        class CreateProductsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('products', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('sub_category_id')->constrained()->index();  // Index foreign keys
+                    $table->string('name')->index();  // Index product names for quicker search
+                    $table->text('description');
+                    $table->decimal('price', 8, 2);
+                    $table->timestamps();
+                });
+            }
+
+            // ... rest of the code
+        }
+        ```
     - Categories
+        ```php
+        class CreateCategoriesTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('categories', function (Blueprint $table) {
+                    $table->id();
+                    $table->string('name')->unique();
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('categories');
+            }
+        }
+        ```
     - SubCategories
+        ```php
+         class CreateSubCategoriesTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('sub_categories', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('category_id')->constrained()->index();  // Index foreign keys
+                    $table->string('name')->index();  // Index sub-category names for quicker search
+                    $table->timestamps();
+                });
+            }
+
+            // ... rest of the code
+        }
+        ```
     - ProductImages
+        ```php
+         class CreateProductImagesTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('product_images', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('product_id')->constrained()->index();  // Index foreign keys
+                    $table->string('image_url');
+                    $table->timestamps();
+                });
+            }
+
+            // ... rest of the code
+        }
+        ```
     - Discounts
+        ```php
+         
+        ```
     - Reviews
+        ```php
+         class CreateReviewsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('reviews', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('product_id')->constrained()->index();  // Index foreign keys
+                    $table->foreignId('user_id')->constrained()->index();  // Index foreign keys
+                    $table->text('review_text');
+                    $table->timestamps();
+                });
+            }
+
+            // ... rest of the code
+        }
+        ```
     - Ratings
+        ```php
+         class CreateRatingsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('ratings', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('product_id')->constrained()->index();  // Index foreign keys
+                    $table->foreignId('user_id')->constrained()->index();  // Index foreign keys
+                    $table->tinyInteger('rating_value');  // Use tinyInteger for small range values
+                    $table->timestamps();
+                });
+            }
+
+            // ... rest of the code
+        }
+
+        ```
 
 3. **Search & Filtering**
     - Brands
