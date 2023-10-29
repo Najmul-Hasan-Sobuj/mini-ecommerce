@@ -1,6 +1,6 @@
 # Mini E-commerce Project 
 
-# Project Structure
+## Project Structure
 
 1. **User Management**
     - User Registration & Login
@@ -58,7 +58,7 @@
 This structure covers most of the essential features for a small yet robust e-commerce platform. Depending on the specific requirements, some additional features might be added or existing ones further customized.
 
 
-# Project Database
+## Project Database
 
 1. **User Management** `laravel breeze authentication system`
     - Users
