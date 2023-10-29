@@ -180,24 +180,197 @@ This structure covers most of the essential features for a small yet robust e-co
 
             // ... rest of the code
         }
-
         ```
 
 3. **Search & Filtering**
     - Brands
+        ```php
+        class CreateBrandsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('brands', function (Blueprint $table) {
+                    $table->id();
+                    $table->string('name')->unique();  // Ensure brand names are unique
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('brands');
+            }
+        }
+        ```
     - (The other filtering functionalities like Product Search, Filter Products by Categories, Price Range, and Ratings can be achieved through queries without needing separate tables.)
 
 4. **Cart & Wishlist**
     - Carts
+        ```php
+        class CreateCartsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('carts', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Cascade deletes to carts when a user is deleted
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('carts');
+            }
+        }
+        ```
     - CartItems
+        ```php
+        class CreateCartItemsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('cart_items', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('cart_id')->constrained()->onDelete('cascade');  // Cascade deletes to cart_items when a cart is deleted
+                    $table->foreignId('product_id')->constrained()->onDelete('cascade');  // Cascade deletes to cart_items when a product is deleted
+                    $table->integer('quantity');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('cart_items');
+            }
+        }
+        ```
     - Wishlists
+        ```php
+        class CreateWishlistsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('wishlists', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Cascade deletes to wishlists when a user is deleted
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('wishlists');
+            }
+        }
+        ```
     - WishlistItems
+        ```php
+        class CreateWishlistItemsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('wishlist_items', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('wishlist_id')->constrained()->onDelete('cascade');  // Cascade deletes to wishlist_items when a wishlist is deleted
+                    $table->foreignId('product_id')->constrained()->onDelete('cascade');  // Cascade deletes to wishlist_items when a product is deleted
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('wishlist_items');
+            }
+        }
+        ```
 
 5. **Order Management**
     - Orders
+        ```php
+        class CreateOrdersTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('orders', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Cascade deletes to orders when a user is deleted
+                    $table->timestamp('order_date');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('orders');
+            }
+        }
+        ```
     - OrderItems
+        ```php
+        class CreateOrderItemsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('order_items', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('order_id')->constrained()->onDelete('cascade');  // Cascade deletes to order_items when an order is deleted
+                    $table->foreignId('product_id')->constrained()->onDelete('cascade');  // Cascade deletes to order_items when a product is deleted
+                    $table->integer('quantity');
+                    $table->decimal('unit_price', 8, 2);
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('order_items');
+            }
+        }
+
+        ```
     - OrderHistory
+        ```php
+        class CreateOrderHistoryTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('order_history', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('order_id')->constrained()->onDelete('cascade');  // Cascade deletes to order_history when an order is deleted
+                    $table->string('status');
+                    $table->timestamp('status_date');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('order_history');
+            }
+        }
+        ```
     - OrderTracking
+        ```php
+        class CreateOrderTrackingTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('order_tracking', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('order_id')->constrained()->onDelete('cascade');  // Cascade deletes to order_tracking when an order is deleted
+                    $table->string('tracking_status');
+                    $table->timestamp('tracking_date');
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('order_tracking');
+            }
+        }
+        ```
 
 6. **Checkout Process**
     - ShippingAddresses
