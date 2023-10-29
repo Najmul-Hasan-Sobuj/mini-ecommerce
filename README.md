@@ -74,14 +74,14 @@ This structure covers most of the essential features for a small yet robust e-co
             {
                 Schema::create('products', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('sub_category_id')->constrained()->index();
+                    $table->foreignId('sub_category_id')->constrained()->index()->onDelete('cascade');
                     $table->string('name')->index();
                     $table->string('sku')->unique()->nullable();  // Unique Stock Keeping Unit
                     $table->text('description');
                     $table->decimal('price', 8, 2);
                     $table->integer('quantity');  // Quantity in stock
-                    $table->foreignId('created_by')->constrained('users')->nullable();  // Who created this product?
-                    $table->foreignId('updated_by')->constrained('users')->nullable();  // Who last updated this product?
+                    $table->foreignId('created_by')->constrained('users')->nullable()->onDelete('set null');  // Who created this product?
+                    $table->foreignId('updated_by')->constrained('users')->nullable()->onDelete('set null');  // Who last updated this product?
                     $table->timestamps();
                 });
             }
@@ -119,7 +119,7 @@ This structure covers most of the essential features for a small yet robust e-co
             {
                 Schema::create('sub_categories', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('category_id')->constrained()->index();  // Index foreign keys
+                    $table->foreignId('category_id')->constrained()->index()->onDelete('cascade');   // Index foreign keys
                     $table->string('name')->index();  // Index sub-category names for quicker search
                     $table->timestamps();
                 });
@@ -136,7 +136,7 @@ This structure covers most of the essential features for a small yet robust e-co
             {
                 Schema::create('product_images', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('product_id')->constrained()->index();  // Index foreign keys
+                    $table->foreignId('product_id')->constrained()->index()->onDelete('cascade'); // Index foreign keys
                     $table->string('image_url');
                     $table->timestamps();
                 });
@@ -153,8 +153,8 @@ This structure covers most of the essential features for a small yet robust e-co
             {
                 Schema::create('reviews', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('product_id')->constrained()->index();  // Index foreign keys
-                    $table->foreignId('user_id')->constrained()->index();  // Index foreign keys
+                    $table->foreignId('product_id')->constrained()->index()->onDelete('cascade'); // Index foreign keys
+                    $table->foreignId('user_id')->constrained()->index()->onDelete('cascade'); // Index foreign keys
                     $table->text('review_text');
                     $table->timestamps();
                 });
@@ -171,8 +171,8 @@ This structure covers most of the essential features for a small yet robust e-co
             {
                 Schema::create('ratings', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('product_id')->constrained()->index();  // Index foreign keys
-                    $table->foreignId('user_id')->constrained()->index();  // Index foreign keys
+                    $table->foreignId('product_id')->constrained()->index()->onDelete('cascade');   // Index foreign keys
+                    $table->foreignId('user_id')->constrained()->index()->onDelete('cascade');   // Index foreign keys
                     $table->tinyInteger('rating_value');  // Use tinyInteger for small range values
                     $table->timestamps();
                 });
