@@ -78,10 +78,12 @@ This structure covers most of the essential features for a small yet robust e-co
                     $table->foreignId('sub_category_id')->constrained()->index()->onDelete('cascade');
                     $table->string('name')->index();
                     $table->string('slug')->unique();
+                    $table->string('image');
                     $table->string('sku')->unique()->nullable();  // Unique Stock Keeping Unit
                     $table->text('description');
                     $table->decimal('price', 8, 2);
                     $table->integer('quantity');  // Quantity in stock
+                    $table->enum('status', ['active', 'inactive']);  // Enum column for status 
                     $table->foreignId('created_by')->constrained('users')->nullable()->onDelete('set null');  // Who created this product?
                     $table->foreignId('updated_by')->constrained('users')->nullable()->onDelete('set null');  // Who last updated this product?
                     $table->timestamps();
@@ -103,6 +105,7 @@ This structure covers most of the essential features for a small yet robust e-co
                 Schema::create('categories', function (Blueprint $table) {
                     $table->id();
                     $table->string('name')->unique();
+                    $table->string('slug')->unique();
                     $table->timestamps();
                 });
             }
@@ -123,6 +126,7 @@ This structure covers most of the essential features for a small yet robust e-co
                     $table->id();
                     $table->foreignId('category_id')->constrained()->index()->onDelete('cascade');   // Index foreign keys
                     $table->string('name')->index();  // Index sub-category names for quicker search
+                    $table->string('slug')->unique();
                     $table->timestamps();
                 });
             }
@@ -139,7 +143,7 @@ This structure covers most of the essential features for a small yet robust e-co
                 Schema::create('product_images', function (Blueprint $table) {
                     $table->id();
                     $table->foreignId('product_id')->constrained()->index()->onDelete('cascade'); // Index foreign keys
-                    $table->string('image_url');
+                    $table->string('images');
                     $table->timestamps();
                 });
             }
@@ -147,35 +151,18 @@ This structure covers most of the essential features for a small yet robust e-co
             // ... rest of the code
         }
         ```
-    - Reviews
+    - Reviews & Rating
         ```php
-         class CreateReviewsTable extends Migration
+        class CreateReviewsAndRatingsTable extends Migration
         {
             public function up()
             {
-                Schema::create('reviews', function (Blueprint $table) {
+                Schema::create('reviews_and_ratings', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('product_id')->constrained()->index()->onDelete('cascade'); // Index foreign keys
-                    $table->foreignId('user_id')->constrained()->index()->onDelete('cascade'); // Index foreign keys
-                    $table->text('review_text');
-                    $table->timestamps();
-                });
-            }
-
-            // ... rest of the code
-        }
-        ```
-    - Ratings
-        ```php
-         class CreateRatingsTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('ratings', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('product_id')->constrained()->index()->onDelete('cascade');   // Index foreign keys
-                    $table->foreignId('user_id')->constrained()->index()->onDelete('cascade');   // Index foreign keys
-                    $table->tinyInteger('rating_value');  // Use tinyInteger for small range values
+                    $table->foreignId('product_id')->constrained()->index()->onDelete('cascade');  // Index foreign keys
+                    $table->foreignId('user_id')->constrained()->index()->onDelete('cascade');  // Index foreign keys
+                    $table->text('review_text')->nullable();  // Nullable as it may not be required always
+                    $table->tinyInteger('rating_value')->nullable();  // Nullable as it may not be required always
                     $table->timestamps();
                 });
             }
@@ -194,6 +181,7 @@ This structure covers most of the essential features for a small yet robust e-co
                 Schema::create('brands', function (Blueprint $table) {
                     $table->id();
                     $table->string('name')->unique();  // Ensure brand names are unique
+                    $table->string('slug')->unique();
                     $table->timestamps();
                 });
             }
@@ -207,82 +195,26 @@ This structure covers most of the essential features for a small yet robust e-co
     - (The other filtering functionalities like Product Search, Filter Products by Categories, Price Range, and Ratings can be achieved through queries without needing separate tables.)
 
 4. **Cart & Wishlist**
-    - Carts
+    - Carts & Wishlist
         ```php
-        class CreateCartsTable extends Migration
+        class CreateItemsTable extends Migration
         {
             public function up()
             {
-                Schema::create('carts', function (Blueprint $table) {
+                Schema::create('items', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Cascade deletes to carts when a user is deleted
+                    $table->enum('type', ['cart', 'wishlist']);
+                    $table->foreignId('user_id')->constrained()->onDelete('cascade');
+                    $table->foreignId('product_id')->constrained()->onDelete('cascade');
+                    $table->integer('quantity')->nullable();  // Nullable if not applicable to wishlist items
+                    $table->decimal('price', 8, 2)->nullable(); // Nullable if not applicable to wishlist items
                     $table->timestamps();
                 });
             }
 
             public function down()
             {
-                Schema::dropIfExists('carts');
-            }
-        }
-        ```
-    - CartItems
-        ```php
-        class CreateCartItemsTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('cart_items', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('cart_id')->constrained()->onDelete('cascade');  // Cascade deletes to cart_items when a cart is deleted
-                    $table->foreignId('product_id')->constrained()->onDelete('cascade');  // Cascade deletes to cart_items when a product is deleted
-                    $table->integer('quantity');
-                    $table->timestamps();
-                });
-            }
-
-            public function down()
-            {
-                Schema::dropIfExists('cart_items');
-            }
-        }
-        ```
-    - Wishlists
-        ```php
-        class CreateWishlistsTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('wishlists', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Cascade deletes to wishlists when a user is deleted
-                    $table->timestamps();
-                });
-            }
-
-            public function down()
-            {
-                Schema::dropIfExists('wishlists');
-            }
-        }
-        ```
-    - WishlistItems
-        ```php
-        class CreateWishlistItemsTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('wishlist_items', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('wishlist_id')->constrained()->onDelete('cascade');  // Cascade deletes to wishlist_items when a wishlist is deleted
-                    $table->foreignId('product_id')->constrained()->onDelete('cascade');  // Cascade deletes to wishlist_items when a product is deleted
-                    $table->timestamps();
-                });
-            }
-
-            public function down()
-            {
-                Schema::dropIfExists('wishlist_items');
+                Schema::dropIfExists('items');
             }
         }
         ```
@@ -296,8 +228,12 @@ This structure covers most of the essential features for a small yet robust e-co
             {
                 Schema::create('orders', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('user_id')->constrained()->onDelete('cascade');  // Cascade deletes to orders when a user is deleted
+                    $table->foreignId('user_id')->constrained()->onDelete('cascade');
+                    $table->foreignId('shipping_id')->constrained('shipping_addresses')->onDelete('cascade');
+                    $table->foreignId('payment_id')->constrained('payments')->onDelete('set null');
                     $table->timestamp('order_date');
+                    $table->enum('status', ['pending', 'processing', 'shipped', 'completed', 'cancelled']);
+                    $table->decimal('total_price', 10, 2)->nullable();
                     $table->timestamps();
                 });
             }
@@ -310,68 +246,7 @@ This structure covers most of the essential features for a small yet robust e-co
         ```
     - OrderItems
         ```php
-        class CreateOrderItemsTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('order_items', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('order_id')->constrained()->onDelete('cascade');  // Cascade deletes to order_items when an order is deleted
-                    $table->foreignId('product_id')->constrained()->onDelete('cascade');  // Cascade deletes to order_items when a product is deleted
-                    $table->integer('quantity');
-                    $table->decimal('unit_price', 8, 2);
-                    $table->timestamps();
-                });
-            }
-
-            public function down()
-            {
-                Schema::dropIfExists('order_items');
-            }
-        }
-
-        ```
-    - OrderHistory
-        ```php
-        class CreateOrderHistoryTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('order_history', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('order_id')->constrained()->onDelete('cascade');  // Cascade deletes to order_history when an order is deleted
-                    $table->string('status');
-                    $table->timestamp('status_date');
-                    $table->timestamps();
-                });
-            }
-
-            public function down()
-            {
-                Schema::dropIfExists('order_history');
-            }
-        }
-        ```
-    - OrderTracking
-        ```php
-        class CreateOrderTrackingTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('order_tracking', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('order_id')->constrained()->onDelete('cascade');  // Cascade deletes to order_tracking when an order is deleted
-                    $table->string('tracking_status');
-                    $table->timestamp('tracking_date');
-                    $table->timestamps();
-                });
-            }
-
-            public function down()
-            {
-                Schema::dropIfExists('order_tracking');
-            }
-        }
+       
         ```
 
 6. **Checkout Process**
