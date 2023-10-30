@@ -63,8 +63,8 @@ These examples showcase how each component and module contributes to the overall
                     $table->string('image');
                     $table->string('sku')->unique()->nullable();  // Unique Stock Keeping Unit
                     $table->text('description');
-                    $table->decimal('price', 8, 2);
-                    $table->integer('quantity');  // Quantity in stock
+                    $table->decimal('price', 8, 2)->unsigned();
+                    $table->unsignedInteger('quantity')->default(0);  // Quantity in stock
                     $table->enum('status', ['active', 'inactive']);  // Enum column for status 
                     $table->foreignId('created_by')->constrained('users')->nullable()->onDelete('set null');  // Who created this product?
                     $table->foreignId('updated_by')->constrained('users')->nullable()->onDelete('set null');  // Who last updated this product?
@@ -144,7 +144,8 @@ These examples showcase how each component and module contributes to the overall
                     $table->foreignId('product_id')->constrained()->index()->onDelete('cascade');  // Index foreign keys
                     $table->foreignId('user_id')->constrained()->index()->onDelete('cascade');  // Index foreign keys
                     $table->text('review_text')->nullable();  // Nullable as it may not be required always
-                    $table->tinyInteger('rating_value')->nullable();  // Nullable as it may not be required always
+                    $table->unsignedTinyInteger('rating_value')->nullable();  // Nullable as it may not be required always
+                    $table->enum('is_verified', ['true', 'false'])->default('false');
                     $table->timestamps();
                 });
             }
@@ -188,8 +189,8 @@ These examples showcase how each component and module contributes to the overall
                     $table->enum('type', ['cart', 'wishlist']);
                     $table->foreignId('user_id')->constrained()->onDelete('cascade');
                     $table->foreignId('product_id')->constrained()->onDelete('cascade');
-                    $table->integer('quantity')->nullable();  // Nullable if not applicable to wishlist items
-                    $table->decimal('price', 8, 2)->nullable(); // Nullable if not applicable to wishlist items
+                    $table->unsignedInteger('quantity')->nullable()->default(0);  // Nullable if not applicable to wishlist items
+                    $table->decimal('price', 8, 2)->nullable()->unsigned(); // Nullable if not applicable to wishlist items
                     $table->timestamps();
                 });
             }
@@ -245,7 +246,7 @@ These examples showcase how each component and module contributes to the overall
                     $table->foreignId('product_id')->constrained()->onDelete('cascade');
                     $table->string('product_name');
                     $table->string('product_sku');
-                    $table->unsignedInteger('quantity');
+                    $table->unsignedInteger('quantity')->nullable()->default(0);
                     $table->decimal('unit_price', 8, 2);
                     $table->decimal('total_price', 8, 2);
                     $table->text('special_instructions')->nullable();
@@ -275,7 +276,7 @@ These examples showcase how each component and module contributes to the overall
                     $table->string('city');
                     $table->string('state');
                     $table->string('country');
-                    $table->string('postal_code');
+                    $table->string('postal_code', 10);
                     $table->timestamps();
                 });
             }
@@ -364,7 +365,7 @@ These examples showcase how each component and module contributes to the overall
                 Schema::create('faqs', function (Blueprint $table) {
                     $table->id();
                     $table->string('question');
-                    $table->integer('order')->unsigned();
+                    $table->unsignedInteger('order')->nullable();
                     $table->enum('status', ['active', 'inactive'])->default('active');
                     $table->text('answer');
                     $table->timestamps();
