@@ -56,14 +56,14 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('products', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('category_id')->constrained()->index()->onDelete('cascade');
-                    $table->foreignId('sub_category_id')->constrained()->index()->onDelete('cascade');
-                    $table->string('name')->index();
+                    $table->foreignId('category_id')->constrained()->onDelete('cascade');
+                    $table->foreignId('sub_category_id')->constrained()->onDelete('cascade');
+                    $table->string('name');
                     $table->string('slug')->unique();
                     $table->string('image');
                     $table->string('sku')->unique()->nullable();  // Unique Stock Keeping Unit
                     $table->text('description');
-                    $table->decimal('price', 8, 2)->unsigned();
+                    $table->unsignedDecimal('price', 8, 2)->unsigned();
                     $table->unsignedInteger('quantity')->default(0);  // Quantity in stock
                     $table->enum('status', ['active', 'inactive']);  // Enum column for status 
                     $table->foreignId('created_by')->constrained('users')->nullable()->onDelete('set null');  // Who created this product?
@@ -86,6 +86,7 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('categories', function (Blueprint $table) {
                     $table->id();
+                    $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('set null'); // Self-referential foreign key
                     $table->string('name')->unique();
                     $table->string('slug')->unique();
                     $table->timestamps();
@@ -98,24 +99,6 @@ These examples showcase how each component and module contributes to the overall
             }
         }
         ```
-    - SubCategories
-        ```php
-         class CreateSubCategoriesTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('sub_categories', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('category_id')->constrained()->index()->onDelete('cascade');   // Index foreign keys
-                    $table->string('name')->index();  // Index sub-category names for quicker search
-                    $table->string('slug')->unique();
-                    $table->timestamps();
-                });
-            }
-
-            // ... rest of the code
-        }
-        ```
     - ProductImages
         ```php
          class CreateProductImagesTable extends Migration
@@ -124,7 +107,7 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('product_images', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('product_id')->constrained()->index()->onDelete('cascade'); // Index foreign keys
+                    $table->foreignId('product_id')->constrained()->onDelete('cascade'); 
                     $table->string('images');
                     $table->timestamps();
                 });
@@ -141,8 +124,8 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('reviews_and_ratings', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('product_id')->constrained()->index()->onDelete('cascade');  // Index foreign keys
-                    $table->foreignId('user_id')->constrained()->index()->onDelete('cascade');  // Index foreign keys
+                    $table->foreignId('product_id')->constrained()->onDelete('cascade');  
+                    $table->foreignId('user_id')->constrained()->onDelete('cascade');  
                     $table->text('review_text')->nullable();  // Nullable as it may not be required always
                     $table->unsignedTinyInteger('rating_value')->nullable();  // Nullable as it may not be required always
                     $table->enum('is_verified', ['true', 'false'])->default('false');
@@ -190,7 +173,7 @@ These examples showcase how each component and module contributes to the overall
                     $table->foreignId('user_id')->constrained()->onDelete('cascade');
                     $table->foreignId('product_id')->constrained()->onDelete('cascade');
                     $table->unsignedInteger('quantity')->nullable()->default(0);  // Nullable if not applicable to wishlist items
-                    $table->decimal('price', 8, 2)->nullable()->unsigned(); // Nullable if not applicable to wishlist items
+                    $table->unsignedDecimal('price', 8, 2)->nullable()->unsigned(); // Nullable if not applicable to wishlist items
                     $table->timestamps();
                 });
             }
@@ -216,10 +199,10 @@ These examples showcase how each component and module contributes to the overall
                     $table->timestamp('order_date')->useCurrent();
                     $table->timestamp('shipped_date')->nullable();
                     $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'return'])->default('pending');
-                    $table->decimal('subtotal', 8, 2)->default(0.00);
-                    $table->decimal('tax', 8, 2)->default(0.00);
-                    $table->decimal('shipping_cost', 8, 2)->default(0.00);
-                    $table->decimal('total_price', 8, 2)->default(0.00);
+                    $table->unsignedDecimal('subtotal', 8, 2)->default(0.00);
+                    $table->unsignedDecimal('tax', 8, 2)->default(0.00);
+                    $table->unsignedDecimal('shipping_cost', 8, 2)->default(0.00);
+                    $table->unsignedDecimal('total_price', 8, 2)->default(0.00);
                     $table->date('return_date')->nullable();
                     $table->text('return_reason')->nullable();
                     $table->double('return_amount', 10, 2)->nullable();
@@ -247,8 +230,8 @@ These examples showcase how each component and module contributes to the overall
                     $table->string('product_name');
                     $table->string('product_sku');
                     $table->unsignedInteger('quantity')->nullable()->default(0);
-                    $table->decimal('unit_price', 8, 2);
-                    $table->decimal('total_price', 8, 2);
+                    $table->unsignedDecimal('unit_price', 8, 2);
+                    $table->unsignedDecimal('total_price', 8, 2);
                     $table->text('special_instructions')->nullable();
                     $table->timestamps();
                 });
@@ -338,7 +321,7 @@ These examples showcase how each component and module contributes to the overall
                     $table->id();
                     $table->foreignId('order_id')->constrained()->onDelete('cascade');  // Reference to Orders table, cascade deletes
                     $table->foreignId('payment_option_id')->constrained('payment_options')->onDelete('cascade');  // Reference to PaymentOptions table, cascade deletes
-                    $table->decimal('amount', 8, 2);  // Transaction amount
+                    $table->unsignedDecimal('amount', 8, 2);  // Transaction amount
                     $table->string('transaction_id')->unique();  // Unique transaction identifier
                     $table->enum('status', ['pending', 'completed', 'failed', 'refunded']);  // Transaction status
                     $table->timestamps();
@@ -354,6 +337,24 @@ These examples showcase how each component and module contributes to the overall
 
 8. **Notifications & Alerts**
     - Notifications
+    `php artisan notifications:table` command generates a new database migration file that includes the schema for a notifications table. This table will hold information about the notifications, including type, JSON data, and other meta-information. After running this command, you will find the new migration file in your `database/migrations` directory.
+
+    Once the migration file is generated, you can run `php artisan migrate` to apply the changes to your database. This will create the notifications table based on the schema defined in the migration file.
+
+    Here's a brief overview of the steps:
+
+    1. Generate the migration file for the notifications table:
+    ```
+    php artisan notifications:table
+    ```
+
+    2. You'll find the migration file in the `database/migrations` directory. You can review or modify this file if needed.
+
+    3. Apply the migration to create the table in your database:
+    ```
+    php artisan migrate
+    ```
+    After completing these steps, your database should now have a new table named `notifications` where you can store and query notifications for your application.
 
 9. **Customer Support & Feedback**
     - FAQs
