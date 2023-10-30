@@ -305,12 +305,9 @@ These examples showcase how each component and module contributes to the overall
                     $table->id();
                     $table->foreignId('order_id')->constrained()->onDelete('cascade');
                     $table->foreignId('product_id')->constrained()->onDelete('cascade');
-                    $table->string('product_name');
-                    $table->string('product_sku');
                     $table->unsignedInteger('quantity')->nullable()->default(0);
                     $table->unsignedDecimal('unit_price', 8, 2);
                     $table->unsignedDecimal('total_price', 8, 2);
-                    $table->text('special_instructions')->nullable();
                     $table->timestamps();
                 });
             }
