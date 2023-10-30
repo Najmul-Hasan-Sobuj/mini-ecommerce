@@ -222,18 +222,25 @@ This structure covers most of the essential features for a small yet robust e-co
 5. **Order Management**
     - Orders
         ```php
-        class CreateOrdersTable extends Migration
+       class CreateOrdersTable extends Migration
         {
             public function up()
             {
                 Schema::create('orders', function (Blueprint $table) {
                     $table->id();
                     $table->foreignId('user_id')->constrained()->onDelete('cascade');
-                    $table->foreignId('shipping_id')->constrained('shipping_addresses')->onDelete('cascade');
-                    $table->foreignId('payment_id')->constrained('payments')->onDelete('set null');
-                    $table->timestamp('order_date');
-                    $table->enum('status', ['pending', 'processing', 'shipped', 'completed', 'cancelled']);
-                    $table->decimal('total_price', 10, 2)->nullable();
+                    $table->foreignId('address_id')->constrained('addresses')->onDelete('cascade');
+                    $table->timestamp('order_date')->useCurrent();
+                    $table->timestamp('shipped_date')->nullable();
+                    $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'return'])->default('pending');
+                    $table->decimal('subtotal', 8, 2)->default(0.00);
+                    $table->decimal('tax', 8, 2)->default(0.00);
+                    $table->decimal('shipping_cost', 8, 2)->default(0.00);
+                    $table->decimal('total_price', 8, 2)->default(0.00);
+                    $table->date('return_date')->nullable();
+                    $table->text('return_reason')->nullable();
+                    $table->double('return_amount', 10, 2)->nullable();
+                    $table->text('notes')->nullable();
                     $table->timestamps();
                 });
             }
@@ -246,7 +253,29 @@ This structure covers most of the essential features for a small yet robust e-co
         ```
     - OrderItems
         ```php
-       
+        class CreateOrderItemsTable extends Migration
+        {
+            public function up()
+            {
+                Schema::create('order_items', function (Blueprint $table) {
+                    $table->id();
+                    $table->foreignId('order_id')->constrained()->onDelete('cascade');
+                    $table->foreignId('product_id')->constrained()->onDelete('cascade');
+                    $table->string('product_name');
+                    $table->string('product_sku');
+                    $table->unsignedInteger('quantity');
+                    $table->decimal('unit_price', 8, 2);
+                    $table->decimal('total_price', 8, 2);
+                    $table->text('special_instructions')->nullable();
+                    $table->timestamps();
+                });
+            }
+
+            public function down()
+            {
+                Schema::dropIfExists('order_items');
+            }
+        }
         ```
 
 6. **Checkout Process**
@@ -294,48 +323,6 @@ This structure covers most of the essential features for a small yet robust e-co
             }
         }
         ```
-    - OrderReviews
-        ```php
-        class CreateOrderReviewsTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('order_reviews', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('order_id')->constrained()->onDelete('cascade');
-                    $table->foreignId('user_id')->constrained()->onDelete('cascade');
-                    $table->text('review_text');
-                    $table->timestamps();
-                });
-            }
-
-            public function down()
-            {
-                Schema::dropIfExists('order_reviews');
-            }
-        }
-        ```
-    - Invoices
-        ```php
-        class CreateInvoicesTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('invoices', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('order_id')->constrained()->onDelete('cascade');
-                    $table->decimal('total_amount', 8, 2);
-                    $table->date('invoice_date');
-                    $table->timestamps();
-                });
-            }
-
-            public function down()
-            {
-                Schema::dropIfExists('invoices');
-            }
-        }
-        ```
 
 7. **Payment Integration**
     - PaymentOptions
@@ -347,6 +334,7 @@ This structure covers most of the essential features for a small yet robust e-co
                 Schema::create('payment_options', function (Blueprint $table) {
                     $table->id();
                     $table->string('name')->unique();  // Unique payment option name
+                    $table->string('slug')->unique();
                     $table->timestamps();
                 });
             }
@@ -394,6 +382,8 @@ This structure covers most of the essential features for a small yet robust e-co
                 Schema::create('faqs', function (Blueprint $table) {
                     $table->id();
                     $table->string('question');
+                    $table->integer('order')->unsigned();
+                    $table->enum('status', ['active', 'inactive'])->default('active');
                     $table->text('answer');
                     $table->timestamps();
                 });
@@ -419,7 +409,7 @@ This structure covers most of the essential features for a small yet robust e-co
                     $table->foreignId('support_agent_id')
                         ->constrained('users')
                         ->onDelete('cascade');
-                    $table->text('chat_text');
+                    $table->text('chat_message');
                     $table->timestamps();
                 });
             }
@@ -427,29 +417,6 @@ This structure covers most of the essential features for a small yet robust e-co
             public function down()
             {
                 Schema::dropIfExists('chats');
-            }
-        }
-        ```
-    - Returns
-        ```php
-        class CreateReturnsTable extends Migration
-        {
-            public function up()
-            {
-                Schema::create('returns', function (Blueprint $table) {
-                    $table->id();
-                    $table->foreignId('order_id')
-                        ->constrained()
-                        ->onDelete('cascade');
-                    $table->text('return_reason');
-                    $table->timestamp('return_date');
-                    $table->timestamps();
-                });
-            }
-
-            public function down()
-            {
-                Schema::dropIfExists('returns');
             }
         }
         ```
