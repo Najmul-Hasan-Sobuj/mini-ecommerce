@@ -74,8 +74,10 @@ This structure covers most of the essential features for a small yet robust e-co
             {
                 Schema::create('products', function (Blueprint $table) {
                     $table->id();
+                    $table->foreignId('category_id')->constrained()->index()->onDelete('cascade');
                     $table->foreignId('sub_category_id')->constrained()->index()->onDelete('cascade');
                     $table->string('name')->index();
+                    $table->string('slug')->unique();
                     $table->string('sku')->unique()->nullable();  // Unique Stock Keeping Unit
                     $table->text('description');
                     $table->decimal('price', 8, 2);
