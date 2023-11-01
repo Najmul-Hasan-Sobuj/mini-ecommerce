@@ -56,13 +56,14 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('products', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('category_id')->constrained()->onDelete('cascade');
+                    $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+                    $table->foreignId('brand_id')->constrained()->cascadeOnDelete();
                     $table->string('name');
                     $table->string('slug')->unique();
                     $table->string('image');
                     $table->string('sku')->unique()->nullable();  // Unique Stock Keeping Unit
                     $table->text('description');
-                    $table->unsignedDecimal('price', 8, 2)->unsigned();
+                    $table->unsignedDecimal('price', 8, 2);
                     $table->unsignedInteger('quantity')->default(0);  // Quantity in stock
                     $table->enum('status', ['active', 'inactive']);  // Enum column for status 
                     $table->foreignId('created_by')->constrained('users')->nullable()->onDelete('set null');  // Who created this product?
@@ -130,7 +131,7 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('product_images', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('product_id')->constrained()->onDelete('cascade'); 
+                    $table->foreignId('product_id')->constrained()->cascadeOnDelete(); 
                     $table->string('images');
                     $table->timestamps();
                 });
@@ -156,11 +157,11 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('reviews_and_ratings', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('product_id')->constrained()->onDelete('cascade');  
-                    $table->foreignId('user_id')->constrained()->onDelete('cascade');  
+                    $table->foreignId('product_id')->constrained()->cascadeOnDelete();  
+                    $table->foreignId('user_id')->constrained()->cascadeOnDelete();  
                     $table->text('review_text')->nullable();  // Nullable as it may not be required always
                     $table->unsignedTinyInteger('rating_value')->nullable();  // Nullable as it may not be required always
-                    $table->enum('is_verified', ['true', 'false'])->default('false');
+                    $table->enum('is_verified', ['yes', 'no'])->default('no');
                     $table->timestamps();
                 });
             }
@@ -222,10 +223,10 @@ These examples showcase how each component and module contributes to the overall
                 Schema::create('items', function (Blueprint $table) {
                     $table->id();
                     $table->enum('type', ['cart', 'wishlist']);
-                    $table->foreignId('user_id')->constrained()->onDelete('cascade');
-                    $table->foreignId('product_id')->constrained()->onDelete('cascade');
+                    $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+                    $table->foreignId('product_id')->constrained()->cascadeOnDelete();
                     $table->unsignedInteger('quantity')->nullable()->default(0);  // Nullable if not applicable to wishlist items
-                    $table->unsignedDecimal('price', 8, 2)->nullable()->unsigned(); // Nullable if not applicable to wishlist items
+                    $table->unsignedDecimal('price', 8, 2)->nullable(); // Nullable if not applicable to wishlist items
                     $table->timestamps();
                 });
             }
@@ -255,8 +256,9 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('orders', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('user_id')->constrained()->onDelete('cascade');
-                    $table->foreignId('address_id')->constrained('addresses')->onDelete('cascade');
+                    $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+                    $table->foreignId('shipping_address_id')->constrained('addresses')->cascadeOnDelete();
+                    $table->foreignId('billing_address_id')->constrained('addresses')->cascadeOnDelete();
                     $table->timestamp('order_date')->useCurrent();
                     $table->timestamp('shipped_date')->nullable();
                     $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'return'])->default('pending');
@@ -303,8 +305,8 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('order_items', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('order_id')->constrained()->onDelete('cascade');
-                    $table->foreignId('product_id')->constrained()->onDelete('cascade');
+                    $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+                    $table->foreignId('product_id')->constrained()->cascadeOnDelete();
                     $table->unsignedInteger('quantity')->nullable()->default(0);
                     $table->unsignedDecimal('unit_price', 8, 2);
                     $table->unsignedDecimal('total_price', 8, 2);
@@ -340,7 +342,7 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('addresses', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('user_id')->constrained()->onDelete('cascade');
+                    $table->foreignId('user_id')->constrained()->cascadeOnDelete();
                     $table->enum('address_type', ['shipping', 'billing']);  // Enum column for address type
                     $table->string('street_address');
                     $table->string('city');
@@ -408,8 +410,8 @@ These examples showcase how each component and module contributes to the overall
             {
                 Schema::create('payment_transactions', function (Blueprint $table) {
                     $table->id();
-                    $table->foreignId('order_id')->constrained()->onDelete('cascade');  // Reference to Orders table, cascade deletes
-                    $table->foreignId('payment_method_id')->constrained('payment_methods')->onDelete('cascade');  // Reference to PaymentMethods table, cascade deletes
+                    $table->foreignId('order_id')->constrained()->cascadeOnDelete();  // Reference to Orders table, cascade deletes
+                    $table->foreignId('payment_method_id')->constrained('payment_methods')->cascadeOnDelete();  // Reference to PaymentMethods table, cascade deletes
                     $table->unsignedDecimal('amount', 8, 2);  // Transaction amount
                     $table->string('transaction_id')->unique();  // Unique transaction identifier
                     $table->enum('status', ['pending', 'completed', 'failed', 'refunded']);  // Transaction status
@@ -496,10 +498,10 @@ These examples showcase how each component and module contributes to the overall
                     $table->id();
                     $table->foreignId('user_id')
                         ->constrained()
-                        ->onDelete('cascade');
+                        ->cascadeOnDelete();
                     $table->foreignId('support_agent_id')
                         ->constrained('users')
-                        ->onDelete('cascade');
+                        ->cascadeOnDelete();
                     $table->text('chat_message');
                     $table->timestamps();
                 });
