@@ -1,5 +1,7 @@
 # Mini E-commerce Project
 
+## Project Mind Map
+![](https://github.com/Najmul-Hasan-Sobuj/mini-ecommerce/blob/main/main/Mini%20Ecommerce.png?raw=true)
 ## Project Structure
 
 1. **User Management (`laravel breeze authentication system`)** 
