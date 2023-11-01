@@ -1,11 +1,69 @@
-# Mini E-commerce Project 
+# Mini E-commerce Project
 
 ## Project Structure
 
-1. **User Management**
-   - *Registration & Login:* Users can create accounts by providing their email and password. They can log in securely using their credentials.
-   - *Profiles:* Users can update their profiles, including personal information, contact details, and profile pictures.
-   - *Password Recovery:* If users forget their passwords, they can request a password recovery link sent to their email.
+1. **User Management (`laravel breeze authentication system`)** 
+   - Registration & Login
+   - Profiles
+   - Password Recoveries
+
+2. **Categories**
+   - Migration: `CreateCategoriesTable`
+   - Validation: `rules` method
+
+3. **Brand**
+   - Migration: `CreateBrandsTable`
+   - Validation: `rules` method
+
+4. **Products**
+   - Migration: `CreateProductsTable`
+   - Validation: `rules` method
+
+5. **Product Images**
+   - Migration: `CreateProductImagesTable`
+   - Validation: `rules` method
+
+6. **Reviews & Rating**
+   - Migration: `CreateReviewsAndRatingsTable`
+   - Validation: `rules` method
+
+7. **Cart & Wishlist**
+   - Migration: `CreateItemsTable`
+   - Validation: `rules` method
+
+8. **Order**
+   - Migration: `CreateOrdersTable`
+   - Validation: `rules` method
+
+9. **Order Items**
+   - Migration: `CreateOrderItemsTable`
+   - Validation: `rules` method
+
+10. **Checkout (Addresses)**
+    - Migration: `CreateAddressesTable`
+    - Validation: `rules` method
+
+11. **Payment Integration**
+    - **Payment Methods**
+      - Migration: `CreatePaymentMethodsTable`
+      - Validation: `rules` method
+    - **Payment Transactions**
+      - Migration: `CreatePaymentTransactionsTable`
+      - Validation: `rules` method
+
+12. **Notifications & Alerts**
+    - Setup: `php artisan notifications:table` & `php artisan migrate`
+
+13. **Customer Support & Feedback**
+    - **FAQs**
+      - Migration: `CreateFaqsTable`
+      - Validation: `rules` method
+    - **Chats**
+      - Migration: `CreateChatsTable`
+      - Validation: `rules` method
+    - **Refund Policies**
+      - Migration: `CreateRefundPoliciesTable`
+      - Validation: `rules` method
 
 ## Project Database
 
@@ -43,6 +101,25 @@
             'name' => "required|string|max:255|unique:categories,name,{$categoryId}",
             'slug' => "required|string|max:255|unique:categories,slug,{$categoryId}",
         ];
+
+        <!-- return [
+            'parent_id' => [
+                'nullable',
+                Rule::exists('categories', 'id'),
+            ],
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'name')->ignore($this->category),
+            ],
+            'slug' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'slug')->ignore($this->category),
+            ],
+        ]; -->
     }
     ```
 
