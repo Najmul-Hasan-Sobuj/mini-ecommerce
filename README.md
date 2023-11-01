@@ -170,8 +170,8 @@
                 $table->unsignedDecimal('price', 8, 2);
                 $table->unsignedInteger('quantity')->default(0);  // Quantity in stock
                 $table->enum('status', ['active', 'inactive']);  // Enum column for status 
-                $table->foreignId('created_by')->constrained('users')->nullable()->onDelete('set null');  // Who created this product?
-                $table->foreignId('updated_by')->constrained('users')->nullable()->onDelete('set null');  // Who last updated this product?
+                $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');  // Who created this product?
+                $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');  // Who last updated this product?
                 $table->timestamps();
             });
         }
