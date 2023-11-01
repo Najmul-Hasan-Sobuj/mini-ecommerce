@@ -34,13 +34,16 @@
     ```
 
     ```php
-    $categoryId = $this->category; // Assuming the route parameter is named 'category'
+    public function rules()
+    {
+        $categoryId = $this->category; // Assuming the route parameter is named 'category'
 
-    return [
-        'parent_id' => 'nullable|exists:categories,id',
-        'name' => "required|string|max:255|unique:categories,name,{$categoryId}",
-        'slug' => "required|string|max:255|unique:categories,slug,{$categoryId}",
-    ];
+        return [
+            'parent_id' => 'nullable|exists:categories,id',
+            'name' => "required|string|max:255|unique:categories,name,{$categoryId}",
+            'slug' => "required|string|max:255|unique:categories,slug,{$categoryId}",
+        ];
+    }
     ```
 
 3. **Brand**
@@ -109,7 +112,7 @@
             'sub_category_id' => 'required|exists:sub_categories,id',
             'name' => 'required|string|max:255',
             'slug' => "required|string|max:255|unique:products,slug,{$productId}",
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Image validation
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image validation
             'sku' => "nullable|string|max:255|unique:products,sku,{$productId}",
             'description' => 'required|string',
             'price' => 'required|numeric|between:0,999999.99',
@@ -143,7 +146,7 @@
     {
         return [
             'product_id' => 'required|exists:products,id',
-            'images' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
     ```
