@@ -1,0 +1,46 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('products', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('brand_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('image');
+            $table->string('sku')->unique()->nullable(); // Unique Stock Keeping Unit
+            $table->text('description');
+            $table->unsignedDecimal('price', 8, 2);
+            $table->unsignedInteger('quantity')->default(0); // Quantity in stock
+            $table->enum('status', ['active', 'inactive']); // Enum column for status
+            $table->json('sizes')->nullable(); // JSON column for sizes
+            $table->json('colors')->nullable(); // JSON column for colors
+            $table->json('tags')->nullable(); // Tags for SEO purposes.
+            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('products');
+    }
+};
