@@ -29,10 +29,8 @@
 
     <!-- Page content -->
     <div class="page-content">
-        <!-- Main sidebar
-        -->
+        <!-- Main sidebar -->
         <div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg">
-
             <!-- Sidebar content -->
             <div class="sidebar-content">
 
@@ -51,7 +49,6 @@
 
         </div>
         <!-- /main sidebar -->
-
 
         <!-- Main content -->
         <div class="content-wrapper">
@@ -81,7 +78,6 @@
 
     </div>
     <!-- /page content -->
-
 
     <!-- Core JS files -->
     {{-- <script src="{{ asset('admin/assets/demo/demo_configurator.js') }}"></script> --}}

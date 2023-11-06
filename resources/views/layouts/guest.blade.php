@@ -100,7 +100,8 @@
                                         </div>
                                     </div>
 
-                                    <div class="item-slick3" data-thumb="{{ asset('frontend/images/product-detail-03.jpg') }}">
+                                    <div class="item-slick3"
+                                        data-thumb="{{ asset('frontend/images/product-detail-03.jpg') }}">
                                         <div class="wrap-pic-w pos-relative">
                                             <img src="{{ asset('frontend/images/product-detail-03.jpg') }}"
                                                 alt="IMG-PRODUCT">
@@ -328,8 +329,10 @@
         });
     </script>
     <!--===============================================================================================-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAKFWBqlKAGCeS1rMVoaNlwyayu0e0YRes"></script>
+    <script src="{{ asset('frontend/js/map-custom.js') }}"></script>
     <script src="{{ asset('frontend/js/main.js') }}"></script>
-
+    @stack('scripts')
 </body>
 
 </html>

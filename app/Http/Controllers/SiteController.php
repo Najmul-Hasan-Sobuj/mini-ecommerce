@@ -15,4 +15,29 @@ class SiteController extends Controller
     {
         return view('profile');
     }
+
+    public function about()
+    {
+        return view('about');
+    }
+
+    public function contact()
+    {
+        return view('contact');
+    }
+
+    public function shop()
+    {
+        return view('product');
+    }
+
+    public function productDetails()
+    {
+        return view('product-detail');
+    }
+
+    public function shopingCart()
+    {
+        return view('shoping-cart');
+    }
 }
