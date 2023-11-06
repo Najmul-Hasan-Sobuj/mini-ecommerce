@@ -30,7 +30,6 @@ class ProductRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'brand_id' => 'required|exists:brands,id', // Add validation for brand_id
             'name' => 'required|string|max:255',
-            'slug' => "required|string|max:255|unique:products,slug,{$productId}",
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Image validation
             'sku' => "nullable|string|max:255|unique:products,sku,{$productId}",
             'description' => 'required|string',
@@ -60,10 +59,6 @@ class ProductRequest extends FormRequest
             'name.required' => 'The Name field is required.',
             'name.string' => 'The Name must be a string.',
             'name.max' => 'The Name may not be greater than 255 characters.',
-            'slug.required' => 'The Slug field is required.',
-            'slug.string' => 'The Slug must be a string.',
-            'slug.max' => 'The Slug may not be greater than 255 characters.',
-            'slug.unique' => 'The Slug has already been taken.',
             'image.required' => 'The Image field is required.',
             'image.image' => 'The file must be an image.',
             'image.mimes' => 'The image must be a file of type: jpeg, png, jpg.',

@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout :title="'Contact - ' . config('app.name')">
     <!-- Title page -->
     <section class="bg-img1 txt-center p-lr-15 p-tb-92"
         style="background-image: url({{ asset('frontend/images/bg-01.jpg') }});">

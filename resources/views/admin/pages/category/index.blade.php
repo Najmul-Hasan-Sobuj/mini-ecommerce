@@ -1,16 +1,10 @@
-<x-admin-layout>
-    {{-- <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Category') }}
-        </h2>
-    </x-slot> --}}
-
+<x-admin-layout :title="'Category - ' . config('app.name')">
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-body">
                 <div class="d-flex justify-content-end">
                     <div class="mb-2">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#categoryAddModal"
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#parentCategoryAddModal"
                             class="btn btn-flat-success btn-labeled btn-labeled-start btn-sm">
                             <span class="btn-labeled-icon bg-success text-white">
                                 <i class="ph-plus-circle ph-sm"></i>
@@ -39,13 +33,13 @@
                                             <td>
                                                 <div class="d-inline-flex">
                                                     <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#categoryEditModal{{ $category->id }}"
+                                                        data-bs-target="#parentCategoryEditModal{{ $category->id }}"
                                                         class="text-primary" aria-label="Edit Category">
                                                         <i class="ph-pen"></i>
                                                     </a>
-                                                    <div id="categoryEditModal{{ $category->id }}" class="modal fade"
-                                                        data-bs-keyboard="false" data-bs-backdrop="static"
-                                                        tabindex="-1">
+                                                    <div id="parentCategoryEditModal{{ $category->id }}"
+                                                        class="modal fade" data-bs-keyboard="false"
+                                                        data-bs-backdrop="static" tabindex="-1">
                                                         <div class="modal-dialog modal-dialog-centered">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
@@ -61,26 +55,77 @@
                                                                     @method('PUT')
                                                                     <div class="modal-body">
                                                                         <div class="row">
-                                                                            <div class="col-lg-6">
+                                                                            <div class="col-lg-12">
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label">Category
                                                                                         Name</label>
-                                                                                    <select name="category_id"
-                                                                                        data-placeholder="Select a category..."
-                                                                                        class="form-control form-control-sm select select-category-edit"
+                                                                                    <select name="parent_id"
+                                                                                        data-placeholder="Select a parent category..."
+                                                                                        class="form-control form-control-sm select select-parent-category-edit"
                                                                                         data-container-css-class="select-sm">
                                                                                         <option></option>
-                                                                                        @foreach ($categories as $categorie)
-                                                                                            <option
-                                                                                                value="{{ $categorie->id }}"
-                                                                                                @selected($categorie->id == $category->category_id)>
-                                                                                                {{ $categorie->name }}
-                                                                                            </option>
-                                                                                        @endforeach
+                                                                                        @if ($categories && count($categories))
+                                                                                            @foreach ($categories as $category)
+                                                                                                <option
+                                                                                                    value="{{ $category->id }}" @selected($category->id == $category->parent_id)>
+                                                                                                    {{ $category->name }}
+                                                                                                </option>
+                                                                                                @if ($category->children && count($category->children))
+                                                                                                    @foreach ($category->children as $child)
+                                                                                                        <option
+                                                                                                            value="{{ $child->id }}">
+                                                                                                            -
+                                                                                                            {{ $child->name }}
+                                                                                                        </option>
+                                                                                                        @if ($child->children && count($child->children))
+                                                                                                            @foreach ($child->children as $grandchild)
+                                                                                                                <option
+                                                                                                                    value="{{ $grandchild->id }}">
+                                                                                                                    --
+                                                                                                                    {{ $grandchild->name }}
+                                                                                                                </option>
+                                                                                                                @if ($grandchild->children && count($grandchild->children))
+                                                                                                                    @foreach ($grandchild->children as $grandgrandchild)
+                                                                                                                        <option
+                                                                                                                            value="{{ $grandgrandchild->id }}">
+                                                                                                                            ---
+                                                                                                                            {{ $grandgrandchild->name }}
+                                                                                                                        </option>
+                                                                                                                        @if ($grandgrandchild->children && count($grandgrandchild->children))
+                                                                                                                            @foreach ($grandgrandchild->children as $grandgrandgrandchild)
+                                                                                                                                <option
+                                                                                                                                    value="{{ $grandgrandgrandchild->id }}">
+                                                                                                                                    ----
+                                                                                                                                    {{ $grandgrandgrandchild->name }}
+                                                                                                                                </option>
+                                                                                                                                @if ($grandgrandgrandchild->children && count($grandgrandgrandchild->children))
+                                                                                                                                    @foreach ($grandgrandgrandchild->children as $grandgrandgrandgrandchild)
+                                                                                                                                        <option
+                                                                                                                                            value="{{ $grandgrandgrandgrandchild->id }}">
+                                                                                                                                            -----
+                                                                                                                                            {{ $grandgrandgrandgrandchild->name }}
+                                                                                                                                        </option>
+                                                                                                                                        {{-- You can add even more nesting levels if needed --}}
+                                                                                                                                    @endforeach
+                                                                                                                                @endif
+                                                                                                                            @endforeach
+                                                                                                                        @endif
+                                                                                                                    @endforeach
+                                                                                                                @endif
+                                                                                                            @endforeach
+                                                                                                        @endif
+                                                                                                    @endforeach
+                                                                                                @endif
+                                                                                            @endforeach
+                                                                                            @else
+                                                                                            <tr>
+                                                                                                <td colspan="3">No categories found.</td>
+                                                                                            </tr>
+                                                                                            @endif
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-lg-8">
+                                                                            <div class="col-lg-12">
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label">Category
                                                                                         Name</label>
@@ -89,6 +134,18 @@
                                                                                         type="text"
                                                                                         class="form-control form-control-sm"
                                                                                         placeholder="Enter Category Name"
+                                                                                        maxlength="200">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-lg-12">
+                                                                                <div class="mb-3">
+                                                                                    <label class="form-label">Category
+                                                                                       Slug Name</label>
+                                                                                    <input id="slug" name="slug"
+                                                                                        value="{{ $category->slug }}"
+                                                                                        type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Enter Category Slug Name"
                                                                                         maxlength="200">
                                                                                 </div>
                                                                             </div>
@@ -121,7 +178,7 @@
                 </div>
 
                 <!-- Disabled keyboard interaction add modal for category -->
-                <div id="categoryAddModal" class="modal fade" data-bs-keyboard="false" data-bs-backdrop="static"
+                <div id="parentCategoryAddModal" class="modal fade" data-bs-keyboard="false" data-bs-backdrop="static"
                     tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -134,11 +191,11 @@
                                 @csrf
                                 <div class="modal-body">
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-12">
                                             <div class="mb-3">
-                                                <label class="form-label">Category Name</label>
-                                                <select name="category_id" data-placeholder="Select a category..."
-                                                    class="form-control form-control-sm select select-category-add"
+                                                <label class="form-label">Parent Category Name</label>
+                                                <select name="parent_id" data-placeholder="Select a Parent category..."
+                                                    class="form-control form-control-sm select select-parent-category-add"
                                                     data-container-css-class="select-sm">
                                                     <option></option>
                                                     @foreach ($categories as $categorie)
@@ -148,12 +205,20 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-8">
+                                        <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label class="form-label">Category Name</label>
                                                 <input id="name" name="name" type="text"
                                                     class="form-control form-control-sm"
                                                     placeholder="Enter Category Name" maxlength="200">
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label class="form-label">Category Slug Name</label>
+                                                <input id="slug" name="slug" type="text"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="Enter Category Slug Name" maxlength="200">
                                             </div>
                                         </div>
                                     </div>
@@ -168,20 +233,20 @@
                         </div>
                     </div>
                 </div>
-                <!-- Disabled keyboard interaction add modal for category -->
-
                 @push('scripts')
                     <script>
-                        $('#categoryAddModal').on('shown.bs.modal', function() {
-                            $('.select-category-add').select2({
-                                dropdownParent: $('#categoryAddModal')
-                            })
+                        $('#parentCategoryAddModal').on('shown.bs.modal', function() {
+                            $('.select-parent-category-add').select2({
+                                dropdownParent: $('#parentCategoryAddModal')
+                            });
                         });
 
-                        $('#categoryEditModal').on('shown.bs.modal', function() {
-                            $('.select-category-edit').select2({
-                                dropdownParent: $('#categoryEditModal')
-                            })
+                        // Use a class selector and iterate through all edit modals
+                        $('[id^="parentCategoryEditModal"]').on('shown.bs.modal', function() {
+                            // Use `$(this)` to target the specific modal being shown
+                            $(this).find('.select-parent-category-edit').select2({
+                                dropdownParent: $(this)
+                            });
                         });
 
                         $('.data-table-category').DataTable({
@@ -194,11 +259,10 @@
                                 orderable: false,
                                 width: 100,
                                 targets: [2],
-                            }, ],
+                            }],
                         });
                     </script>
                 @endpush
-
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-<x-guest-layout>
+<x-guest-layout :title="'Shop - ' . config('app.name')">
     <!-- Product -->
     <div class="bg0 m-t-23 p-b-140">
         <div class="container">

@@ -29,7 +29,6 @@ class CategoryRequest extends FormRequest
         return [
             'parent_id' => 'nullable|exists:categories,id',
             'name' => "required|string|max:255|unique:categories,name,{$categoryId}",
-            'slug' => "required|string|max:255|unique:categories,slug,{$categoryId}",
         ];
     }
 
@@ -46,10 +45,6 @@ class CategoryRequest extends FormRequest
             'name.string' => 'The category name must be a string.',
             'name.max' => 'The category name may not be greater than 255 characters.',
             'name.unique' => 'The category name has already been taken.',
-            'slug.required' => 'The slug is required.',
-            'slug.string' => 'The slug must be a string.',
-            'slug.max' => 'The slug may not be greater than 255 characters.',
-            'slug.unique' => 'The slug has already been taken.',
         ];
     }
 

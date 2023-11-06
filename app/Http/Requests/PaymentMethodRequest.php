@@ -24,11 +24,8 @@ class PaymentMethodRequest extends FormRequest
      */
     public function rules()
     {
-        $paymentMethodId = $this->payment_method; // Assuming the route parameter is named 'payment_method'
-
         return [
             'name' => 'required|string|max:255',
-            'slug' => "required|string|max:255|unique:payment_methods,slug,{$paymentMethodId}",
         ];
     }
 
@@ -43,10 +40,6 @@ class PaymentMethodRequest extends FormRequest
             'name.required' => 'The Name field is required.',
             'name.string' => 'The Name must be a string.',
             'name.max' => 'The Name may not be greater than 255 characters.',
-            'slug.required' => 'The Slug field is required.',
-            'slug.string' => 'The Slug must be a string.',
-            'slug.max' => 'The Slug may not be greater than 255 characters.',
-            'slug.unique' => 'The Slug has already been taken.',
         ];
     }
 

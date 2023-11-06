@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Category;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Repositories\Interfaces\CategoryRepositoryInterface;
 
 class CategoryController extends Controller
 {
+    private $categoryRepository;
+
+    public function __construct(CategoryRepositoryInterface $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +24,7 @@ class CategoryController extends Controller
     public function index()
     {
         return view('admin.pages.category.index', [
-            'categories' => Category::get(),
+            'categories' => $this->categoryRepository->allCategory(),
         ]);
     }
 
@@ -40,15 +46,14 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
-        Category::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
+        $data = [
+            'name'      => $request->name,
+            'slug'      => Str::slug($request->name),
             'parent_id' => $request->parent_id,
-        ]);
-
-        return redirect()->route('admin.categories.index')
-            ->with('message', 'Category created successfully!')
-            ->with('alert-type', 'success');
+        ];
+        $this->categoryRepository->storeCategory($data);
+        toastr()->success('Data has been saved successfully!');
+        return redirect()->back();
     }
 
     /**
@@ -82,16 +87,15 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, $id)
     {
-        $category = Category::findOrFail($id);
-        $category->update([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
+        $data = [
+            'name'      => $request->name,
+            'slug'      => Str::slug($request->name),
             'parent_id' => $request->parent_id,
-        ]);
+        ];
+        $this->categoryRepository->updateCategory($data, $id);
 
-        return redirect()->route('admin.categories.index')
-            ->with('message', 'Category updated successfully!')
-            ->with('alert-type', 'success');
+        toastr()->success('Data has been updated successfully!');
+        return redirect()->back();
     }
 
     /**
@@ -102,6 +106,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        Category::findOrFail($id)->delete();
+        $this->categoryRepository->destroyCategory($id);
     }
 }
