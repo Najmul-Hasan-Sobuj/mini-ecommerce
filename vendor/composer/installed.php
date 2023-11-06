@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => '7591f6c6384f4f3c14761a419f6cfbc5f4bc8ded',
         'name' => 'rubensrocha/laravel-breeze-multi-auth-admin',
         'dev' => true,
     ),
@@ -53,6 +53,15 @@
             'install_path' => __DIR__ . '/../brick/math',
             'aliases' => array(),
             'reference' => '0ad82ce168c82ba30d1c01ec86116ab52f589478',
+            'dev_requirement' => false,
+        ),
+        'browner12/helpers' => array(
+            'pretty_version' => 'v3.5.0',
+            'version' => '3.5.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../browner12/helpers',
+            'aliases' => array(),
+            'reference' => '0e66da06d750255f871fc5d9801e83b25e6942b2',
             'dev_requirement' => false,
         ),
         'composer/class-map-generator' => array(
@@ -948,12 +957,12 @@
             ),
         ),
         'rubensrocha/laravel-breeze-multi-auth-admin' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => '7591f6c6384f4f3c14761a419f6cfbc5f4bc8ded',
             'dev_requirement' => false,
         ),
         'sebastian/cli-parser' => array(

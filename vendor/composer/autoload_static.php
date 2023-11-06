@@ -25,9 +25,9 @@ class ComposerStaticInitfe4e9e832801abeb4136a2d284087bdf
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '3bd81c9b8fcc150b69d8b63b4d2ccf23' => __DIR__ . '/..' . '/spatie/flare-client-php/src/helpers.php',
         '35a6ad97d21e794e7e22a17d806652e4' => __DIR__ . '/..' . '/nunomaduro/termwind/src/Functions.php',
+        'da91a01b5badbe5394c83814ef5982ea' => __DIR__ . '/..' . '/php-flasher/flasher/helpers.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
-        'da91a01b5badbe5394c83814ef5982ea' => __DIR__ . '/..' . '/php-flasher/flasher/helpers.php',
         '265b4faa2b3a9766332744949e83bf97' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Collections/helpers.php',
         'c7a3c339e7e14b60e06a2d7fcce9476b' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Events/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
@@ -48,6 +48,10 @@ class ComposerStaticInitfe4e9e832801abeb4136a2d284087bdf
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
+        ),
+        'b' => 
+        array (
+            'browner12\\helpers\\' => 18,
         ),
         'Y' => 
         array (
@@ -210,6 +214,10 @@ class ComposerStaticInitfe4e9e832801abeb4136a2d284087bdf
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'browner12\\helpers\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/browner12/helpers/src',
         ),
         'Yoeunes\\Toastr\\' => 
         array (
@@ -659,7 +667,6 @@ class ComposerStaticInitfe4e9e832801abeb4136a2d284087bdf
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Requests\\Admin\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Admin/Auth/LoginRequest.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
-        'App\\Http\\Requests\\BrandRequest' => __DIR__ . '/../..' . '/app/Http/Requests/BrandRequest.php',
         'App\\Http\\Requests\\CartAndWishlistRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CartAndWishlistRequest.php',
         'App\\Http\\Requests\\CategoryRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CategoryRequest.php',
         'App\\Http\\Requests\\ChatRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ChatRequest.php',
@@ -673,10 +680,12 @@ class ComposerStaticInitfe4e9e832801abeb4136a2d284087bdf
         'App\\Http\\Requests\\ProductReviewRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProductReviewRequest.php',
         'App\\Http\\Requests\\RefundPolicyRequest' => __DIR__ . '/../..' . '/app/Http/Requests/RefundPolicyRequest.php',
         'App\\Http\\Requests\\ShippingAndBillingAddressRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ShippingAndBillingAddressRequest.php',
+        'App\\Http\\Requests\\brandRequest' => __DIR__ . '/../..' . '/app/Http/Requests/brandRequest.php',
         'App\\Models\\Admin' => __DIR__ . '/../..' . '/app/Models/Admin.php',
         'App\\Models\\Brand' => __DIR__ . '/../..' . '/app/Models/Brand.php',
         'App\\Models\\CartAndWishlist' => __DIR__ . '/../..' . '/app/Models/CartAndWishlist.php',
         'App\\Models\\Category' => __DIR__ . '/../..' . '/app/Models/Category.php',
+        'App\\Models\\Catogory' => __DIR__ . '/../..' . '/app/Models/Catogory.php',
         'App\\Models\\Chat' => __DIR__ . '/../..' . '/app/Models/Chat.php',
         'App\\Models\\Faq' => __DIR__ . '/../..' . '/app/Models/Faq.php',
         'App\\Models\\Order' => __DIR__ . '/../..' . '/app/Models/Order.php',
@@ -693,12 +702,16 @@ class ComposerStaticInitfe4e9e832801abeb4136a2d284087bdf
         'App\\Notifications\\Admin\\VerifyEmail' => __DIR__ . '/../..' . '/app/Notifications/Admin/VerifyEmail.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
+        'App\\Providers\\BreadcrumbServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BreadcrumbServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
+        'App\\Repositories\\CategoryRepository' => __DIR__ . '/../..' . '/app/Repositories/CategoryRepository.php',
+        'App\\Repositories\\Interfaces\\CategoryRepositoryInterface' => __DIR__ . '/../..' . '/app/Repositories/Interfaces/CategoryRepositoryInterface.php',
         'App\\View\\Components\\AdminLayout' => __DIR__ . '/../..' . '/app/View/Components/AdminLayout.php',
         'App\\View\\Components\\AppLayout' => __DIR__ . '/../..' . '/app/View/Components/AppLayout.php',
         'App\\View\\Components\\GuestLayout' => __DIR__ . '/../..' . '/app/View/Components/GuestLayout.php',
+        'App\\View\\Components\\ToastrNotification' => __DIR__ . '/../..' . '/app/View/Components/ToastrNotification.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Barryvdh\\Debugbar\\Console\\ClearCommand' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/Console/ClearCommand.php',
         'Barryvdh\\Debugbar\\Controllers\\AssetController' => __DIR__ . '/..' . '/barryvdh/laravel-debugbar/src/Controllers/AssetController.php',
@@ -6741,6 +6754,8 @@ class ComposerStaticInitfe4e9e832801abeb4136a2d284087bdf
         'Yoeunes\\Toastr\\ToastrFactory' => __DIR__ . '/..' . '/yoeunes/toastr/src/ToastrFactory.php',
         'Yoeunes\\Toastr\\ToastrPlugin' => __DIR__ . '/..' . '/yoeunes/toastr/src/ToastrPlugin.php',
         'Yoeunes\\Toastr\\ToastrServiceProvider' => __DIR__ . '/..' . '/yoeunes/toastr/src/ToastrServiceProvider.php',
+        'browner12\\helpers\\Commands\\HelperMakeCommand' => __DIR__ . '/..' . '/browner12/helpers/src/Commands/HelperMakeCommand.php',
+        'browner12\\helpers\\HelperServiceProvider' => __DIR__ . '/..' . '/browner12/helpers/src/HelperServiceProvider.php',
         'phpDocumentor\\Reflection\\Element' => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src/Element.php',
         'phpDocumentor\\Reflection\\File' => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src/File.php',
         'phpDocumentor\\Reflection\\Fqsen' => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src/Fqsen.php',

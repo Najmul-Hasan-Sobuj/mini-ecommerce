@@ -66,10 +66,13 @@
                                                                                         <option></option>
                                                                                         @if ($categories && count($categories))
                                                                                             @foreach ($categories as $category)
+                                                                                                <!-- Main category -->
                                                                                                 <option
-                                                                                                    value="{{ $category->id }}" @selected($category->id == $category->parent_id)>
+                                                                                                    value="{{ $category->id }}">
                                                                                                     {{ $category->name }}
                                                                                                 </option>
+
+                                                                                                <!-- Children of the main category -->
                                                                                                 @if ($category->children && count($category->children))
                                                                                                     @foreach ($category->children as $child)
                                                                                                         <option
@@ -77,6 +80,8 @@
                                                                                                             -
                                                                                                             {{ $child->name }}
                                                                                                         </option>
+
+                                                                                                        <!-- Sub-children of the main category's child -->
                                                                                                         @if ($child->children && count($child->children))
                                                                                                             @foreach ($child->children as $grandchild)
                                                                                                                 <option
@@ -84,44 +89,22 @@
                                                                                                                     --
                                                                                                                     {{ $grandchild->name }}
                                                                                                                 </option>
-                                                                                                                @if ($grandchild->children && count($grandchild->children))
-                                                                                                                    @foreach ($grandchild->children as $grandgrandchild)
-                                                                                                                        <option
-                                                                                                                            value="{{ $grandgrandchild->id }}">
-                                                                                                                            ---
-                                                                                                                            {{ $grandgrandchild->name }}
-                                                                                                                        </option>
-                                                                                                                        @if ($grandgrandchild->children && count($grandgrandchild->children))
-                                                                                                                            @foreach ($grandgrandchild->children as $grandgrandgrandchild)
-                                                                                                                                <option
-                                                                                                                                    value="{{ $grandgrandgrandchild->id }}">
-                                                                                                                                    ----
-                                                                                                                                    {{ $grandgrandgrandchild->name }}
-                                                                                                                                </option>
-                                                                                                                                @if ($grandgrandgrandchild->children && count($grandgrandgrandchild->children))
-                                                                                                                                    @foreach ($grandgrandgrandchild->children as $grandgrandgrandgrandchild)
-                                                                                                                                        <option
-                                                                                                                                            value="{{ $grandgrandgrandgrandchild->id }}">
-                                                                                                                                            -----
-                                                                                                                                            {{ $grandgrandgrandgrandchild->name }}
-                                                                                                                                        </option>
-                                                                                                                                        {{-- You can add even more nesting levels if needed --}}
-                                                                                                                                    @endforeach
-                                                                                                                                @endif
-                                                                                                                            @endforeach
-                                                                                                                        @endif
-                                                                                                                    @endforeach
-                                                                                                                @endif
+
+                                                                                                                <!-- This pattern continues for additional levels of nesting -->
+                                                                                                                @foreach ($grandchild->children as $greatGrandchild)
+                                                                                                                    <option
+                                                                                                                        value="{{ $greatGrandchild->id }}">
+                                                                                                                        ---
+                                                                                                                        {{ $greatGrandchild->name }}
+                                                                                                                    </option>
+                                                                                                                    <!-- Additional nested levels would follow the same pattern -->
+                                                                                                                @endforeach
                                                                                                             @endforeach
                                                                                                         @endif
                                                                                                     @endforeach
                                                                                                 @endif
                                                                                             @endforeach
-                                                                                            @else
-                                                                                            <tr>
-                                                                                                <td colspan="3">No categories found.</td>
-                                                                                            </tr>
-                                                                                            @endif
+                                                                                        @endif
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -134,18 +117,6 @@
                                                                                         type="text"
                                                                                         class="form-control form-control-sm"
                                                                                         placeholder="Enter Category Name"
-                                                                                        maxlength="200">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <div class="mb-3">
-                                                                                    <label class="form-label">Category
-                                                                                       Slug Name</label>
-                                                                                    <input id="slug" name="slug"
-                                                                                        value="{{ $category->slug }}"
-                                                                                        type="text"
-                                                                                        class="form-control form-control-sm"
-                                                                                        placeholder="Enter Category Slug Name"
                                                                                         maxlength="200">
                                                                                 </div>
                                                                             </div>
@@ -194,7 +165,8 @@
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label class="form-label">Parent Category Name</label>
-                                                <select name="parent_id" data-placeholder="Select a Parent category..."
+                                                <select name="parent_id"
+                                                    data-placeholder="Select a Parent category..."
                                                     class="form-control form-control-sm select select-parent-category-add"
                                                     data-container-css-class="select-sm">
                                                     <option></option>
@@ -211,14 +183,6 @@
                                                 <input id="name" name="name" type="text"
                                                     class="form-control form-control-sm"
                                                     placeholder="Enter Category Name" maxlength="200">
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="mb-3">
-                                                <label class="form-label">Category Slug Name</label>
-                                                <input id="slug" name="slug" type="text"
-                                                    class="form-control form-control-sm"
-                                                    placeholder="Enter Category Slug Name" maxlength="200">
                                             </div>
                                         </div>
                                     </div>
@@ -267,3 +231,5 @@
         </div>
     </div>
 </x-admin-layout>
+
+
