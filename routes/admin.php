@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 
 /*
@@ -44,16 +45,19 @@ Route::prefix('admin')->group(static function () {
         Route::get('dashboard', [\App\Http\Controllers\Admin\HomeController::class, 'index'])->name('admin.index');
         Route::get('profile', [\App\Http\Controllers\Admin\HomeController::class, 'profile'])->middleware('password.confirm.admin')->name('admin.profile');
 
-        Route::put('seo/setting', [WebSettingController::class, 'seo'])->name('seo.setting');
-        Route::put('smtp/setting', [WebSettingController::class, 'smtp'])->name('smtp.setting');
+        Route::get('web-setting', [WebSettingController::class, 'index'])->name('web.setting');
+        Route::put('seo-setting', [WebSettingController::class, 'seo'])->name('seo.setting');
+        Route::put('smtp-setting', [WebSettingController::class, 'smtp'])->name('smtp.setting');
 
         Route::resources(
             [
                 'category' => CategoryController::class,
-                'brand'    => BrandController::class,
             ],
             ['except' => ['create', 'show', 'edit'],]
         );
+        Route::resource('brand', BrandController::class);
+        Route::resource('product', ProductController::class)->except(['show']);
+
         Route::resource('contact', ContactController::class)->except(['create', 'show', 'edit'])
             ->middleware(['throttle:10,1', 'checkBan'], 'only', ['store']);
 

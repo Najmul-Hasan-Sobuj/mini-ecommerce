@@ -165,8 +165,7 @@
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label class="form-label">Parent Category Name</label>
-                                                <select name="parent_id"
-                                                    data-placeholder="Select a Parent category..."
+                                                <select name="parent_id" data-placeholder="Select a Parent category..."
                                                     class="form-control form-control-sm select select-parent-category-add"
                                                     data-container-css-class="select-sm">
                                                     <option></option>
@@ -197,39 +196,37 @@
                         </div>
                     </div>
                 </div>
-                @push('scripts')
-                    <script>
-                        $('#parentCategoryAddModal').on('shown.bs.modal', function() {
-                            $('.select-parent-category-add').select2({
-                                dropdownParent: $('#parentCategoryAddModal')
-                            });
-                        });
-
-                        // Use a class selector and iterate through all edit modals
-                        $('[id^="parentCategoryEditModal"]').on('shown.bs.modal', function() {
-                            // Use `$(this)` to target the specific modal being shown
-                            $(this).find('.select-parent-category-edit').select2({
-                                dropdownParent: $(this)
-                            });
-                        });
-
-                        $('.data-table-category').DataTable({
-                            dom: '<"datatable-header"fl><"datatable-scroll-wrap"t><"datatable-footer"ip>',
-                            autoWidth: false,
-                            responsive: true,
-                            "iDisplayLength": 10,
-                            "lengthMenu": [10, 25, 30, 50],
-                            columnDefs: [{
-                                orderable: false,
-                                width: 100,
-                                targets: [2],
-                            }],
-                        });
-                    </script>
-                @endpush
             </div>
         </div>
     </div>
+    @push('scripts')
+        <script>
+            $('#parentCategoryAddModal').on('shown.bs.modal', function() {
+                $('.select-parent-category-add').select2({
+                    dropdownParent: $('#parentCategoryAddModal')
+                });
+            });
+
+            // Use a class selector and iterate through all edit modals
+            $('[id^="parentCategoryEditModal"]').on('shown.bs.modal', function() {
+                // Use `$(this)` to target the specific modal being shown
+                $(this).find('.select-parent-category-edit').select2({
+                    dropdownParent: $(this)
+                });
+            });
+
+            $('.data-table-category').DataTable({
+                dom: '<"datatable-header"fl><"datatable-scroll-wrap"t><"datatable-footer"ip>',
+                autoWidth: false,
+                responsive: true,
+                "iDisplayLength": 10,
+                "lengthMenu": [10, 25, 30, 50],
+                columnDefs: [{
+                    orderable: false,
+                    width: 100,
+                    targets: [2],
+                }],
+            });
+        </script>
+    @endpush
 </x-admin-layout>
-
-

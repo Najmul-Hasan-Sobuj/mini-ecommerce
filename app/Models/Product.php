@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ProductAttachment;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -14,4 +15,9 @@ class Product extends Model
      * @var array
      */
     protected $guarded = [];
+
+    public function attachments()
+    {
+        return $this->hasMany(ProductAttachment::class);
+    }
 }

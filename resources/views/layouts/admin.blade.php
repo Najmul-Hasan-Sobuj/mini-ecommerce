@@ -118,14 +118,17 @@
     <script src="{{ asset('admin/assets/js/vendor/pickers/daterangepicker.js') }}"></script>
     <script src="{{ asset('admin/assets/js/vendor/pickers/datepicker.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/vendor/editors/ckeditor/ckeditor_classic.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/vendor/media/glightbox.min.js') }}"></script>
 
     <script src="{{ asset('admin/assets/js/app.js') }}"></script>
 
+    <script src="{{ asset('admin/assets/demo/pages/gallery_library.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/extra_sweetalert.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/components_buttons.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/pages/partials.js') }}"></script>
+    {{-- <script src="{{ asset('admin/assets/demo/pages/partials.js') }}"></script> --}}
     <script src="{{ asset('admin/assets/demo/pages/form_select2.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/form_multiselect.js') }}"></script>
+    <script src="{{ asset('admin/assets/demo/pages/form_layouts.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/components_modals.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/table_elements.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/datatables_basic.js') }}"></script>

@@ -19,6 +19,11 @@
                     'icon' => 'ph-brandy',
                     'label' => __('Brand'),
                 ],
+                [
+                    'route' => 'product.index',
+                    'icon' => 'ph-brandy',
+                    'label' => __('Product'),
+                ],
             ],
         ],
         // [

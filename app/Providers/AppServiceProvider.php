@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\BrandRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\CategoryRepository;
+use App\Repositories\Interfaces\BrandRepositoryInterface;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $bindings = [
             CategoryRepositoryInterface::class => CategoryRepository::class,
+            BrandRepositoryInterface::class => BrandRepository::class,
         ];
 
         foreach ($bindings as $interface => $implementation) {

@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '7591f6c6384f4f3c14761a419f6cfbc5f4bc8ded',
+        'reference' => 'dee4727e8d6640c0c3bf8cdb1ebe5a8ce04f34b4',
         'name' => 'rubensrocha/laravel-breeze-multi-auth-admin',
         'dev' => true,
     ),
@@ -456,6 +456,15 @@
             'replaced' => array(
                 0 => 'v9.52.16',
             ),
+        ),
+        'intervention/image' => array(
+            'pretty_version' => '2.7.2',
+            'version' => '2.7.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../intervention/image',
+            'aliases' => array(),
+            'reference' => '04be355f8d6734c826045d02a1079ad658322dad',
+            'dev_requirement' => false,
         ),
         'kodova/hamcrest-php' => array(
             'dev_requirement' => true,
@@ -962,7 +971,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '7591f6c6384f4f3c14761a419f6cfbc5f4bc8ded',
+            'reference' => 'dee4727e8d6640c0c3bf8cdb1ebe5a8ce04f34b4',
             'dev_requirement' => false,
         ),
         'sebastian/cli-parser' => array(
