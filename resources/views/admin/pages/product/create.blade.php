@@ -29,7 +29,7 @@
                             <div class="col-lg-2">
                                 <div class="mb-2">
                                     <label class="form-label">Product key:</label>
-                                    <input type="text" name="sku" class="form-control"
+                                    <input type="text" name="sku" class="form-control form-control-sm"
                                         placeholder="Enter your product key" id="mask_product_key">
                                     <span class="form-text">a*-000-a000</span>
                                 </div>
@@ -185,7 +185,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="mb-2">
-                                    <label class="col-form-label">Product Image </label>
+                                    <label class="col-form-label">Product Description </label>
                                     <textarea class="form-control form-control-sm" id="ckeditor_classic_empty_1" name="description"
                                         placeholder="Enter your text..."></textarea>
                                 </div>

@@ -51,12 +51,12 @@ Route::prefix('admin')->group(static function () {
 
         Route::resources(
             [
-                'category' => CategoryController::class,
+                'category' => CategoryController::class, //done
             ],
             ['except' => ['create', 'show', 'edit'],]
         );
-        Route::resource('brand', BrandController::class);
-        Route::resource('product', ProductController::class)->except(['show']);
+        Route::resource('brand', BrandController::class); //done
+        Route::resource('product', ProductController::class)->except(['show']); //done
 
         Route::resource('contact', ContactController::class)->except(['create', 'show', 'edit'])
             ->middleware(['throttle:10,1', 'checkBan'], 'only', ['store']);

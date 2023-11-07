@@ -3,12 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SiteController extends Controller
 {
     public function index()
     {
-        return view('welcome');
+        // Get all categories with their active products
+        $categories = DB::table('categories')
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('products')
+                    ->whereRaw('products.category_id = categories.id')
+                    ->where('products.status', 'active'); // If you want to filter by active products
+            })
+            ->get();
+
+        // Get the products for each category
+        foreach ($categories as $category) {
+            $category->products = DB::table('products')
+                ->where('category_id', $category->id)
+                ->where('status', 'active') // If you want to filter by active products
+                ->get();
+        }
+        // dd($categories);
+        return view('welcome', ['categories' => $categories]);
     }
 
     public function profile()
