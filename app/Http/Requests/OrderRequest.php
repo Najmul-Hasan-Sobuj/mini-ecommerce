@@ -27,6 +27,7 @@ class OrderRequest extends FormRequest
         return [
             'user_id' => 'required|exists:users,id',
             'address_id' => 'required|exists:addresses,id',
+            'payment_method_id' => 'required|exists:payment_methods,id',
             'order_date' => 'required|date',
             'shipped_date' => 'nullable|date|after_or_equal:order_date',
             'status' => 'required|in:pending,processing,shipped,delivered,cancelled,return',
@@ -53,6 +54,8 @@ class OrderRequest extends FormRequest
             'user_id.exists' => 'The specified User ID does not exist.',
             'address_id.required' => 'The Address ID field is required.',
             'address_id.exists' => 'The specified Address ID does not exist.',
+            'payment_method_id.required' => 'The Payment Method ID field is required.',
+            'payment_method_id.exists' => 'The specified Payment Method ID does not exist.',
             'order_date.required' => 'The Order Date field is required.',
             'order_date.date' => 'The Order Date must be a valid date.',
             'shipped_date.date' => 'The Shipped Date must be a valid date.',

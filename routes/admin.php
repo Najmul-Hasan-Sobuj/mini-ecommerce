@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\PaymentMethodController;
+use App\Http\Controllers\Admin\PaymentTransactionController;
+use App\Http\Controllers\Admin\RefundPolicyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +55,11 @@ Route::prefix('admin')->group(static function () {
 
         Route::resources(
             [
-                'category' => CategoryController::class, //done
+                'category'           => CategoryController::class, //done
+                'paymentMethod'      => PaymentMethodController::class, // done
+                'paymentTransaction' => PaymentTransactionController::class, //
+                'faq'                => FaqController::class, // done
+                'refundPolicy'       => RefundPolicyController::class, //
             ],
             ['except' => ['create', 'show', 'edit'],]
         );
@@ -79,3 +87,11 @@ Route::prefix('admin')->group(static function () {
         // Route::resource('contact', ContactController::class)->except(['create', 'show', 'edit']); //example
     });
 });
+
+
+
+
+
+
+
+

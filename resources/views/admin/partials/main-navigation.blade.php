@@ -26,11 +26,26 @@
                 ],
             ],
         ],
-        // [
-        //     'route' => 'admin.web.setting.index',
-        //     'icon' => 'ph-gear-six',
-        //     'label' => __('Setting'),
-        // ],
+        [
+            'route' => 'paymentMethod.index',
+            'icon' => 'ph-gear-six',
+            'label' => __('Payment Method'),
+        ],
+        [
+            'route' => 'paymentTransaction.index',
+            'icon' => 'ph-gear-six',
+            'label' => __('Payment Transaction'),
+        ],
+        [
+            'route' => 'faq.index',
+            'icon' => 'ph-gear-six',
+            'label' => __('Faq'),
+        ],
+        [
+            'route' => 'refundPolicy.index',
+            'icon' => 'ph-gear-six',
+            'label' => __('Refund Policy'),
+        ],
     ];
 
     $currentRoute = request()

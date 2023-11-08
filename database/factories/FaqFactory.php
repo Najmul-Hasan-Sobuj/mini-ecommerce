@@ -25,10 +25,11 @@ class FaqFactory extends Factory
     public function definition()
     {
         return [
+            'category' => $this->faker->word,
             'question' => $this->faker->sentence,
-            'order' => $this->faker->optional()->randomNumber(),
-            'status' => $this->faker->randomElement(['active', 'inactive']),
-            'answer' => $this->faker->paragraph,
+            'order'    => $this->faker->optional()->randomNumber(),
+            'status'   => $this->faker->randomElement(['active', 'inactive']),
+            'answer'   => $this->faker->paragraph,
         ];
     }
 }

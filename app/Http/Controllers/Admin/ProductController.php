@@ -200,12 +200,22 @@ class ProductController extends Controller
 
             // Process additional images if they are provided
             if ($request->has('images')) {
+                // First, delete old attachment records and their files
+                $oldAttachments = ProductAttachment::where('product_id', $product->id)->get();
+                foreach ($oldAttachments as $oldAttachment) {
+                    $oldAttachmentPath = $filePath . $oldAttachment->images;
+                    if (File::exists($oldAttachmentPath)) {
+                        File::delete($oldAttachmentPath);
+                    }
+                    $oldAttachment->delete(); // This will delete the record from the database
+                }
+
                 $additionalImages = $request->file('images');
                 foreach ($additionalImages as $imageFile) {
                     // Upload and store each additional image
                     $uploadImage = customUpload($imageFile, $filePath);
                     if ($uploadImage['status'] == 1) {
-                        // Create or update product attachments
+                        // Create new product attachments
                         ProductAttachment::create([
                             'product_id' => $product->id,
                             'images' => $uploadImage['file_name'],

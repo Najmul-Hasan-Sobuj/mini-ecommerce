@@ -5,6 +5,8 @@ namespace Database\Factories;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\PaymentMethod;
+use App\Models\PaymentTransaction;
 use App\Models\ShippingAndBillingAddress;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -34,6 +36,7 @@ class OrderFactory extends Factory
             'user_id' =>  User::query()->inRandomOrder()->first()->id ?? User::factory()->create()->id,
             'shipping_address_id' => ShippingAndBillingAddress::query()->inRandomOrder()->first()->id ?? ShippingAndBillingAddress::factory()->create()->id,
             'billing_address_id' => ShippingAndBillingAddress::query()->inRandomOrder()->first()->id ?? ShippingAndBillingAddress::factory()->create()->id,
+            'payment_method_id' => PaymentMethod::query()->inRandomOrder()->first()->id ?? PaymentMethod::factory()->create()->id,
             'order_date' => $orderDate,
             'shipped_date' => $shippedDate,
             'status' => $this->faker->randomElement(['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'return']),

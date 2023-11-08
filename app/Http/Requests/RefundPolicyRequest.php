@@ -26,7 +26,7 @@ class RefundPolicyRequest extends FormRequest
     {
         return [
             'policy_text' => 'required|string',
-            'last_updated' => 'required|date',
+            // 'last_updated' => 'required|date',
         ];
     }
 

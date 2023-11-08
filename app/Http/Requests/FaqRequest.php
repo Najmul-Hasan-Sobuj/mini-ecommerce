@@ -25,6 +25,7 @@ class FaqRequest extends FormRequest
     public function rules()
     {
         return [
+            'category' => 'required|string|max:255',
             'question' => 'required|string|max:255',
             'order' => 'nullable|integer|min:1',
             'status' => 'required|in:active,inactive',
@@ -40,6 +41,9 @@ class FaqRequest extends FormRequest
     public function messages()
     {
         return [
+            'category.required' => 'The category field is required.',
+            'category.string' => 'The category must be a string.',
+            'category.max' => 'The category may not be greater than 255 characters.',
             'question.required' => 'The question field is required.',
             'question.string' => 'The question must be a string.',
             'question.max' => 'The question may not be greater than 255 characters.',

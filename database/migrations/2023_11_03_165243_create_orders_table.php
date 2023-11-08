@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('shipping_address_id')->constrained('shipping_and_billing_addresses')->cascadeOnDelete();
             $table->foreignId('billing_address_id')->constrained('shipping_and_billing_addresses')->cascadeOnDelete();
+            $table->foreignId('payment_method_id')->constrained('payment_methods')->cascadeOnDelete();
             $table->timestamp('order_date')->useCurrent();
             $table->timestamp('shipped_date')->nullable();
             $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'return'])->default('pending');

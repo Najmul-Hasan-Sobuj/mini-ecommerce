@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('faqs', function (Blueprint $table) {
             $table->id();
+            $table->string('category');
             $table->string('question');
             $table->unsignedInteger('order')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');

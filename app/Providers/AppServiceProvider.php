@@ -2,11 +2,19 @@
 
 namespace App\Providers;
 
+use App\Repositories\FaqRepository;
 use App\Repositories\BrandRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\CategoryRepository;
+use App\Repositories\RefundPolicyRepository;
+use App\Repositories\PaymentMethodRepository;
+use App\Repositories\PaymentTransactionRepository;
+use App\Repositories\Interfaces\FaqRepositoryInterface;
 use App\Repositories\Interfaces\BrandRepositoryInterface;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
+use App\Repositories\Interfaces\RefundPolicyRepositoryInterface;
+use App\Repositories\Interfaces\PaymentMethodRepositoryInterface;
+use App\Repositories\Interfaces\PaymentTransactionRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
         $bindings = [
             CategoryRepositoryInterface::class => CategoryRepository::class,
             BrandRepositoryInterface::class => BrandRepository::class,
+            FaqRepositoryInterface::class => FaqRepository::class,
+            PaymentMethodRepositoryInterface::class => PaymentMethodRepository::class,
+            PaymentTransactionRepositoryInterface::class => PaymentTransactionRepository::class,
+            RefundPolicyRepositoryInterface::class => RefundPolicyRepository::class,
         ];
 
         foreach ($bindings as $interface => $implementation) {
