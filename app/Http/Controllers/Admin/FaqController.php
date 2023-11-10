@@ -24,7 +24,7 @@ class FaqController extends Controller
     public function index()
     {
         return view('admin.pages.faq.index', [
-            'faqs' => $this->faqRepository->allFaq(),
+            'faqs' => $this->faqRepository->all(),
         ]);
     }
 
@@ -43,7 +43,7 @@ class FaqController extends Controller
             'status'   => $request->status,
             'answer'   => $request->answer,
         ];
-        $this->faqRepository->storeFaq($data);
+        $this->faqRepository->create($data);
         toastr()->success('Data has been saved successfully!');
         return redirect()->back();
     }
@@ -64,7 +64,7 @@ class FaqController extends Controller
             'status'   => $request->status,
             'answer'   => $request->answer,
         ];
-        $this->faqRepository->updateFaq($data, $id);
+        $this->faqRepository->update($data, $id);
 
         toastr()->success('Data has been updated successfully!');
         return redirect()->back();
@@ -78,6 +78,6 @@ class FaqController extends Controller
      */
     public function destroy($id)
     {
-        $this->faqRepository->destroyFaq($id);
+        $this->faqRepository->delete($id);
     }
 }

@@ -55,9 +55,9 @@ Route::prefix('admin')->group(static function () {
 
         Route::resources(
             [
-                'category'           => CategoryController::class, //done
-                'paymentMethod'      => PaymentMethodController::class, // done
-                'faq'                => FaqController::class, // done
+                'category'      => CategoryController::class, //done
+                'paymentMethod' => PaymentMethodController::class, // done
+                'faq'           => FaqController::class, // done
             ],
             ['except' => ['create', 'show', 'edit'],]
         );
