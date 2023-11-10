@@ -1,13 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\RefundPolicyController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\PaymentTransactionController;
-use App\Http\Controllers\Admin\RefundPolicyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,49 +49,47 @@ Route::prefix('admin')->group(static function () {
         Route::get('dashboard', [\App\Http\Controllers\Admin\HomeController::class, 'index'])->name('admin.index');
         Route::get('profile', [\App\Http\Controllers\Admin\HomeController::class, 'profile'])->middleware('password.confirm.admin')->name('admin.profile');
 
-        Route::get('web-setting', [WebSettingController::class, 'index'])->name('web.setting');
-        Route::put('seo-setting', [WebSettingController::class, 'seo'])->name('seo.setting');
-        Route::put('smtp-setting', [WebSettingController::class, 'smtp'])->name('smtp.setting');
+        // Route::get('web-setting', [WebSettingController::class, 'index'])->name('web.setting');
+        // Route::put('seo-setting', [WebSettingController::class, 'seo'])->name('seo.setting');
+        // Route::put('smtp-setting', [WebSettingController::class, 'smtp'])->name('smtp.setting');
 
         Route::resources(
             [
                 'category'           => CategoryController::class, //done
                 'paymentMethod'      => PaymentMethodController::class, // done
-                'paymentTransaction' => PaymentTransactionController::class, //
                 'faq'                => FaqController::class, // done
-                'refundPolicy'       => RefundPolicyController::class, //
             ],
             ['except' => ['create', 'show', 'edit'],]
         );
+
+        Route::get('payment-transaction', [PaymentTransactionController::class, 'index'])->name('payment.transaction.index');
+        Route::post('/update-transaction-status/{id}', [PaymentTransactionController::class, 'updateStatus'])->name('transaction.updateStatus');
+        Route::delete('payment-transaction/{id}', [PaymentTransactionController::class, 'destroy'])->name('payment.transaction.destroy');
+
+        Route::get('refund-policy', [RefundPolicyController::class, 'index'])->name('refund.policy.index');
+        Route::put('refund-policy', [RefundPolicyController::class, 'refundPolicy'])->name('refund.policy.update.or.create');
+
         Route::resource('brand', BrandController::class); //done
         Route::resource('product', ProductController::class)->except(['show']); //done
 
-        Route::resource('contact', ContactController::class)->except(['create', 'show', 'edit'])
-            ->middleware(['throttle:10,1', 'checkBan'], 'only', ['store']);
+        // Route::resource('contact', ContactController::class)->except(['create', 'show', 'edit'])
+        //     ->middleware(['throttle:10,1', 'checkBan'], 'only', ['store']);
 
-        Route::get('/subscribers', [NewsletterController::class, 'index'])->name('newsletter.index');
-        Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+        // Route::get('/subscribers', [NewsletterController::class, 'index'])->name('newsletter.index');
+        // Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
-        Route::get('/verify/{token}', [NewsletterController::class, 'verify'])->name('newsletter.verify');
+        // Route::get('/verify/{token}', [NewsletterController::class, 'verify'])->name('newsletter.verify');
 
-        Route::get('/verified', function () {
-            return view('newsletter.verified');
-        })->name('newsletter.verified');
+        // Route::get('/verified', function () {
+        //     return view('newsletter.verified');
+        // })->name('newsletter.verified');
 
-        Route::get('/verify-failed', function () {
-            return view('newsletter.verify-failed');
-        })->name('newsletter.verify-failed');
+        // Route::get('/verify-failed', function () {
+        //     return view('newsletter.verify-failed');
+        // })->name('newsletter.verify-failed');
 
-        Route::post('/unsubscribe', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+        // Route::post('/unsubscribe', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
         // Route::resource('contact', ContactController::class)->except(['create', 'show', 'edit']); //example
     });
 });
-
-
-
-
-
-
-
-

@@ -32,7 +32,7 @@
             'label' => __('Payment Method'),
         ],
         [
-            'route' => 'paymentTransaction.index',
+            'route' => 'payment.transaction.index',
             'icon' => 'ph-gear-six',
             'label' => __('Payment Transaction'),
         ],
@@ -42,7 +42,7 @@
             'label' => __('Faq'),
         ],
         [
-            'route' => 'refundPolicy.index',
+            'route' => 'refund.policy.index',
             'icon' => 'ph-gear-six',
             'label' => __('Refund Policy'),
         ],

@@ -9,12 +9,7 @@ class RefundPolicyRepository implements RefundPolicyRepositoryInterface
 {
     public function allRefundPolicy()
     {
-        return RefundPolicy::latest('id')->get();
-    }
-
-    public function storeRefundPolicy(array $data)
-    {
-        return RefundPolicy::create($data);
+        return RefundPolicy::first();
     }
 
     public function findRefundPolicy(int $id)
@@ -22,13 +17,8 @@ class RefundPolicyRepository implements RefundPolicyRepositoryInterface
         return RefundPolicy::findOrFail($id);
     }
 
-    public function updateRefundPolicy(array $data, int $id)
+    public function updateOrCreateRefundPolicy(array $data)
     {
-        return RefundPolicy::findOrFail($id)->update($data);
-    }
-
-    public function destroyRefundPolicy(int $id)
-    {
-        return RefundPolicy::destroy($id);
+        return RefundPolicy::updateOrCreate([], $data);
     }
 }

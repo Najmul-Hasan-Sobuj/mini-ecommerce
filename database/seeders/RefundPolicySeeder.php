@@ -15,6 +15,6 @@ class RefundPolicySeeder extends Seeder
      */
     public function run()
     {
-        RefundPolicy::factory(3)->create();
+        RefundPolicy::factory(1)->create();
     }
 }

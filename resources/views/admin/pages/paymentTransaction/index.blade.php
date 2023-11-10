@@ -1,18 +1,7 @@
-<x-admin-layout :title="'Payment Transactions - ' . config('app.name')">
+<x-admin-layout :title="'Payment Transaction Information - ' . config('app.name')">
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-body">
-                <div class="d-flex justify-content-end">
-                    <div class="mb-2">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="#paymentTransactionAddModal"
-                            class="btn btn-flat-success btn-labeled btn-labeled-start btn-sm">
-                            <span class="btn-labeled-icon bg-success text-white">
-                                <i class="ph-plus-circle ph-sm"></i>
-                            </span>
-                            Add
-                        </button>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-lg-12">
                         <table
@@ -20,8 +9,11 @@
                             <thead>
                                 <tr class="bg-secondary border-secondary text-white">
                                     <th width="5%">#</th>
-                                    <th width="45%">Name</th>
-                                    <th width="45%">Slug</th>
+                                    <th width="20%">payment_method_id</th>
+                                    <th width="15%">amount</th>
+                                    <th width="20%">transaction_id</th>
+                                    <th width="15%">status</th>
+                                    <th width="20%">created_at</th>
                                     <th class="text-center" width="5%">Action</th>
                                 </tr>
                             </thead>
@@ -30,85 +22,28 @@
                                     @foreach ($paymentTransactions as $paymentTransaction)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $paymentTransaction->name }}</td>
-                                            <td>{{ $paymentTransaction->slug }}</td>
+                                            <td>{{ $paymentTransaction->paymentMethodName() }}</td>
+                                            <td>{{ $paymentTransaction->amount }}</td>
+                                            <td>{{ $paymentTransaction->transaction_id }}</td>
                                             <td>
-                                                <div class="d-inline-flex">
-                                                    <a href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#paymentTransactionEditModal{{ $paymentTransaction->id }}"
-                                                        class="text-primary" aria-label="Edit Category">
-                                                        <i class="ph-pen"></i>
-                                                    </a>
-                                                    <div id="paymentTransactionEditModal{{ $paymentTransaction->id }}"
-                                                        class="modal fade" data-bs-keyboard="false"
-                                                        data-bs-backdrop="static" tabindex="-1">
-                                                        <div class="modal-dialog modal-dialog-centered">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title">Edit Category</h5>
-                                                                    <button type="button" class="btn-close"
-                                                                        data-bs-dismiss="modal"></button>
-                                                                </div>
-
-                                                                <form
-                                                                    action="{{ route('paymentTransaction.update', $paymentTransaction->id) }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    @method('PUT')
-                                                                    <div class="modal-body">
-                                                                        <div class="row">
-                                                                            <div class="col-lg-12">
-                                                                                <div class="mb-3">
-                                                                                    <label class="form-label">Order ID</label>
-                                                                                    <input id="order_id" name="order_id"
-                                                                                        value="{{ $paymentTransaction->order_id }}"
-                                                                                        type="text"
-                                                                                        class="form-control form-control-sm"
-                                                                                        placeholder="Enter Payment Method Name">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <div class="mb-3">
-                                                                                    <label class="form-label">Parent Category Name</label>
-                                                                                    <select name="parent_id" data-placeholder="Select a Parent category..."
-                                                                                        class="form-control form-control-sm select select-parent-category-add"
-                                                                                        data-container-css-class="select-sm">
-                                                                                        <option></option>
-                                                                                        @foreach ($paymentMethods as $categorie)
-                                                                                            <option value="{{ $categorie->id }}">{{ $categorie->name }}
-                                                                                            </option>
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-lg-12">
-                                                                                <div class="mb-3">
-                                                                                    <label class="form-label">Payment
-                                                                                        Method
-                                                                                        Name</label>
-                                                                                    <input id="name" name="name"
-                                                                                        value="{{ $paymentTransaction->name }}"
-                                                                                        type="text"
-                                                                                        class="form-control form-control-sm"
-                                                                                        placeholder="Enter Payment Method Name">
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-link"
-                                                                            data-bs-dismiss="modal">Close</button>
-                                                                        <button type="submit"
-                                                                            class="btn btn-primary ">Save
-                                                                            changes</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <a href="{{ route('paymentTransaction.destroy', $paymentTransaction->id) }}"
-                                                        class="text-danger mx-2 delete" aria-label="Delete Category">
+                                                <select name="status"
+                                                    class="form-control form-control-select2 status-selector"
+                                                    data-id="{{ $paymentTransaction->id }}"
+                                                    data-current-status="{{ $paymentTransaction->status }}">
+                                                    <option @selected($paymentTransaction->status == 'pending') value="pending">Pending
+                                                    </option>
+                                                    <option @selected($paymentTransaction->status == 'completed') value="completed">Completed
+                                                    </option>
+                                                    <option @selected($paymentTransaction->status == 'failed') value="failed">Failed</option>
+                                                    <option @selected($paymentTransaction->status == 'refunded') value="refunded">Refunded
+                                                    </option>
+                                                </select>
+                                            </td>
+                                            <td>{{ $paymentTransaction->created_at }}</td>
+                                            <td>
+                                                <div class="d-inline-flex text-center">
+                                                    <a href="{{ route('payment.transaction.destroy', $paymentTransaction->id) }}"
+                                                        class="text-danger delete">
                                                         <i class="ph-trash"></i>
                                                     </a>
                                                 </div>
@@ -118,40 +53,6 @@
                                 @endif
                             </tbody>
                         </table>
-                    </div>
-                </div>
-
-                <!-- Disabled keyboard interaction add modal for paymentTransaction -->
-                <div id="paymentTransactionAddModal" class="modal fade" data-bs-keyboard="false"
-                    data-bs-backdrop="static" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Add New Category</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                            </div>
-
-                            <form action="{{ route('paymentTransaction.store') }}" method="POST">
-                                @csrf
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="mb-3">
-                                                <label class="form-label">Payment Method Name</label>
-                                                <input id="name" name="name" type="text"
-                                                    class="form-control form-control-sm"
-                                                    placeholder="Enter Payment Method Name">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Save changes</button>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -168,8 +69,49 @@
                 columnDefs: [{
                     orderable: false,
                     width: 100,
-                    targets: [3],
+                    targets: [4, 6],
                 }],
+            });
+
+            $(document).ready(function() {
+                $(document).on('change', '.status-selector', function() {
+                    var selectedStatus = $(this).val();
+                    var currentStatus = $(this).data('current-status');
+                    var transactionId = $(this).data('id');
+
+                    if (selectedStatus !== currentStatus) {
+                        swalInit.fire({
+                            title: 'Are you sure?',
+                            text: 'Do you want to update the status?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, update it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: '/admin/update-transaction-status/' +
+                                        transactionId,
+                                    type: 'POST',
+                                    data: {
+                                        status: selectedStatus,
+                                        _token: '{{ csrf_token() }}'
+                                    },
+                                    success: function(response) {
+                                        swalInit.fire('Updated!',
+                                            'The status has been updated.', 'success');
+                                    },
+                                    error: function(xhr, status, error) {
+                                        swalInit.fire('Error!',
+                                            'There was a problem updating the status.',
+                                            'error');
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
             });
         </script>
     @endpush

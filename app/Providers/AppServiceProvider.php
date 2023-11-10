@@ -14,7 +14,6 @@ use App\Repositories\Interfaces\BrandRepositoryInterface;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\RefundPolicyRepositoryInterface;
 use App\Repositories\Interfaces\PaymentMethodRepositoryInterface;
-use App\Repositories\Interfaces\PaymentTransactionRepositoryInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -30,7 +29,6 @@ class AppServiceProvider extends ServiceProvider
             BrandRepositoryInterface::class => BrandRepository::class,
             FaqRepositoryInterface::class => FaqRepository::class,
             PaymentMethodRepositoryInterface::class => PaymentMethodRepository::class,
-            PaymentTransactionRepositoryInterface::class => PaymentTransactionRepository::class,
             RefundPolicyRepositoryInterface::class => RefundPolicyRepository::class,
         ];
 

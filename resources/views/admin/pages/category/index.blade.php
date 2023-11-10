@@ -20,7 +20,8 @@
                             <thead>
                                 <tr class="bg-secondary border-secondary text-white">
                                     <th width="5%">#</th>
-                                    <th width="90%">Name</th>
+                                    <th width="50%">Parent Name</th>
+                                    <th width="40%">Name</th>
                                     <th class="text-center" width="5%">Action</th>
                                 </tr>
                             </thead>
@@ -29,7 +30,10 @@
                                     @foreach ($categories as $category)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $category->name }}</td>
+                                            <td>{{ $category->parentName() ?? 'No Parent' }}
+                                            </td>
+                                            <td>{{ $category->name }}
+                                            </td>
                                             <td>
                                                 <div class="d-inline-flex">
                                                     <a href="#" data-bs-toggle="modal"
@@ -57,54 +61,27 @@
                                                                         <div class="row">
                                                                             <div class="col-lg-12">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label">Category
+                                                                                    <label class="form-label">Parent
+                                                                                        Category
                                                                                         Name</label>
+                                                                                    {{-- <x-category-dropdown
+                                                                                        :categories="$categories"
+                                                                                        mode="edit" /> --}}
                                                                                     <select name="parent_id"
-                                                                                        data-placeholder="Select a parent category..."
+                                                                                        data-placeholder="Select a Parent category..."
                                                                                         class="form-control form-control-sm select select-parent-category-edit"
                                                                                         data-container-css-class="select-sm">
                                                                                         <option></option>
-                                                                                        @if ($categories && count($categories))
-                                                                                            @foreach ($categories as $category)
-                                                                                                <!-- Main category -->
-                                                                                                <option
-                                                                                                    value="{{ $category->id }}">
-                                                                                                    {{ $category->name }}
-                                                                                                </option>
-
-                                                                                                <!-- Children of the main category -->
-                                                                                                @if ($category->children && count($category->children))
-                                                                                                    @foreach ($category->children as $child)
-                                                                                                        <option
-                                                                                                            value="{{ $child->id }}">
-                                                                                                            -
-                                                                                                            {{ $child->name }}
-                                                                                                        </option>
-
-                                                                                                        <!-- Sub-children of the main category's child -->
-                                                                                                        @if ($child->children && count($child->children))
-                                                                                                            @foreach ($child->children as $grandchild)
-                                                                                                                <option
-                                                                                                                    value="{{ $grandchild->id }}">
-                                                                                                                    --
-                                                                                                                    {{ $grandchild->name }}
-                                                                                                                </option>
-
-                                                                                                                <!-- This pattern continues for additional levels of nesting -->
-                                                                                                                @foreach ($grandchild->children as $greatGrandchild)
-                                                                                                                    <option
-                                                                                                                        value="{{ $greatGrandchild->id }}">
-                                                                                                                        ---
-                                                                                                                        {{ $greatGrandchild->name }}
-                                                                                                                    </option>
-                                                                                                                    <!-- Additional nested levels would follow the same pattern -->
-                                                                                                                @endforeach
-                                                                                                            @endforeach
-                                                                                                        @endif
-                                                                                                    @endforeach
-                                                                                                @endif
-                                                                                            @endforeach
-                                                                                        @endif
+                                                                                        @foreach ($categories->whereNull('parent_id') as $parentCategory)
+                                                                                            @include(
+                                                                                                'admin.pages.category.partial.edit-parent',
+                                                                                                [
+                                                                                                    'category' => $parentCategory,
+                                                                                                    'level' => 0,
+                                                                                                    'editingCategory' => $category, // Pass the currently editing category
+                                                                                                ]
+                                                                                            )
+                                                                                        @endforeach
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -165,14 +142,22 @@
                                         <div class="col-lg-12">
                                             <div class="mb-3">
                                                 <label class="form-label">Parent Category Name</label>
+                                                {{-- <x-category-dropdown :categories="$categories" /> --}}
                                                 <select name="parent_id" data-placeholder="Select a Parent category..."
                                                     class="form-control form-control-sm select select-parent-category-add"
                                                     data-container-css-class="select-sm">
                                                     <option></option>
-                                                    @foreach ($categories as $categorie)
-                                                        <option value="{{ $categorie->id }}">{{ $categorie->name }}
-                                                        </option>
-                                                    @endforeach
+                                                    @if (count($categories))
+                                                        @foreach ($categories->whereNull('parent_id') as $category)
+                                                            @include(
+                                                                'admin.pages.category.partial.add-parent',
+                                                                [
+                                                                    'category' => $category,
+                                                                    'level' => 0,
+                                                                ]
+                                                            )
+                                                        @endforeach
+                                                    @endif
                                                 </select>
                                             </div>
                                         </div>
@@ -224,7 +209,7 @@
                 columnDefs: [{
                     orderable: false,
                     width: 100,
-                    targets: [2],
+                    targets: [3],
                 }],
             });
         </script>

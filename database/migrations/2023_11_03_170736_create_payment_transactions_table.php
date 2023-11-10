@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('payment_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();  // Reference to Orders table, cascade deletes
-            $table->foreignId('payment_method_id')->constrained('payment_methods')->cascadeOnDelete();  // Reference to PaymentMethods table, cascade deletes
-            $table->unsignedDecimal('amount', 8, 2);  // Transaction amount
-            $table->string('transaction_id')->unique();  // Unique transaction identifier
-            $table->enum('status', ['pending', 'completed', 'failed', 'refunded']);  // Transaction status
+            $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
+            $table->foreignId('payment_method_id')->constrained('payment_methods')->cascadeOnDelete();
+            $table->unsignedDecimal('amount', 8, 2);
+            $table->string('transaction_id')->unique();
+            $table->enum('status', ['pending', 'completed', 'failed', 'refunded']);
             $table->timestamps();
         });
     }

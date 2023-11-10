@@ -14,4 +14,9 @@ class PaymentTransaction extends Model
      * @var array
      */
     protected $guarded = [];
+
+    public function paymentMethodName()
+    {
+        return PaymentMethod::where('id', $this->payment_method_id)->value('name');
+    }
 }

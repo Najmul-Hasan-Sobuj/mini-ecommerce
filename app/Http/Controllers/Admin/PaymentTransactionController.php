@@ -3,19 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Models\PaymentTransaction;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PaymentTransactionRequest;
-use App\Repositories\Interfaces\PaymentTransactionRepositoryInterface;
 
 class PaymentTransactionController extends Controller
 {
-    private $paymentTransactionRepository;
-
-    public function __construct(PaymentTransactionRepositoryInterface $paymentTransactionRepository)
-    {
-        $this->paymentTransactionRepository = $paymentTransactionRepository;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -24,28 +16,8 @@ class PaymentTransactionController extends Controller
     public function index()
     {
         return view('admin.pages.paymentTransaction.index', [
-            'paymentTransactions' => $this->paymentTransactionRepository->allPaymentTransaction(),
+            'paymentTransactions' => PaymentTransaction::get(),
         ]);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(PaymentTransactionRequest $request)
-    {
-        $data = [
-            'order_id'          => $request->order_id,
-            'payment_method_id' => $request->payment_method_id,
-            'amount'            => $request->amount,
-            'transaction_id'    => $request->transaction_id,
-            'status'            => $request->status,
-        ];
-        $this->paymentTransactionRepository->storePaymentTransaction($data);
-        toastr()->success('Data has been saved successfully!');
-        return redirect()->back();
     }
 
     /**
@@ -55,19 +27,24 @@ class PaymentTransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PaymentTransactionRequest $request, $id)
+    public function updateStatus(Request $request, $id)
     {
-        $data = [
-            'order_id'          => $request->order_id,
-            'payment_method_id' => $request->payment_method_id,
-            'amount'            => $request->amount,
-            'transaction_id'    => $request->transaction_id,
-            'status'            => $request->status,
-        ];
-        $this->paymentTransactionRepository->updatePaymentTransaction($data, $id);
+        // Validate the request data
+        $validated = $request->validate([
+            'status' => 'required|string|in:pending,completed,failed,refunded' // Adjust the status values as needed
+        ]);
 
-        toastr()->success('Data has been updated successfully!');
-        return redirect()->back();
+        // Update the transaction status
+        $updated = PaymentTransaction::find($id)
+            ->update(['status' => $validated['status']]);
+
+        // Check if any row was actually updated
+        if ($updated) {
+            return response()->json(['message' => 'Status updated successfully']);
+        }
+
+        // If no rows were updated, it means the transaction was not found
+        return response()->json(['message' => 'Transaction not found'], 404);
     }
 
     /**
@@ -78,6 +55,6 @@ class PaymentTransactionController extends Controller
      */
     public function destroy($id)
     {
-        $this->paymentTransactionRepository->destroyPaymentTransaction($id);
+        PaymentTransaction::find($id)->delete();
     }
 }

@@ -28,49 +28,23 @@ class RefundPolicyController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(RefundPolicyRequest $request)
-    {
-        $data = [
-            'policy_text' => $request->policy_text,
-            'last_updated' => now(),
-        ];
-        $this->refundPolicyRepository->storeRefundPolicy($data);
-        toastr()->success('Data has been saved successfully!');
-        return redirect()->back();
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(RefundPolicyRequest $request, $id)
+    function refundPolicy(RefundPolicyRequest $request)
     {
-        $data = [
-            'policy_text' => $request->policy_text,
+        $dataToUpdateOrCreate = [
+            'policy_text'  => $request->policy_text,
             'last_updated' => now(),
         ];
-        $this->refundPolicyRepository->updateRefundPolicy($data, $id);
 
-        toastr()->success('Data has been updated successfully!');
+        $refundPolicy = $this->refundPolicyRepository->updateOrCreateRefundPolicy($dataToUpdateOrCreate);
+
+        $toastMessage = $refundPolicy->wasRecentlyCreated ? 'Data has been created successfully!' : 'Data has been updated successfully!';
+        toastr()->success($toastMessage);
         return redirect()->back();
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $this->refundPolicyRepository->destroyRefundPolicy($id);
     }
 }
