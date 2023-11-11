@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\FaqRequest;
+use App\Http\Controllers\Controller;
+use App\Repositories\BaseRepositoryInterface;
 use App\Repositories\Interfaces\FaqRepositoryInterface;
 
 class FaqController extends Controller
 {
     private $faqRepository;
 
-    public function __construct(FaqRepositoryInterface $faqRepository)
+    public function __construct(BaseRepositoryInterface $faqRepository)
     {
         $this->faqRepository = $faqRepository;
     }

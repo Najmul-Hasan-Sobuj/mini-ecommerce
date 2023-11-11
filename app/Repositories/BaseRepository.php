@@ -2,11 +2,14 @@
 
 namespace App\Repositories;
 
-abstract class BaseRepository
+use Illuminate\Database\Eloquent\Model;
+use App\Repositories\BaseRepositoryInterface;
+
+abstract class BaseRepository implements BaseRepositoryInterface
 {
     protected $model;
 
-    public function __construct($model)
+    public function __construct(Model $model)
     {
         $this->model = $model;
     }
@@ -16,6 +19,11 @@ abstract class BaseRepository
         return $this->model->all();
     }
 
+    public function find($id)
+    {
+        return $this->model->find($id);
+    }
+
     public function create(array $data)
     {
         return $this->model->create($data);
@@ -23,17 +31,15 @@ abstract class BaseRepository
 
     public function update(array $data, $id)
     {
-        $record = $this->model->find($id);
-        return $record->update($data);
+        $record = $this->find($id);
+        if ($record) {
+            return $record->update($data);
+        }
+        return null;
     }
 
     public function delete($id)
     {
         return $this->model->destroy($id);
-    }
-
-    public function show($id)
-    {
-        return $this->model->findOrFail($id);
     }
 }

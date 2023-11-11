@@ -7,9 +7,8 @@ use App\Repositories\BrandRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\CategoryRepository;
 use App\Repositories\RefundPolicyRepository;
+use App\Repositories\BaseRepositoryInterface;
 use App\Repositories\PaymentMethodRepository;
-use App\Repositories\PaymentTransactionRepository;
-use App\Repositories\Interfaces\FaqRepositoryInterface;
 use App\Repositories\Interfaces\BrandRepositoryInterface;
 use App\Repositories\Interfaces\CategoryRepositoryInterface;
 use App\Repositories\Interfaces\RefundPolicyRepositoryInterface;
@@ -27,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $bindings = [
             CategoryRepositoryInterface::class => CategoryRepository::class,
             BrandRepositoryInterface::class => BrandRepository::class,
-            FaqRepositoryInterface::class => FaqRepository::class,
+            BaseRepositoryInterface::class => FaqRepository::class,
             PaymentMethodRepositoryInterface::class => PaymentMethodRepository::class,
             RefundPolicyRepositoryInterface::class => RefundPolicyRepository::class,
         ];
