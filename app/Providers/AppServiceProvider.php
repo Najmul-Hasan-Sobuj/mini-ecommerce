@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Repositories\FaqRepository;
 use App\Repositories\BrandRepository;
+use App\Repositories\CouponRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\CategoryRepository;
 use App\Repositories\RefundPolicyRepository;
@@ -27,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
             CategoryRepositoryInterface::class => CategoryRepository::class,
             BrandRepositoryInterface::class => BrandRepository::class,
             BaseRepositoryInterface::class => FaqRepository::class,
+            BaseRepositoryInterface::class => CouponRepository::class,
             PaymentMethodRepositoryInterface::class => PaymentMethodRepository::class,
             RefundPolicyRepositoryInterface::class => RefundPolicyRepository::class,
         ];

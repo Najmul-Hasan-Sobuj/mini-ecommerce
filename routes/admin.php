@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\RefundPolicyController;
@@ -58,6 +59,7 @@ Route::prefix('admin')->group(static function () {
                 'category'      => CategoryController::class, //done
                 'paymentMethod' => PaymentMethodController::class, // done
                 'faq'           => FaqController::class, // done
+                'coupon'       => CouponController::class, // done
             ],
             ['except' => ['create', 'show', 'edit'],]
         );
@@ -91,5 +93,13 @@ Route::prefix('admin')->group(static function () {
         // Route::post('/unsubscribe', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
         // Route::resource('contact', ContactController::class)->except(['create', 'show', 'edit']); //example
+
+        Route::get('/cart', [ProductController::class, 'cartIndex'])->name('cart.index');
+        Route::get('/add-to-cart/{id}', [ProductController::class, 'addToCart'])->name('add.to.cart');
+        Route::get('/remove/{id}', [ProductController::class, 'removeCart'])->name('remove.cart');
+
+        Route::get('/change-qty/{id}', [ProductController::class, 'changeQty'])->name('change.qty');
+        Route::post('/increment-cart/{id}', [ProductController::class, 'incrementCart'])->name('increment.cart');
+        Route::post('/decrement-cart/{id}', [ProductController::class, 'decrementCart'])->name('decrement.cart');
     });
 });

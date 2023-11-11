@@ -46,7 +46,28 @@ class SiteController extends Controller
 
     public function shop()
     {
-        return view('product');
+        // Get categories with their active products
+        $categories = DB::table('categories')
+            ->whereExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('products')
+                    ->whereRaw('products.category_id = categories.id')
+                    ->where('products.status', 'active'); // If you want to filter by active products
+            })
+            ->take(6)
+            ->get();
+
+        // Filter out categories with no active products
+        $categories = $categories->filter(function ($category) {
+            $category->products = DB::table('products')
+                ->where('category_id', $category->id)
+                ->where('status', 'active') // If you want to filter by active products
+                ->get();
+
+            return $category->products->isNotEmpty(); // Only keep categories with active products
+        });
+
+        return view('product', ['categories' => $categories]);
     }
 
     public function productDetails()
