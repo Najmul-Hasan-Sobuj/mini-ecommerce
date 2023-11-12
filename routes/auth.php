@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
 Route::get('about', [SiteController::class, 'about'])->name('about');
 Route::get('contact', [SiteController::class, 'contact'])->name('contact');
 Route::get('shop', [SiteController::class, 'shop'])->name('shop');
-Route::get('product-detail', [SiteController::class, 'productDetails'])->name('product.detail');
+Route::get('product-detail/{slug}', [SiteController::class, 'productDetails'])->name('product.detail');
 Route::get('shoping-cart', [SiteController::class, 'shopingCart'])->name('shoping.cart');
 // all site pages end /
 

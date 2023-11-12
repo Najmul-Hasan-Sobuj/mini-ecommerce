@@ -73,7 +73,7 @@ class SiteController extends Controller
         return view('product', ['categories' => $categories]);
     }
 
-    public function productDetails()
+    public function productDetails($slug)
     {
         return view('product-detail');
     }
