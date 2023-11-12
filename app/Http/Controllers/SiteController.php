@@ -148,43 +148,41 @@ class SiteController extends Controller
     //     return redirect()->back()->with('success', 'Product removed from cart successfully!');
     // }
 
-    // function changeQty($id)
-    // {
-    //     $cart = session()->get('cart', []);
+    function changeQty($id)
+    {
+        $cart = session()->get('cart', []);
 
-    //     if (isset($cart[$id])) {
-    //         $cart[$id]['quantity'] = request()->quantity;
-    //         session()->put('cart', $cart);
-    //     }
+        if (isset($cart[$id])) {
+            $cart[$id]['quantity'] = request()->quantity;
+            session()->put('cart', $cart);
+        }
 
-    //     return redirect()->back()->with('success', 'Cart quantity updated successfully!');
-    // }
+        return redirect()->back()->with('success', 'Cart quantity updated successfully!');
+    }
 
-    // function incrementCart($id)
-    // {
-    //     $cart = session()->get('cart', []);
+    function incrementCart($id)
+    {
+        $cart = session()->get('cart', []);
 
-    //     if (isset($cart[$id])) {
-    //         $cart[$id]['quantity']++;
-    //         session()->put('cart', $cart);
-    //     }
+        if (isset($cart[$id])) {
+            $cart[$id]['quantity']++;
+            session()->put('cart', $cart);
+        }
 
-    //     return redirect()->back()->with('success', 'Product quantity incremented successfully!');
-    // }
+        return redirect()->back()->with('success', 'Product quantity incremented successfully!');
+    }
 
-    // function decrementCart($id)
-    // {
-    //     $cart = session()->get('cart', []);
+    function decrementCart($id)
+    {
+        $cart = session()->get('cart', []);
 
-    //     if (isset($cart[$id])) {
-    //         if ($cart[$id]['quantity'] > 1) {
-    //             $cart[$id]['quantity']--;
-    //             session()->put('cart', $cart);
-    //         }
-    //     }
+        if (isset($cart[$id])) {
+            if ($cart[$id]['quantity'] > 1) {
+                $cart[$id]['quantity']--;
+                session()->put('cart', $cart);
+            }
+        }
 
-    //     return redirect()->back()->with('success', 'Product quantity decremented successfully!');
-    // }
-
-
+        return redirect()->back()->with('success', 'Product quantity decremented successfully!');
+    }
 }

@@ -68,15 +68,8 @@
                                                         <button type="submit"
                                                             class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                                             <i class="fs-16 zmdi zmdi-plus"></i>
+                                                        </button>
                                                     </form>
-
-
-
-
-
-
-
-                                                    </button>
                                                 </div>
                                             </td>
                                             <td class="column-5">$ {{ $item['price'] * $item['quantity'] }}</td>
