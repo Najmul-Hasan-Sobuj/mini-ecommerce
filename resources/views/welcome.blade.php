@@ -295,11 +295,6 @@
                                                 <div class="block2-pic hov-img0">
                                                     <img src="{{ isset($product->image) && Str::startsWith($product->image, 'https:') ? $product->image : (isset($product->image) ? asset('storage/' . $product->image) : asset('storage/main/noImage.jpg')) }}"
                                                         alt="{{ $product->name }}">
-
-                                                    <a href="#"
-                                                        class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-                                                        Quick View
-                                                    </a>
                                                 </div>
 
                                                 <div class="block2-txt flex-w flex-t p-t-14">
@@ -314,8 +309,12 @@
                                                         </span>
                                                     </div>
 
+                                                    <a href="{{ route('add.to.cart', $product->slug) }}"
+                                                        class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                                        Add to cart
+                                                    </a href>
                                                     <div class="block2-txt-child2 flex-r p-t-3">
-                                                        <a href="#"
+                                                        <a href="{{ route('add.to.wishlist', $product->slug) }}"
                                                             class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
                                                             <img class="icon-heart1 dis-block trans-04"
                                                                 src="{{ asset('frontend/images/icons/icon-heart-01.png') }}"
@@ -337,5 +336,4 @@
             </div>
         </div>
     </section>
-
 </x-guest-layout>

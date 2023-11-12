@@ -20,10 +20,12 @@
                             <thead>
                                 <tr class="bg-secondary border-secondary text-white">
                                     <th width="5%">#</th>
-                                    <th width="20%">Category</th>
-                                    <th width="30%">Question</th>
-                                    <th width="20%">Order</th>
-                                    <th width="20%">Status</th>
+                                    <th width="30%">Code</th>
+                                    <th width="10%">Type</th>
+                                    <th width="10%">Max Uses</th>
+                                    <th width="15%">Valid From</th>
+                                    <th width="15%">Valid Until</th>
+                                    <th width="10%">Status</th>
                                     <th class="text-center" width="5%">Action</th>
                                 </tr>
                             </thead>
@@ -32,20 +34,17 @@
                                     @foreach ($coupons as $coupon)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $coupon->category }}</td>
-                                            <td>{{ $coupon->question }}</td>
-                                            <td>{{ $coupon->order }}</td>
+                                            <td>{{ $coupon->code }}</td>
+                                            <td>{{ $coupon->type }}</td>
+                                            <td>{{ $coupon->max_uses }}</td>
+                                            <td>{{ $coupon->valid_from }}</td>
+                                            <td>{{ $coupon->valid_until }}</td>
                                             <td> <span
                                                     class="badge {{ $coupon->status == 'active' ? 'bg-success' : 'bg-danger' }}">
                                                     {{ $coupon->status }}
                                                 </span></td>
                                             <td>
                                                 <div class="d-inline-flex">
-                                                    <a href="javascript:void(0)" data-bs-toggle="modal"
-                                                        data-bs-target="#couponViewModal{{ $coupon->id }}"
-                                                        class="text-info" aria-label="View Coupon">
-                                                        <i class="ph-airplay"></i>
-                                                    </a>
                                                     <a href="javascript:void(0)" data-bs-toggle="modal"
                                                         data-bs-target="#couponEditModal{{ $coupon->id }}"
                                                         class="text-primary mx-2" aria-label="Edit Coupon">
@@ -62,7 +61,9 @@
                                                                         data-bs-dismiss="modal"></button>
                                                                 </div>
 
-                                                                <form action="{{ route('coupon.update', $coupon->id) }}" method="POST">
+                                                                <form
+                                                                    action="{{ route('coupon.update', $coupon->id) }}"
+                                                                    method="POST">
                                                                     @csrf
                                                                     @method('PUT')
                                                                     <div class="modal-body">
@@ -71,29 +72,43 @@
                                                                                 <div class="mb-2">
                                                                                     <label class="form-label">Coupon
                                                                                         Code</label>
-                                                                                    <input name="code" value="{{ $coupon->code }}" type="text"
-                                                                                        class="form-control form-control-sm" placeholder="Enter Coupon Code"
+                                                                                    <input name="code"
+                                                                                        value="{{ $coupon->code }}"
+                                                                                        type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Enter Coupon Code"
                                                                                         maxlength="50">
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-lg-3">
                                                                                 <div class="mb-2">
-                                                                                    <label class="form-label">Type</label>
-                                                                                    <select class="form-control select" data-placeholder=" Select Type"
+                                                                                    <label
+                                                                                        class="form-label">Type</label>
+                                                                                    <select class="form-control select"
+                                                                                        data-placeholder=" Select Type"
                                                                                         data-minimum-results-for-search="Infinity"
-                                                                                        data-container-css-class="select-sm" name="type">
+                                                                                        data-container-css-class="select-sm"
+                                                                                        name="type">
                                                                                         <option></option>
-                                                                                        <option value="fixed" @selected($coupon->type == 'fixed')>Fixed</option>
-                                                                                        <option value="percentage" @selected($coupon->type == 'percentage')>Percentage
+                                                                                        <option value="fixed"
+                                                                                            @selected($coupon->type == 'fixed')>
+                                                                                            Fixed</option>
+                                                                                        <option value="percentage"
+                                                                                            @selected($coupon->type == 'percentage')>
+                                                                                            Percentage
                                                                                         </option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-lg-3">
                                                                                 <div class="mb-2">
-                                                                                    <label class="form-label">Max Uses</label>
-                                                                                    <input id="max_uses" name="max_uses" value="{{ $coupon->max_uses }}"
-                                                                                        type="text" class="form-control form-control-sm maxUsers"
+                                                                                    <label class="form-label">Max
+                                                                                        Uses</label>
+                                                                                    <input id="max_uses"
+                                                                                        name="max_uses"
+                                                                                        value="{{ $coupon->max_uses }}"
+                                                                                        type="text"
+                                                                                        class="form-control form-control-sm maxUsers"
                                                                                         placeholder="Enter Max Uses">
                                                                                 </div>
                                                                             </div>
@@ -101,11 +116,17 @@
                                                                         <div class="row">
                                                                             <div class="col-lg-4">
                                                                                 <div class="mb-2">
-                                                                                    <label class="form-label">Valid From</label>
+                                                                                    <label class="form-label">Valid
+                                                                                        From</label>
                                                                                     <div class="input-group">
-                                                                                        <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                                                                        <input type="date" class="form-control form-control-sm" name="valid_from"
-                                                                                            value="{{ $coupon->valid_from }}" placeholder="Enter Valid From">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ph-calendar"></i></span>
+                                                                                        <input type="date"
+                                                                                            class="form-control form-control-sm"
+                                                                                            name="valid_from"
+                                                                                            value="{{ $coupon->valid_from }}"
+                                                                                            placeholder="Enter Valid From">
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -114,22 +135,36 @@
                                                                                     <label class="form-label">Valid
                                                                                         Until</label>
                                                                                     <div class="input-group">
-                                                                                        <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                                                                        <input type="date" class="form-control form-control-sm" name="valid_until"
-                                                                                            value="{{ $coupon->valid_until }}" placeholder="Enter Valid Until">
+                                                                                        <span
+                                                                                            class="input-group-text"><i
+                                                                                                class="ph-calendar"></i></span>
+                                                                                        <input type="date"
+                                                                                            class="form-control form-control-sm"
+                                                                                            name="valid_until"
+                                                                                            value="{{ $coupon->valid_until }}"
+                                                                                            placeholder="Enter Valid Until">
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-lg-4">
                                                                                 <div class="mb-2">
-                                                                                    <label class="form-label">Status</label>
-                                                                                    <select class="form-control form-control-sm select" name="status"
+                                                                                    <label
+                                                                                        class="form-label">Status</label>
+                                                                                    <select
+                                                                                        class="form-control form-control-sm select"
+                                                                                        name="status"
                                                                                         data-minimum-results-for-search="Infinity"
                                                                                         data-container-css-class="select-sm">
-                                                                                        <option value="active" @selected($coupon->status == 'active')>Active</option>
-                                                                                        <option value="expired" @selected($coupon->status == 'expired')>Expired
+                                                                                        <option value="active"
+                                                                                            @selected($coupon->status == 'active')>
+                                                                                            Active</option>
+                                                                                        <option value="expired"
+                                                                                            @selected($coupon->status == 'expired')>
+                                                                                            Expired
                                                                                         </option>
-                                                                                        <option value="used" @selected($coupon->status == 'used')>Used</option>
+                                                                                        <option value="used"
+                                                                                            @selected($coupon->status == 'used')>
+                                                                                            Used</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
@@ -137,17 +172,23 @@
                                                                         <div class="row">
                                                                             <div class="col-lg-6">
                                                                                 <div class="mb-2">
-                                                                                    <label class="form-label">Description</label>
-                                                                                    <input name="description" type="text" class="form-control form-control-sm"
-                                                                                        placeholder="Enter Coupon Description" maxlength="255"
+                                                                                    <label
+                                                                                        class="form-label">Description</label>
+                                                                                    <input name="description"
+                                                                                        type="text"
+                                                                                        class="form-control form-control-sm"
+                                                                                        placeholder="Enter Coupon Description"
+                                                                                        maxlength="255"
                                                                                         value="{{ $coupon->description }}">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                                                                        <button type="submit" class="btn btn-primary from-prevent-multiple-submits">Save
+                                                                        <button type="button" class="btn btn-link"
+                                                                            data-bs-dismiss="modal">Close</button>
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary from-prevent-multiple-submits">Save
                                                                             changes</button>
                                                                     </div>
                                                                 </form>
@@ -185,7 +226,8 @@
                                         <div class="col-lg-3">
                                             <div class="mb-2">
                                                 <label class="form-label">Coupon Code</label>
-                                                <input name="code" value="" type="text" class="form-control form-control-sm"
+                                                <input name="code" value="" type="text"
+                                                    class="form-control form-control-sm"
                                                     placeholder="Enter Coupon Code" maxlength="50">
                                             </div>
                                         </div>
@@ -193,8 +235,8 @@
                                             <div class="mb-2">
                                                 <label class="form-label">Type</label>
                                                 <select class="form-control select" data-placeholder=" Select Type"
-                                                    data-minimum-results-for-search="Infinity" data-container-css-class="select-sm"
-                                                    name="type">
+                                                    data-minimum-results-for-search="Infinity"
+                                                    data-container-css-class="select-sm" name="type">
                                                     <option></option>
                                                     <option value="fixed">Fixed</option>
                                                     <option value="percentage">Percentage</option>
@@ -205,7 +247,8 @@
                                             <div class="mb-2">
                                                 <label class="form-label">Max Uses</label>
                                                 <input id="max_uses" name="max_uses" type="text"
-                                                    class="form-control form-control-sm maxUsers" placeholder="Enter Max Uses">
+                                                    class="form-control form-control-sm maxUsers"
+                                                    placeholder="Enter Max Uses">
                                             </div>
                                         </div>
                                     </div>
@@ -215,8 +258,9 @@
                                                 <label class="form-label">Valid From</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                                    <input type="date" class="form-control form-control-sm" name="valid_from"
-                                                        value="03/18/2013" placeholder="Enter Valid From">
+                                                    <input type="date" class="form-control form-control-sm"
+                                                        name="valid_from" value="03/18/2013"
+                                                        placeholder="Enter Valid From">
                                                 </div>
                                             </div>
                                         </div>
@@ -225,8 +269,9 @@
                                                 <label class="form-label">Valid Until</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text"><i class="ph-calendar"></i></span>
-                                                    <input type="date" class="form-control form-control-sm" name="valid_until"
-                                                        value="03/18/2013" placeholder="Enter Valid Until">
+                                                    <input type="date" class="form-control form-control-sm"
+                                                        name="valid_until" value="03/18/2013"
+                                                        placeholder="Enter Valid Until">
                                                 </div>
                                             </div>
                                         </div>
@@ -234,7 +279,8 @@
                                             <div class="mb-2">
                                                 <label class="form-label">Status</label>
                                                 <select class="form-control form-control-sm select" name="status"
-                                                    data-minimum-results-for-search="Infinity" data-container-css-class="select-sm">
+                                                    data-minimum-results-for-search="Infinity"
+                                                    data-container-css-class="select-sm">
                                                     <option value="active">Active</option>
                                                     <option value="expired">Expired</option>
                                                     <option value="used">Used</option>
@@ -246,39 +292,10 @@
                                         <div class="col-lg-12">
                                             <div class="mb-2">
                                                 <label class="form-label">Description</label>
-                                                <input name="description" type="text" class="form-control form-control-sm"
+                                                <input name="description" type="text"
+                                                    class="form-control form-control-sm"
                                                     placeholder="Enter Coupon Description" maxlength="255">
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-link" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary from-prevent-multiple-submits">Save changes</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                @foreach ($coupons as $coupon)
-                    <div id="couponViewModal{{ $coupon->id }}" class="modal fade text-start"
-                        data-bs-keyboard="false" data-bs-backdrop="static" tabindex="-1">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title text-secondary d-flex align-items-center">
-                                        <span>{{ $coupon->category }} </span>
-                                        <span class="badge bg-secondary ms-2">{{ $coupon->order ?? '0' }}</span>
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <h5 class="text-info">{{ $coupon->question }}</h5>
-                                            <p><span class="text-success fw-bold">Ans:</span> {{ $coupon->answer }}
-                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -288,10 +305,10 @@
                                     <button type="submit" class="btn btn-primary from-prevent-multiple-submits">Save
                                         changes</button>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-                @endforeach
+                </div>
             </div>
         </div>
     </div>
@@ -306,7 +323,7 @@
                 columnDefs: [{
                     orderable: false,
                     width: 100,
-                    targets: [5],
+                    targets: [7],
                 }],
             });
 

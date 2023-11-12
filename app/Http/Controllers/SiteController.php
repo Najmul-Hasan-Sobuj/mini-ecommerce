@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -28,6 +29,8 @@ class SiteController extends Controller
         }
         return view('welcome', ['categories' => $categories]);
     }
+
+
 
     public function profile()
     {
@@ -80,26 +83,58 @@ class SiteController extends Controller
         return view('shoping-cart');
     }
 
-    // function addToCart($id)
-    // {
-    //     $product = Product::find($id);
+    function addToCart($id)
+    {
+        $product = Product::find($id);
 
-    //     if (!$product) {
-    //         return redirect()->back()->with('error', 'Product not found!');
-    //     }
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product not found!');
+        }
 
-    //     $cart = session()->get('cart', []);
+        $cart = session()->get('cart', []);
 
-    //     $cart[$id] = [
-    //         "name" => $product->name,
-    //         "quantity" => isset($cart[$id]) ? $cart[$id]['quantity'] + 1 : 1,
-    //         "price" => $product->price,
-    //         "image" => $product->image,
-    //     ];
+        $cart[$id] = [
+            "name" => $product->name,
+            "quantity" => isset($cart[$id]) ? $cart[$id]['quantity'] + 1 : 1,
+            "price" => $product->price,
+            "image" => $product->image,
+        ];
 
-    //     session()->put('cart', $cart);
-    //     return redirect()->back()->with('success', 'Product added to cart successfully!');
-    // }
+        session()->put('cart', $cart);
+        return redirect()->back()->with('success', 'Product added to cart successfully!');
+    }
+
+    function addToWishlist($id)
+    {
+        $product = Product::find($id);
+
+        if (!$product) {
+            return redirect()->back()->with('error', 'Product not found!');
+        }
+
+        $wishlist = session()->get('wishlist', []);
+
+        $wishlist[$id] = [
+            "name" => $product->name,
+            "price" => $product->price,
+            "image" => $product->image,
+        ];
+
+        session()->put('wishlist', $wishlist);
+        return redirect()->back()->with('success', 'Product added to wishlist successfully!');
+    }
+
+    function removeWishlist($id)
+    {
+        $wishlist = session()->get('wishlist', []);
+
+        if (isset($wishlist[$id])) {
+            unset($wishlist[$id]);
+            session()->put('wishlist', $wishlist);
+        }
+
+        return redirect()->back()->with('success', 'Product removed from wishlist successfully!');
+    }
 
     // function removeCart($id)
     // {
@@ -150,4 +185,6 @@ class SiteController extends Controller
 
     //     return redirect()->back()->with('success', 'Product quantity decremented successfully!');
     // }
+
+
 }

@@ -24,6 +24,11 @@
                     'icon' => 'ph-brandy',
                     'label' => __('Product'),
                 ],
+                [
+                    'route' => 'coupon.index',
+                    'icon' => 'ph-brandy',
+                    'label' => __('Coupon'),
+                ],
             ],
         ],
         [

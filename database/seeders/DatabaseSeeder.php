@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\ChatSeeder;
 use Database\Seeders\BrandSeeder;
 use Database\Seeders\OrderSeeder;
+use Database\Seeders\CouponSeeder;
 use Database\Seeders\ProductSeeder;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\OrderItemSeeder;
@@ -51,6 +52,7 @@ class DatabaseSeeder extends Seeder
             FaqSeeder::class,
             ChatSeeder::class,
             RefundPolicySeeder::class,
+            CouponSeeder::class,
         ]);
     }
 }

@@ -94,12 +94,6 @@ Route::prefix('admin')->group(static function () {
 
         // Route::resource('contact', ContactController::class)->except(['create', 'show', 'edit']); //example
 
-        Route::get('/cart', [ProductController::class, 'cartIndex'])->name('cart.index');
-        Route::get('/add-to-cart/{id}', [ProductController::class, 'addToCart'])->name('add.to.cart');
-        Route::get('/remove/{id}', [ProductController::class, 'removeCart'])->name('remove.cart');
 
-        Route::get('/change-qty/{id}', [ProductController::class, 'changeQty'])->name('change.qty');
-        Route::post('/increment-cart/{id}', [ProductController::class, 'incrementCart'])->name('increment.cart');
-        Route::post('/decrement-cart/{id}', [ProductController::class, 'decrementCart'])->name('decrement.cart');
     });
 });

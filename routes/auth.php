@@ -56,9 +56,19 @@ Route::middleware('auth')->group(function () {
         ->name('logout');
 });
 
-
+// all site pages starting /
 Route::get('about', [SiteController::class, 'about'])->name('about');
 Route::get('contact', [SiteController::class, 'contact'])->name('contact');
 Route::get('shop', [SiteController::class, 'shop'])->name('shop');
 Route::get('product-detail', [SiteController::class, 'productDetails'])->name('product.detail');
 Route::get('shoping-cart', [SiteController::class, 'shopingCart'])->name('shoping.cart');
+// all site pages end /
+
+Route::get('/add-to-cart/{id}', [SiteController::class, 'addToCart'])->name('add.to.cart');
+Route::get('/add-to-wishlist/{id}', [SiteController::class, 'addToWishlist'])->name('add.to.wishlist');
+Route::get('/remove/{id}', [SiteController::class, 'removeCart'])->name('remove.cart');
+Route::get('/remove/{id}', [SiteController::class, 'removeWishlist'])->name('remove.wishlist');
+
+Route::get('/change-qty/{id}', [SiteController::class, 'changeQty'])->name('change.qty');
+Route::post('/increment-cart/{id}', [SiteController::class, 'incrementCart'])->name('increment.cart');
+Route::post('/decrement-cart/{id}', [SiteController::class, 'decrementCart'])->name('decrement.cart');
