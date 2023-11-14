@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\RefundPolicyController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\PaymentTransactionController;
@@ -52,7 +53,7 @@ Route::prefix('admin')->group(static function () {
 
         // Route::get('web-setting', [WebSettingController::class, 'index'])->name('web.setting');
         // Route::put('seo-setting', [WebSettingController::class, 'seo'])->name('seo.setting');
-        // Route::put('smtp-setting', [WebSettingController::class, 'smtp'])->name('smtp.setting');
+        Route::put('smtp-setting', [WebSettingController::class, 'smtp'])->name('smtp.setting');
 
         Route::resources(
             [

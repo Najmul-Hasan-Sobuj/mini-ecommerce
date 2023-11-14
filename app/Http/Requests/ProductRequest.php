@@ -39,6 +39,7 @@ class ProductRequest extends FormRequest
             'sizes' => 'nullable|array',
             'colors' => 'nullable|array',
             'tags' => 'nullable|array',
+            'product_attachments.*.images' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 
@@ -57,12 +58,14 @@ class ProductRequest extends FormRequest
             'name.required' => 'The name field is required.',
             'name.string' => 'The name must be a string.',
             'name.max' => 'The name may not be greater than 255 characters.',
+            'image.sometimes' => 'The image field is optional.',
             'image.image' => 'The image must be an image.',
             'image.mimes' => 'The image must be a file of type: jpeg, png, jpg.',
             'image.max' => 'The image may not be greater than 2048 kilobytes.',
-            'sku.string' => 'The SKU must be a string.',
-            'sku.max' => 'The SKU may not be greater than 255 characters.',
-            'sku.unique' => 'The SKU has already been taken.',
+            'sku.nullable' => 'The sku field is optional.',
+            'sku.string' => 'The sku must be a string.',
+            'sku.max' => 'The sku may not be greater than 255 characters.',
+            'sku.unique' => 'The sku has already been taken.',
             'description.required' => 'The description field is required.',
             'description.string' => 'The description must be a string.',
             'price.required' => 'The price field is required.',
@@ -72,10 +75,17 @@ class ProductRequest extends FormRequest
             'quantity.integer' => 'The quantity must be an integer.',
             'quantity.min' => 'The quantity must be at least 1.',
             'status.required' => 'The status field is required.',
-            'status.in' => 'The selected status is invalid.',
+            'status.in' => 'The status field must be either active or inactive.',
+            'sizes.nullable' => 'The sizes field is optional.',
             'sizes.array' => 'The sizes must be an array.',
+            'colors.nullable' => 'The colors field is optional.',
             'colors.array' => 'The colors must be an array.',
+            'tags.nullable' => 'The tags field is optional.',
             'tags.array' => 'The tags must be an array.',
+            'product_attachments.*.images.sometimes' => 'The product attachments images field is optional.',
+            'product_attachments.*.images.image' => 'The product attachments images must be an image.',
+            'product_attachments.*.images.mimes' => 'The product attachments images must be a file of type: jpeg, png, jpg.',
+            'product_attachments.*.images.max' => 'The product attachments images may not be greater than 2048 kilobytes.',
         ];
     }
 
@@ -87,7 +97,19 @@ class ProductRequest extends FormRequest
     public function attributes()
     {
         return [
-            //
+            'category_id' => 'category',
+            'brand_id' => 'brand',
+            'name' => 'name',
+            'image' => 'image',
+            'sku' => 'sku',
+            'description' => 'description',
+            'price' => 'price',
+            'quantity' => 'quantity',
+            'status' => 'status',
+            'sizes' => 'sizes',
+            'colors' => 'colors',
+            'tags' => 'tags',
+            'product_attachments.*.images' => 'product attachments images',
         ];
     }
 
