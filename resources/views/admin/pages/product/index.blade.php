@@ -50,14 +50,16 @@
                                             <td>{{ $product->price }}</td>
                                             <td>{{ $product->quantity }}</td>
                                             <td>
-                                                <span class="badge {{ $product->status == 'active' ? 'bg-success' : 'bg-danger' }}">
+                                                <span
+                                                    class="badge {{ $product->status == 'active' ? 'bg-success' : 'bg-danger' }}">
                                                     {{ $product->status }}
                                                 </span>
                                             </td>
                                             <td>
                                                 @if (!empty(($sizes = json_decode($product->sizes))))
                                                     @foreach ($sizes as $size)
-                                                        <span class="badge bg-primary">{{ $size }}</span>
+                                                        <span
+                                                            class="badge bg-primary">{{ str_replace('_', ' ', strtoupper($size)) }}</span>
                                                     @endforeach
                                                 @else
                                                     Data not available
@@ -66,7 +68,8 @@
                                             <td>
                                                 @if (!empty(($colors = json_decode($product->colors))))
                                                     @foreach ($colors as $color)
-                                                        <span class="badge bg-primary">{{ $color }}</span>
+                                                        <span
+                                                            class="badge bg-primary">{{ str_replace('_', ' ', ucfirst($color)) }}</span>
                                                     @endforeach
                                                 @else
                                                     Data not available

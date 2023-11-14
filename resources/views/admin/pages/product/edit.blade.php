@@ -47,23 +47,15 @@
                                         multiple="multiple" data-include-select-all-option="true"
                                         data-button-class="btn btn-sm" data-enable-filtering="true"
                                         data-enable-case-insensitive-filtering="true">
-                                        <option @selected(!is_null($productSizes) && in_array('1', $productSizes)) value="1">S</option>
-                                        <option @selected(!is_null($productSizes) && in_array('2', $productSizes)) value="2">M</option>
-                                        <option @selected(!is_null($productSizes) && in_array('3', $productSizes)) value="3">L</option>
-                                        <option @selected(!is_null($productSizes) && in_array('4', $productSizes)) value="4">XL</option>
-                                        <option @selected(!is_null($productSizes) && in_array('5', $productSizes)) value="5">XXL</option>
-                                        <option @selected(!is_null($productSizes) && in_array('6', $productSizes)) value="6">64GB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('7', $productSizes)) value="7">128GB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('8', $productSizes)) value="8">512GB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('9', $productSizes)) value="9">1TB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('10', $productSizes)) value="10">3/32 GB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('11', $productSizes)) value="11">4/64 GB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('12', $productSizes)) value="12">4/128 GB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('13', $productSizes)) value="13">6/128 GB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('14', $productSizes)) value="14">8/128 GB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('15', $productSizes)) value="15">8/256 GB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('16', $productSizes)) value="16">12/256 GB</option>
-                                        <option @selected(!is_null($productSizes) && in_array('17', $productSizes)) value="17">12/512 GB</option>
+                                        <option @selected(!is_null($productSizes) && in_array('s', $productSizes)) value="s">S</option>
+                                        <option @selected(!is_null($productSizes) && in_array('m', $productSizes)) value="m">M</option>
+                                        <option @selected(!is_null($productSizes) && in_array('l', $productSizes)) value="l">L</option>
+                                        <option @selected(!is_null($productSizes) && in_array('xl', $productSizes)) value="xl">XL</option>
+                                        <option @selected(!is_null($productSizes) && in_array('xxl', $productSizes)) value="xxl">XXL</option>
+                                        <option @selected(!is_null($productSizes) && in_array('64gb', $productSizes)) value="64gb">64GB</option>
+                                        <option @selected(!is_null($productSizes) && in_array('128gb', $productSizes)) value="128gb">128GB</option>
+                                        <option @selected(!is_null($productSizes) && in_array('512gb', $productSizes)) value="512gb">512GB</option>
+                                        <option @selected(!is_null($productSizes) && in_array('1tb', $productSizes)) value="1tb">1TB</option>
                                     </select>
                                 </div>
 
@@ -210,7 +202,7 @@
                                 <div class="mb-2">
                                     <label class="col-form-label">Product Description </label>
                                     <textarea class="form-control form-control-sm" id="ckeditor_classic_empty_1" name="description"
-                                        placeholder="Enter your text...">{{ $product->description }}</textarea>
+                                        placeholder="Enter your text...">{!! $product->description !!}</textarea>
                                 </div>
                             </div>
                         </div>

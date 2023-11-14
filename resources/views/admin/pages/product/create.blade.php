@@ -14,7 +14,7 @@
                                 <div class="mb-2">
                                     <label class="form-label">Product Name <span class="text-danger">*</span></label>
                                     <input type="text" id="name" name="name"
-                                        class="form-control form-control-sm maxlength-options" maxlength="200"
+                                        class="form-control form-control-sm " max="200"
                                         placeholder="Enter Your Product Name" required>
                                 </div>
                             </div>
@@ -22,8 +22,8 @@
                                 <div class="mb-2">
                                     <label class="form-label">Quantity </label>
                                     <input type="number" id="quantity" name="quantity"
-                                        class="form-control form-control-sm maxlength-options" max="1000"
-                                        min="1" placeholder="Enter Product Quantity">
+                                        class="form-control form-control-sm " max="1000" min="1"
+                                        placeholder="Enter Product Quantity">
                                 </div>
                             </div>
                             <div class="col-lg-2">
@@ -42,23 +42,15 @@
                                         multiple="multiple" data-include-select-all-option="true"
                                         data-button-class="btn btn-sm" data-enable-filtering="true"
                                         data-enable-case-insensitive-filtering="true">
-                                        <option value="1">S</option>
-                                        <option value="2">M</option>
-                                        <option value="3">L</option>
-                                        <option value="4">XL</option>
-                                        <option value="5">XXL</option>
-                                        <option value="6">64GB</option>
-                                        <option value="7">128GB</option>
-                                        <option value="8">512GB</option>
-                                        <option value="9">1TB</option>
-                                        <option value="10">3/32 GB</option>
-                                        <option value="11">4/64 GB</option>
-                                        <option value="12">4/128 GB</option>
-                                        <option value="13">6/128 GB</option>
-                                        <option value="14">8/128 GB</option>
-                                        <option value="15">8/256 GB</option>
-                                        <option value="16">12/256 GB</option>
-                                        <option value="17">12/512 GB</option>
+                                        <option value="s">S</option>
+                                        <option value="m">M</option>
+                                        <option value="l">L</option>
+                                        <option value="xl">XL</option>
+                                        <option value="xxl">XXL</option>
+                                        <option value="64gb">64GB</option>
+                                        <option value="128gb">128GB</option>
+                                        <option value="512gb">512GB</option>
+                                        <option value="1tb">1TB</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,8 +114,8 @@
                                 <div class="mb-2">
                                     <label class="form-label">Price</label>
                                     <input type="number" step="0.01" id="price" name="price"
-                                        class="form-control form-control-sm maxlength-options" max="1000000"
-                                        min="1" placeholder="Enter Product price">
+                                        class="form-control form-control-sm " max="1000000" min="1"
+                                        placeholder="Enter Product price">
                                 </div>
                             </div>
                             <div class="col-lg-4">
