@@ -455,8 +455,10 @@
         };
 
         function emptyCart(event) {
-            var cartHead = $('.header-cart-content');
-            var cartContainer = $('.cart_product');
+            const cartHead = $('.header-cart-content');
+            const cartContainer = $('.cart_product');
+            const iconHeaderNoti = $('.icon-header-noti');
+
             $.ajax({
                 type: 'GET',
                 url: "{{ route('cart.clear') }}",
@@ -465,8 +467,7 @@
                     cartContainer.html(data);
                     cartHead.html(data.cartHeader);
                     swal("Cart", "Cleared Successfully !", "success");
-                    $('.icon-header-noti').attr('data-notify', data.cartCount);
-
+                    iconHeaderNoti.attr('data-notify', data.cartCount);
                 }
             });
         }
