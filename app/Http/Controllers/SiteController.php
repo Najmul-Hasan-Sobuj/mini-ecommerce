@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -119,31 +120,30 @@ class SiteController extends Controller
     public function cartRemove($rowId)
     {
         $cart = session()->get('cart', []);
-        $cartName = $cart[$rowId]['name'];
 
         if (isset($cart[$rowId])) {
-            unset($cart[$rowId]);
+            $cartName = Arr::pull($cart, $rowId)['name'];
             session()->put('cart', $cart);
         }
 
-        $cartCount = collect($cart)->sum('quantity');
-        $total = collect($cart)->sum(function ($item) {
+        $cartCount = array_sum(array_column($cart, 'quantity'));
+        $total = array_sum(array_map(function ($item) {
             return $item['price'] * $item['quantity'];
-        });
+        }, $cart));
 
         $data = [
             'cartItems' => $cart,
             'cartCount' => $cartCount,
-            'total' => $total,
+            'total'     => $total,
         ];
 
         return response()->json([
-            'name' => $cartName,
-            'cartCount' => $cartCount,
-            'total' => $total,
+            'name'       => $cartName,
+            'cartCount'  => $cartCount,
+            'total'      => $total,
             'cartHeader' => view('layouts.cart-header', $data)->render(),
-            'html' => view('layouts.cart-table', $data)->render(),
-            'success' => true,
+            'html'       => view('layouts.cart-table', $data)->render(),
+            'success'    => true,
         ]);
     }
 
@@ -155,7 +155,6 @@ class SiteController extends Controller
         if (isset($cart[$rowId])) {
 
             $cart[$rowId]['quantity'] = $cart[$rowId]['quantity'] + 1;
-
 
             session()->put('cart', $cart);
         }
@@ -192,7 +191,6 @@ class SiteController extends Controller
             if ($cart[$rowId]['quantity'] == 0) {
                 unset($cart[$rowId]);
             }
-
             session()->put('cart', $cart);
         }
         $cartCount = collect($cart)->sum('quantity');

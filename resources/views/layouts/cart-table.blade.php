@@ -48,7 +48,7 @@
                             <td class="column-5">$ {{ $item['price'] * $item['quantity'] }}</td>
                             <td class="column-6">
                                 <a href="JavaScript:void(0)" class="mr-4" title="Remove this item"
-                                    id="{{ $id }}" onclick="deleteRow(event, this, this.id)">
+                                    id="{{ $id }}" onclick="deleteRow(this.id)">
                                     <i class="fa fa-trash text-danger"></i>
                                 </a>
                             </td>
