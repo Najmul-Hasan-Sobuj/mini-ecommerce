@@ -67,6 +67,8 @@ Route::get('shoping-cart', [SiteController::class, 'shopingCart'])->name('shopin
 Route::post('add-to-cart', [SiteController::class, 'addToCart'])->name('add.cart');
 Route::get('cart-clear', [SiteController::class, 'cartClear'])->name('cart.clear');
 Route::get('cart-remove/{id}', [SiteController::class, 'cartRemove'])->name('cart.remove');
+// Route::delete('cart-remove/{id}', [SiteController::class, 'cartRemove'])->name('cart.remove');
+
 Route::post('cart-quantity/change/', [SiteController::class, 'cartQuantityChange'])->name('cart.quantity.change');
 Route::get('cart-increment/{id}', [SiteController::class, 'cartIncrement'])->name('cart.increment');
 Route::get('cart-decrement/{id}', [SiteController::class, 'cartDecrement'])->name('cart.decrement');

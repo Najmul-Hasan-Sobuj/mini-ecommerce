@@ -11,21 +11,21 @@ class SiteController extends Controller
 {
     public function index()
     {
-        // Get all categories with their active products
+
         $categories = DB::table('categories')
             ->whereExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('products')
                     ->whereRaw('products.category_id = categories.id')
-                    ->where('products.status', 'active'); // If you want to filter by active products
+                    ->where('products.status', 'active');
             })
             ->get();
 
-        // Get the products for each category
+
         foreach ($categories as $category) {
             $category->products = DB::table('products')
                 ->where('category_id', $category->id)
-                ->where('status', 'active') // If you want to filter by active products
+                ->where('status', 'active')
                 ->get();
         }
         return view('welcome', ['categories' => $categories]);
@@ -50,25 +50,23 @@ class SiteController extends Controller
 
     public function shop()
     {
-        // Get categories with their active products
         $categories = DB::table('categories')
             ->whereExists(function ($query) {
                 $query->select(DB::raw(1))
                     ->from('products')
                     ->whereRaw('products.category_id = categories.id')
-                    ->where('products.status', 'active'); // If you want to filter by active products
+                    ->where('products.status', 'active');
             })
             ->take(6)
             ->get();
 
-        // Filter out categories with no active products
         $categories = $categories->filter(function ($category) {
             $category->products = DB::table('products')
                 ->where('category_id', $category->id)
-                ->where('status', 'active') // If you want to filter by active products
+                ->where('status', 'active')
                 ->get();
 
-            return $category->products->isNotEmpty(); // Only keep categories with active products
+            return $category->products->isNotEmpty();
         });
 
         return view('product', ['categories' => $categories]);
@@ -84,7 +82,7 @@ class SiteController extends Controller
         $data = [
             'cartItems' => session()->get('cart'),
         ];
-        // dd($data['cartItems']);
+
         return view('shoping-cart', $data);
     }
 
@@ -93,62 +91,52 @@ class SiteController extends Controller
         $product = Product::find($request->productId);
 
         if (!$product) {
-            return response()->json(['error' => true]);
+            return response()->json(['error' => 'Product not found'], 404);
         }
 
         $cart = session()->get('cart', []);
-        $cart[$request->productId] = [
+        $productId = $product->id;
+
+        $cart[$productId] = [
             "name" => $product->name,
-            "quantity" => $request->productQuantity,
+            "quantity" => isset($cart[$productId]) ? $cart[$productId]['quantity'] + $request->productQuantity : $request->productQuantity,
             "price" => $product->price,
             "image" => $product->image,
         ];
 
         session()->put('cart', $cart);
-        $cartCount = collect(session('cart'))->sum('quantity');
-        $data = [
-            'cartItems' => session()->get('cart'),
-        ];
-        // toastr()->success('Successfully Added to Your Cart');
+        $cartCount = collect($cart)->sum('quantity');
 
         return response()->json([
-            'name' => $product->name,
+            'productName' => $product->name,
             'cartCount' => $cartCount,
-            'cartHeader' => view('layouts.cart-header', $data)->render(),
+            'cartHeader' => view('layouts.cart-header', ['cartItems' => $cart])->render(),
             'success' => true
         ]);
     }
-
-
 
 
     public function cartRemove($rowId)
     {
         $cart = session()->get('cart', []);
         $cartName = $cart[$rowId]['name'];
-        // Check if the item exists in the cart
-        if (isset($cart[$rowId])) {
-            // Remove the item from the cart
-            unset($cart[$rowId]);
 
-            // Update the cart in the session
+        if (isset($cart[$rowId])) {
+            unset($cart[$rowId]);
             session()->put('cart', $cart);
         }
 
-        // Recalculate the total and cart count
         $cartCount = collect($cart)->sum('quantity');
         $total = collect($cart)->sum(function ($item) {
             return $item['price'] * $item['quantity'];
         });
 
-        // Prepare the data for the view
         $data = [
             'cartItems' => $cart,
             'cartCount' => $cartCount,
             'total' => $total,
         ];
 
-        // Response
         return response()->json([
             'name' => $cartName,
             'cartCount' => $cartCount,
@@ -161,15 +149,14 @@ class SiteController extends Controller
 
     public function cartIncrement($rowId)
     {
-
         $cart = session()->get('cart', []);
         $cartName = $cart[$rowId]['name'];
-        // Check if the item exists in the cart
+
         if (isset($cart[$rowId])) {
-            // Remove the item from the cart
+
             $cart[$rowId]['quantity'] = $cart[$rowId]['quantity'] + 1;
 
-            // Update the cart in the session
+
             session()->put('cart', $cart);
         }
         $cartCount = collect($cart)->sum('quantity');
@@ -177,13 +164,12 @@ class SiteController extends Controller
             return $item['price'] * $item['quantity'];
         });
 
-        // Prepare the data for the view
         $data = [
             'cartItems' => $cart,
             'cartCount' => $cartCount,
             'total' => $total,
         ];
-        // Response
+
         return response()->json([
             'name' => $cartName,
             'cartCount' => $cartCount,
@@ -192,21 +178,21 @@ class SiteController extends Controller
             'html' => view('layouts.cart-table', $data)->render(),
             'success' => true,
         ]);
-    } // End Method
+    }
 
 
     public function cartDecrement($rowId)
     {
         $cart = session()->get('cart', []);
         $cartName = $cart[$rowId]['name'];
-        // Check if the item exists in the cart
+
         if (isset($cart[$rowId])) {
-            // Remove the item from the cart
+
             $cart[$rowId]['quantity'] = $cart[$rowId]['quantity'] - 1;
             if ($cart[$rowId]['quantity'] == 0) {
                 unset($cart[$rowId]);
             }
-            // Update the cart in the session
+
             session()->put('cart', $cart);
         }
         $cartCount = collect($cart)->sum('quantity');
@@ -214,13 +200,12 @@ class SiteController extends Controller
             return $item['price'] * $item['quantity'];
         });
 
-        // Prepare the data for the view
         $data = [
             'cartItems' => $cart,
             'cartCount' => $cartCount,
             'total' => $total,
         ];
-        // Response
+
         return response()->json([
             'name' => $cartName,
             'cartCount' => $cartCount,
@@ -229,22 +214,21 @@ class SiteController extends Controller
             'html' => view('layouts.cart-table', $data)->render(),
             'success' => true,
         ]);
-        // return response()->json('Increment');
-    } // End Method
+    }
 
 
     public function cartQuantityChange(Request $request)
     {
         $cart = session()->get('cart', []);
         $cartName = $cart[$request->id]['name'];
-        // Check if the item exists in the cart
+
         if (isset($cart[$request->id])) {
-            // Remove the item from the cart
+
             $cart[$request->id]['quantity'] = $request->quantity;
             if ($cart[$request->id]['quantity'] == 0) {
                 unset($cart[$request->id]);
             }
-            // Update the cart in the session
+
             session()->put('cart', $cart);
         }
         $cartCount = collect($cart)->sum('quantity');
@@ -252,13 +236,12 @@ class SiteController extends Controller
             return $item['price'] * $item['quantity'];
         });
 
-        // Prepare the data for the view
         $data = [
             'cartItems' => $cart,
             'cartCount' => $cartCount,
             'total' => $total,
         ];
-        // Response
+
         return response()->json([
             'name' => $cartName,
             'cartCount' => $cartCount,
@@ -267,8 +250,7 @@ class SiteController extends Controller
             'html' => view('layouts.cart-table', $data)->render(),
             'success' => true,
         ]);
-        // return response()->json('Increment');
-    } // End Method
+    }
 
 
 
@@ -291,6 +273,5 @@ class SiteController extends Controller
             'html' => view('layouts.cart-table', $data)->render(),
             'success' => true,
         ]);
-    } // End Method
-
+    }
 }

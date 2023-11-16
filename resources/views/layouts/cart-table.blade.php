@@ -8,12 +8,10 @@
                     <th class="column-3">Price</th>
                     <th class="column-4">Quantity</th>
                     <th class="column-5">Total</th>
-                    <th class="column-6"> 
-                        <a href="javascript:void(0);" class="text-danger mr-3" onClick='emptyCart(event)'>Empty Cart</a>
+                    <th class="column-6">
+                        <a href="javascript:void(0);" class="text-danger mr-3" onclick='emptyCart(event)'>Empty Cart</a>
                     </th>
                 </tr>
-
-
                 @if ($cartItems)
                     @foreach ($cartItems as $id => $item)
                         <tr class="table_row">
@@ -27,17 +25,21 @@
                             <td class="column-4">
                                 <div class="wrap-num-product flex-w m-l-auto m-r-0">
 
-                                    <button type="button" class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" id="{{ $id }}" onclick="decreaseCount(event, this, this.id)">
+                                    <button type="button" class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"
+                                        id="{{ $id }}" onclick="decreaseCount(event, this, this.id)">
                                         <i class="fs-16 zmdi zmdi-minus"></i>
                                     </button>
                                     <!-- Change Quantity -->
 
-                                    <input id="{{ $id }}" min="1" name="quantity" value="{{ $item['quantity'] }}"
-                                        type="number" class="mtext-104 cl3 txt-center num-product input-cart-qty" onchange="quantityChange(event, this, this.id, this.value)"/>
+                                    <input id="{{ $id }}" min="1" name="quantity"
+                                        value="{{ $item['quantity'] }}" type="number"
+                                        class="mtext-104 cl3 txt-center num-product input-cart-qty"
+                                        onchange="quantityChange(event, this, this.id, this.value)" />
 
                                     <!-- Increment Quantity -->
 
-                                    <button type="button" class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m" id="{{ $id }}" onclick="increaseCount(event, this, this.id)">
+                                    <button type="button" class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
+                                        id="{{ $id }}" onclick="increaseCount(event, this, this.id)">
                                         <i class="fs-16 zmdi zmdi-plus"></i>
                                     </button>
 
@@ -46,14 +48,13 @@
                             <td class="column-5">$ {{ $item['price'] * $item['quantity'] }}</td>
                             <td class="column-6">
                                 <a href="JavaScript:void(0)" class="mr-4" title="Remove this item"
-                                    id="{{ $id }}" onClick='deleteRow(event, this, this.id)'>
+                                    id="{{ $id }}" onclick="deleteRow(event, this, this.id)">
                                     <i class="fa fa-trash text-danger"></i>
                                 </a>
                             </td>
                         </tr>
                     @endforeach
                 @endif
-
             </table>
         </div>
 

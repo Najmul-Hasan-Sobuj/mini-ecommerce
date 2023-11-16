@@ -322,42 +322,32 @@
 
         /*---------------------------------------------*/
 
-        $('.js-addcart-detail').each(function() {
-            $(this).on('click', function() {
-                var id = $(this).data('id');
-                var name = $(this).data('name');
-                var quantity = $(this).data('quantity');
-                var cartContainer = $('.header-cart-content');
-                var formData = {
-                    productId: id,
-                    productName: name,
-                    productQuantity: quantity
-                };
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{ route('add.cart') }}",
-                    type: 'POST',
-                    data: formData,
-                    dataType: 'json',
-                    success: function(success) {
-                        swal(success.name, "is added to cart !",
-                            "success");
-                        console.log(success);
-                        cartContainer.html(success.cartHeader);
-                        $('.icon-header-noti').attr('data-notify', success.cartCount);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText);
-                        swal("Error", "There was an error adding the product to the cart.",
-                            "error");
-                    }
-                });
+        $(document).on('click', '.js-addcart-detail', function() {
+            var $this = $(this);
+            var formData = {
+                productId: $this.data('id'),
+                productQuantity: $this.data('quantity')
+            };
+
+            $.ajax({
+                url: "/add-to-cart",
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    swal(response.productName, " is added to cart!", "success");
+                    $('.header-cart-content').html(response.cartHeader);
+                    $('.icon-header-noti').attr('data-notify', response.cartCount);
+                },
+                error: function(xhr) {
+                    swal("Error", "There was an error adding the product to the cart.", "error");
+                }
             });
         });
+
 
         function deleteRow(a, b, c) {
             var rowId = c;
@@ -381,6 +371,7 @@
                 }
             });
         }
+
 
         //-----  CART INCREMENT
         function increaseCount(a, b, c) {
@@ -444,7 +435,6 @@
             var cartContainer = $('.cart_product');
             var quantity = value;
             var id = id;
-            alert(id);
 
             $.ajax({
                 url: '{{ route('cart.quantity.change') }}',

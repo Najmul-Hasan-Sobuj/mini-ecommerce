@@ -14,7 +14,6 @@ use Database\Seeders\OrderItemSeeder;
 use Database\Seeders\RefundPolicySeeder;
 use Database\Seeders\PaymentMethodSeeder;
 use Database\Seeders\ProductReviewSeeder;
-use Database\Seeders\CartAndWishlistSeeder;
 use Database\Seeders\ProductAttachmentSeeder;
 use Database\Seeders\PaymentTransactionSeeder;
 use Database\Seeders\ShippingAndBillingAddressSeeder;
@@ -42,7 +41,6 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             ProductSeeder::class,
             ProductAttachmentSeeder::class,
-            CartAndWishlistSeeder::class,
             ShippingAndBillingAddressSeeder::class,
             OrderSeeder::class,
             OrderItemSeeder::class,

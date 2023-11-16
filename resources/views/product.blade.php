@@ -262,16 +262,13 @@
                                     </div>
 
                                     <div class="block2-txt-child2 flex-r p-t-3">
-                                        <a href="{{ route('add.to.cart', $product->slug) }}"
-                                            class="btn-addwish-b2 dis-block pos-relative js-addcart-detail">
-                                            <img class="icon-heart1 dis-block trans-04"
-                                                src="{{ asset('frontend/images/icons/icon-heart-01.png') }}"
-                                                alt="ICON">
-                                            <img class="icon-heart2 dis-block trans-04 ab-t-l"
-                                                src="{{ asset('frontend/images/icons/icon-heart-02.png') }}"
-                                                alt="ICON">
+                                        <a href="JavaScript:void(0)"
+                                            class=" btn-addwish-b2 dis-block pos-relative cart_button">
+                                            <i class="zmdi zmdi-shopping-cart js-addcart-detail"
+                                                data-id="{{ $product->id }}" data-name="{{ $product->name }}"
+                                                data-quantity="1"></i>
                                         </a>
-                                        <a href="{{ route('add.to.wishlist', $product->slug) }}"
+                                        <a href="JavaScript:void(0)"
                                             class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
                                             <img class="icon-heart1 dis-block trans-04"
                                                 src="{{ asset('frontend/images/icons/icon-heart-01.png') }}"

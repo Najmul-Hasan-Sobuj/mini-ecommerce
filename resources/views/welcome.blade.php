@@ -233,7 +233,7 @@
                                                                 data-quantity="1"></i>
                                                         </a>
 
-                                                        <a href="{{ route('add.wishlist', $product->slug) }}"
+                                                        <a href="JavaScript:void(0)"
                                                             class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
                                                             <img class="icon-heart1 dis-block trans-04"
                                                                 src="{{ asset('frontend/images/icons/icon-heart-01.png') }}"
