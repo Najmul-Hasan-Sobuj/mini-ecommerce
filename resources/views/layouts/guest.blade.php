@@ -44,6 +44,24 @@
     <!-- Header -->
     @include('layouts.header')
 
+    <div class="wrap-header-cart js-panel-cart">
+        <div class="s-full js-hide-cart"></div>
+        <div class="header-cart flex-col-l p-l-65 p-r-25">
+            <div class="header-cart-title flex-w flex-sb-m p-b-8">
+                <span class="mtext-103 cl2">
+                    Your Cart
+                </span>
+
+                <div class="fs-35 lh-10 cl2 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart">
+                    <i class="zmdi zmdi-close"></i>
+                </div>
+            </div>
+            <div class="header-cart-content flex-w js-pscroll">
+                @include('layouts.cart-header')
+            </div>
+        </div>
+    </div>
+
     {{ $slot }}
 
     <!-- Footer -->
@@ -305,11 +323,168 @@
         /*---------------------------------------------*/
 
         $('.js-addcart-detail').each(function() {
-            var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
             $(this).on('click', function() {
-                swal(nameProduct, "is added to cart !", "success");
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                var quantity = $(this).data('quantity');
+                var cartContainer = $('.header-cart-content');
+                var formData = {
+                    productId: id,
+                    productName: name,
+                    productQuantity: quantity
+                };
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: "{{ route('add.cart') }}",
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json',
+                    success: function(success) {
+                        swal(success.name, "is added to cart !",
+                            "success");
+                        console.log(success);
+                        cartContainer.html(success.cartHeader);
+                        $('.icon-header-noti').attr('data-notify', success.cartCount);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                        swal("Error", "There was an error adding the product to the cart.",
+                            "error");
+                    }
+                });
             });
         });
+
+        function deleteRow(a, b, c) {
+            var rowId = c;
+            var cartHead = $('.header-cart-content');
+            var cartContainer = $('.cart_product');
+            var listItem = $(`li[data-row-id="${rowId}"]`);
+            var cartCount = $('.cartCount');
+            var cartTotal = $('.cartTotal');
+
+            $.ajax({
+                type: 'GET',
+                url: "cart-remove/" + rowId,
+                dataType: 'json',
+                success: function(data) {
+                    swal(data.name, "is removed from the cart.", "success");
+                    cartContainer.empty(data);
+                    cartHead.html(data.cartHeader);
+                    cartContainer.html(data.html);
+                    listItem.remove();
+                    $('.icon-header-noti').attr('data-notify', data.cartCount);
+                }
+            });
+        }
+
+        //-----  CART INCREMENT
+        function increaseCount(a, b, c) {
+            var input = $('.input-qty').val();
+            var cartHead = $('.header-cart-content');
+            var value = parseInt(input.value, 10);
+            var cartContainer = $('.cart_product');
+            value = isNaN(value) ? 0 : value;
+            value++;
+            input.value = value;
+            var rowId = c;
+            $.ajax({
+                type: 'GET',
+                url: "/cart-increment/" + rowId,
+                dataType: 'json',
+                success: function(data) {
+                    swal(data.name, "increased one item!", "success");
+                    cartHead.html(data.cartHeader);
+                    cartContainer.empty(data);
+                    cartContainer.html(data.html);
+                    $('.icon-header-noti').attr('data-notify', data.cartCount);
+                }
+            });
+
+
+        }
+        // -------- CART Decrement  --------//
+
+        function decreaseCount(a, b, c) {
+            var cartHead = $('.header-cart-content');
+            var input = $('.input-qty').val();
+            var value = parseInt(input.value, 10);
+            if (value > 1) {
+                value = isNaN(value) ? 0 : value;
+                value--;
+                input.value = value;
+            }
+
+            var form = $(this).closest('.myForm');
+            var rowId = c;
+            var cartContainer = $('.cart_product');
+            $.ajax({
+                type: 'GET',
+                url: "/cart-decrement/" + rowId,
+                dataType: 'json',
+                success: function(data) {
+                    swal(data.name, "decreased one item.", "success");
+                    cartContainer.empty(data);
+                    cartHead.html(data.cartHeader);
+                    cartContainer.html(data.html);
+                    $('.icon-header-noti').attr('data-notify', data.cartCount);
+                    cartTotal.text(data.total);
+                }
+            });
+        }
+
+        //-------------- Cart Quantity Change ------- //
+        function quantityChange(a, b, id, value) {
+            a.preventDefault;
+            var cartHead = $('.header-cart-content');
+            var cartContainer = $('.cart_product');
+            var quantity = value;
+            var id = id;
+            alert(id);
+
+            $.ajax({
+                url: '{{ route('cart.quantity.change') }}',
+                type: 'POST',
+                data: {
+                    quantity: quantity,
+                    id: id,
+                    _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+                },
+                success: function(data) {
+                    swal(data.name, "quantity changed in cart!", "success");
+                    cartHead.html(data.cartHeader);
+                    cartContainer.empty(data);
+                    cartContainer.html(data.html);
+                    $('.icon-header-noti').attr('data-notify', data.cartCount);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    swal("Error", "There was an error adding the product to the cart.",
+                        "error");
+                }
+            });
+        };
+
+        function emptyCart(event) {
+            var cartHead = $('.header-cart-content');
+            var cartContainer = $('.cart_product');
+            $.ajax({
+                type: 'GET',
+                url: "{{ route('cart.clear') }}",
+                dataType: 'json',
+                success: function(data) {
+                    cartContainer.html(data);
+                    cartHead.html(data.cartHeader);
+                    swal("Cart", "Cleared Successfully !", "success");
+                    $('.icon-header-noti').attr('data-notify', data.cartCount);
+
+                }
+            });
+        }
     </script>
     <!--===============================================================================================-->
     <script src="{{ asset('frontend/vendor/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>

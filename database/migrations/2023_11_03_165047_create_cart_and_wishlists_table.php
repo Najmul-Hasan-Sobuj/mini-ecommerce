@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->enum('type', ['cart', 'wishlist']);
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
-            $table->unsignedInteger('quantity')->nullable()->default(0);  // Nullable if not applicable to wishlist items
+            // $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            // $table->unsignedInteger('quantity')->nullable()->default(0);  // Nullable if not applicable to wishlist items
             $table->unsignedDecimal('price', 8, 2)->nullable(); // Nullable if not applicable to wishlist items
             $table->timestamps();
         });

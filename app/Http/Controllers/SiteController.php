@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class SiteController extends Controller
 {
@@ -80,109 +81,216 @@ class SiteController extends Controller
 
     public function shopingCart()
     {
-        return view('shoping-cart');
+        $data = [
+            'cartItems' => session()->get('cart'),
+        ];
+        // dd($data['cartItems']);
+        return view('shoping-cart', $data);
     }
 
-    function addToCart($id)
+    public function addToCart(Request $request)
     {
-        $product = Product::find($id);
+        $product = Product::find($request->productId);
 
         if (!$product) {
-            return redirect()->back()->with('error', 'Product not found!');
+            return response()->json(['error' => true]);
         }
 
         $cart = session()->get('cart', []);
-
-        $cart[$id] = [
+        $cart[$request->productId] = [
             "name" => $product->name,
-            "quantity" => isset($cart[$id]) ? $cart[$id]['quantity'] + 1 : 1,
+            "quantity" => $request->productQuantity,
             "price" => $product->price,
             "image" => $product->image,
         ];
 
         session()->put('cart', $cart);
-        return redirect()->back()->with('success', 'Product added to cart successfully!');
+        $cartCount = collect(session('cart'))->sum('quantity');
+        $data = [
+            'cartItems' => session()->get('cart'),
+        ];
+        // toastr()->success('Successfully Added to Your Cart');
+
+        return response()->json([
+            'name' => $product->name,
+            'cartCount' => $cartCount,
+            'cartHeader' => view('layouts.cart-header', $data)->render(),
+            'success' => true
+        ]);
     }
 
-    function addToWishlist($id)
-    {
-        $product = Product::find($id);
 
-        if (!$product) {
-            return redirect()->back()->with('error', 'Product not found!');
+
+
+    public function cartRemove($rowId)
+    {
+        $cart = session()->get('cart', []);
+        $cartName = $cart[$rowId]['name'];
+        // Check if the item exists in the cart
+        if (isset($cart[$rowId])) {
+            // Remove the item from the cart
+            unset($cart[$rowId]);
+
+            // Update the cart in the session
+            session()->put('cart', $cart);
         }
 
-        $wishlist = session()->get('wishlist', []);
+        // Recalculate the total and cart count
+        $cartCount = collect($cart)->sum('quantity');
+        $total = collect($cart)->sum(function ($item) {
+            return $item['price'] * $item['quantity'];
+        });
 
-        $wishlist[$id] = [
-            "name" => $product->name,
-            "price" => $product->price,
-            "image" => $product->image,
+        // Prepare the data for the view
+        $data = [
+            'cartItems' => $cart,
+            'cartCount' => $cartCount,
+            'total' => $total,
         ];
 
-        session()->put('wishlist', $wishlist);
-        return redirect()->back()->with('success', 'Product added to wishlist successfully!');
+        // Response
+        return response()->json([
+            'name' => $cartName,
+            'cartCount' => $cartCount,
+            'total' => $total,
+            'cartHeader' => view('layouts.cart-header', $data)->render(),
+            'html' => view('layouts.cart-table', $data)->render(),
+            'success' => true,
+        ]);
     }
 
-    function removeWishlist($id)
+    public function cartIncrement($rowId)
     {
-        $wishlist = session()->get('wishlist', []);
 
-        if (isset($wishlist[$id])) {
-            unset($wishlist[$id]);
-            session()->put('wishlist', $wishlist);
-        }
-
-        return redirect()->back()->with('success', 'Product removed from wishlist successfully!');
-    }
-
-    // function removeCart($id)
-    // {
-    //     $cart = session()->get('cart', []);
-
-    //     if (isset($cart[$id])) {
-    //         unset($cart[$id]);
-    //         session()->put('cart', $cart);
-    //     }
-
-    //     return redirect()->back()->with('success', 'Product removed from cart successfully!');
-    // }
-
-    function changeQty($id)
-    {
         $cart = session()->get('cart', []);
+        $cartName = $cart[$rowId]['name'];
+        // Check if the item exists in the cart
+        if (isset($cart[$rowId])) {
+            // Remove the item from the cart
+            $cart[$rowId]['quantity'] = $cart[$rowId]['quantity'] + 1;
 
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity'] = request()->quantity;
+            // Update the cart in the session
             session()->put('cart', $cart);
         }
+        $cartCount = collect($cart)->sum('quantity');
+        $total = collect($cart)->sum(function ($item) {
+            return $item['price'] * $item['quantity'];
+        });
 
-        return redirect()->back()->with('success', 'Cart quantity updated successfully!');
-    }
+        // Prepare the data for the view
+        $data = [
+            'cartItems' => $cart,
+            'cartCount' => $cartCount,
+            'total' => $total,
+        ];
+        // Response
+        return response()->json([
+            'name' => $cartName,
+            'cartCount' => $cartCount,
+            'total' => $total,
+            'cartHeader' => view('layouts.cart-header', $data)->render(),
+            'html' => view('layouts.cart-table', $data)->render(),
+            'success' => true,
+        ]);
+    } // End Method
 
-    function incrementCart($id)
+
+    public function cartDecrement($rowId)
     {
         $cart = session()->get('cart', []);
-
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
-            session()->put('cart', $cart);
-        }
-
-        return redirect()->back()->with('success', 'Product quantity incremented successfully!');
-    }
-
-    function decrementCart($id)
-    {
-        $cart = session()->get('cart', []);
-
-        if (isset($cart[$id])) {
-            if ($cart[$id]['quantity'] > 1) {
-                $cart[$id]['quantity']--;
-                session()->put('cart', $cart);
+        $cartName = $cart[$rowId]['name'];
+        // Check if the item exists in the cart
+        if (isset($cart[$rowId])) {
+            // Remove the item from the cart
+            $cart[$rowId]['quantity'] = $cart[$rowId]['quantity'] - 1;
+            if ($cart[$rowId]['quantity'] == 0) {
+                unset($cart[$rowId]);
             }
+            // Update the cart in the session
+            session()->put('cart', $cart);
         }
+        $cartCount = collect($cart)->sum('quantity');
+        $total = collect($cart)->sum(function ($item) {
+            return $item['price'] * $item['quantity'];
+        });
 
-        return redirect()->back()->with('success', 'Product quantity decremented successfully!');
-    }
+        // Prepare the data for the view
+        $data = [
+            'cartItems' => $cart,
+            'cartCount' => $cartCount,
+            'total' => $total,
+        ];
+        // Response
+        return response()->json([
+            'name' => $cartName,
+            'cartCount' => $cartCount,
+            'total' => $total,
+            'cartHeader' => view('layouts.cart-header', $data)->render(),
+            'html' => view('layouts.cart-table', $data)->render(),
+            'success' => true,
+        ]);
+        // return response()->json('Increment');
+    } // End Method
+
+
+    public function cartQuantityChange(Request $request)
+    {
+        $cart = session()->get('cart', []);
+        $cartName = $cart[$request->id]['name'];
+        // Check if the item exists in the cart
+        if (isset($cart[$request->id])) {
+            // Remove the item from the cart
+            $cart[$request->id]['quantity'] = $request->quantity;
+            if ($cart[$request->id]['quantity'] == 0) {
+                unset($cart[$request->id]);
+            }
+            // Update the cart in the session
+            session()->put('cart', $cart);
+        }
+        $cartCount = collect($cart)->sum('quantity');
+        $total = collect($cart)->sum(function ($item) {
+            return $item['price'] * $item['quantity'];
+        });
+
+        // Prepare the data for the view
+        $data = [
+            'cartItems' => $cart,
+            'cartCount' => $cartCount,
+            'total' => $total,
+        ];
+        // Response
+        return response()->json([
+            'name' => $cartName,
+            'cartCount' => $cartCount,
+            'total' => $total,
+            'cartHeader' => view('layouts.cart-header', $data)->render(),
+            'html' => view('layouts.cart-table', $data)->render(),
+            'success' => true,
+        ]);
+        // return response()->json('Increment');
+    } // End Method
+
+
+
+    public function cartClear()
+    {
+        Session::forget('cart');
+        $cartCount = collect(session()->get('cart'))->sum('quantity');
+        $total = collect(session()->get('cart'))->sum(function ($item) {
+            return $item['price'] * $item['quantity'];
+        });
+        $data = [
+            'cartItems' => [],
+            'total' => 0,
+        ];
+
+        return response()->json([
+            'cartCount' => $cartCount,
+            'total' => $total,
+            'cartHeader' => view('layouts.cart-header', $data)->render(),
+            'html' => view('layouts.cart-table', $data)->render(),
+            'success' => true,
+        ]);
+    } // End Method
+
 }

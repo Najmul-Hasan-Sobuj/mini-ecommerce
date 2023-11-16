@@ -64,11 +64,9 @@ Route::get('product-detail/{slug}', [SiteController::class, 'productDetails'])->
 Route::get('shoping-cart', [SiteController::class, 'shopingCart'])->name('shoping.cart');
 // all site pages end /
 
-Route::get('/add-to-cart/{id}', [SiteController::class, 'addToCart'])->name('add.to.cart');
-Route::get('/add-to-wishlist/{id}', [SiteController::class, 'addToWishlist'])->name('add.to.wishlist');
-Route::get('/remove/{id}', [SiteController::class, 'removeCart'])->name('remove.cart');
-Route::get('/remove/{id}', [SiteController::class, 'removeWishlist'])->name('remove.wishlist');
-
-Route::get('/change-qty/{id}', [SiteController::class, 'changeQty'])->name('change.qty');
-Route::post('/increment-cart/{id}', [SiteController::class, 'incrementCart'])->name('increment.cart');
-Route::post('/decrement-cart/{id}', [SiteController::class, 'decrementCart'])->name('decrement.cart');
+Route::post('add-to-cart', [SiteController::class, 'addToCart'])->name('add.cart');
+Route::get('cart-clear', [SiteController::class, 'cartClear'])->name('cart.clear');
+Route::get('cart-remove/{id}', [SiteController::class, 'cartRemove'])->name('cart.remove');
+Route::post('cart-quantity/change/', [SiteController::class, 'cartQuantityChange'])->name('cart.quantity.change');
+Route::get('cart-increment/{id}', [SiteController::class, 'cartIncrement'])->name('cart.increment');
+Route::get('cart-decrement/{id}', [SiteController::class, 'cartDecrement'])->name('cart.decrement');
