@@ -214,34 +214,29 @@ class SiteController extends Controller
         ]);
     }
 
-
     public function cartQuantityChange(Request $request)
     {
         $cart = session()->get('cart', []);
-        $cartName = $cart[$request->id]['name'];
-
-        if (isset($cart[$request->id])) {
-
-            $cart[$request->id]['quantity'] = $request->quantity;
-            if ($cart[$request->id]['quantity'] == 0) {
-                unset($cart[$request->id]);
-            }
-
-            session()->put('cart', $cart);
+        if (!isset($cart[$request->id])) {
+            return response()->json(['success' => false, 'error' => 'Item not found in cart']);
         }
-        $cartCount = collect($cart)->sum('quantity');
-        $total = collect($cart)->sum(function ($item) {
+
+        $cartItem = &$cart[$request->id];
+        $cartItem['quantity'] = max($request->quantity, 0);
+
+        if ($cartItem['quantity'] == 0) {
+            unset($cart[$request->id]);
+        }
+
+        session()->put('cart', $cart);
+        $cartCount = array_sum(array_column($cart, 'quantity'));
+        $total = array_sum(array_map(function ($item) {
             return $item['price'] * $item['quantity'];
-        });
+        }, $cart));
 
-        $data = [
-            'cartItems' => $cart,
-            'cartCount' => $cartCount,
-            'total' => $total,
-        ];
-
+        $data = ['cartItems' => $cart, 'cartCount' => $cartCount, 'total' => $total];
         return response()->json([
-            'name' => $cartName,
+            'name' => $cartItem['name'] ?? '',
             'cartCount' => $cartCount,
             'total' => $total,
             'cartHeader' => view('layouts.cart-header', $data)->render(),
@@ -249,8 +244,6 @@ class SiteController extends Controller
             'success' => true,
         ]);
     }
-
-
 
     public function cartClear()
     {

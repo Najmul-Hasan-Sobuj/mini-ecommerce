@@ -424,32 +424,27 @@
         }
 
         //-------------- Cart Quantity Change ------- //
-        function quantityChange(a, b, id, value) {
-            a.preventDefault;
-            var cartHead = $('.header-cart-content');
-            var cartContainer = $('.cart_product');
-            var quantity = value;
-            var id = id;
+
+        function quantityChange(event, id, value) {
+            event.preventDefault();
+            const cartHead = $('.header-cart-content');
+            const cartContainer = $('.cart_product');
 
             $.ajax({
-                url: '{{ route('cart.quantity.change') }}',
+                url: `/cart/quantity/change/${id}`,
                 type: 'POST',
                 data: {
-                    quantity: quantity,
-                    id: id,
-                    _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+                    quantity: value,
+                    _token: $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(data) {
-                    swal(data.name, "quantity changed in cart!", "success");
+                    swal(data.name, "Quantity changed in cart!", "success");
                     cartHead.html(data.cartHeader);
-                    cartContainer.empty(data);
                     cartContainer.html(data.html);
                     $('.icon-header-noti').attr('data-notify', data.cartCount);
                 },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                    swal("Error", "There was an error adding the product to the cart.",
-                        "error");
+                error: function(xhr) {
+                    swal("Error", "There was an error: " + xhr.responseText, "error");
                 }
             });
         };

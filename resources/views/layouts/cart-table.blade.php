@@ -31,11 +31,10 @@
                                     </button>
                                     <!-- Change Quantity -->
 
-                                    <input id="{{ $id }}" min="1" name="quantity"
-                                        value="{{ $item['quantity'] }}" type="number"
+                                    <input id="{{ $id }}" min="1" name="quantity" type="number"
+                                        value="{{ $item['quantity'] }}"
                                         class="mtext-104 cl3 txt-center num-product input-cart-qty"
-                                        onchange="quantityChange(event, this, this.id, this.value)" />
-
+                                        onchange="quantityChange(event, '{{ $id }}', this.value)" />
                                     <!-- Increment Quantity -->
 
                                     <button type="button" class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
