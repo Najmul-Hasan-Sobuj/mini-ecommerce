@@ -364,64 +364,79 @@
                     cartContainer.html(data.html);
                     listItem.remove();
                     iconHeaderNoti.attr('data-notify', data.cartCount);
+                    $('.js-select2').select2();
                 }
             });
         }
 
         //-----  CART INCREMENT
-        function increaseCount(a, b, c) {
-            var input = $('.input-qty').val();
-            var cartHead = $('.header-cart-content');
-            var value = parseInt(input.value, 10);
-            var cartContainer = $('.cart_product');
+        function increaseCount(event, buttonElement, rowId) {
+            event.preventDefault();
+
+            var input = $(buttonElement).closest('.cart-item').find('.input-qty');
+            var value = parseInt(input.val(), 10);
             value = isNaN(value) ? 0 : value;
             value++;
-            input.value = value;
-            var rowId = c;
+            input.val(value);
+
             $.ajax({
                 type: 'GET',
                 url: "/cart-increment/" + rowId,
                 dataType: 'json',
                 success: function(data) {
-                    swal(data.name, "increased one item!", "success");
-                    cartHead.html(data.cartHeader);
-                    cartContainer.empty(data);
-                    cartContainer.html(data.html);
-                    $('.icon-header-noti').attr('data-notify', data.cartCount);
+                    if (data.success) {
+                        swal(data.name, "Quantity increased!", "success");
+                        $('.header-cart-content').html(data.cartHeader);
+                        $('.cart_product').empty().html(data.html);
+                        $('.icon-header-noti').attr('data-notify', data.cartCount);
+                        $('.js-select2').select2();
+                    } else {
+                        swal("Error", "Item not found in cart", "error");
+                    }
+                },
+                error: function() {
+                    swal("Error", "Unable to increment the item", "error");
                 }
             });
-
-
         }
+
+
         // -------- CART Decrement  --------//
 
-        function decreaseCount(a, b, c) {
-            var cartHead = $('.header-cart-content');
-            var input = $('.input-qty').val();
-            var value = parseInt(input.value, 10);
-            if (value > 1) {
-                value = isNaN(value) ? 0 : value;
-                value--;
-                input.value = value;
-            }
+        function decreaseCount(event, buttonElement, rowId) {
+            event.preventDefault();
 
-            var form = $(this).closest('.myForm');
-            var rowId = c;
-            var cartContainer = $('.cart_product');
+            var input = $(buttonElement).closest('.cart-item').find('.input-qty');
+            var value = parseInt(input.val(), 10);
+            value = (isNaN(value) || value <= 1) ? 0 : value - 1;
+            input.val(value);
+
             $.ajax({
                 type: 'GET',
                 url: "/cart-decrement/" + rowId,
                 dataType: 'json',
                 success: function(data) {
-                    swal(data.name, "decreased one item.", "success");
-                    cartContainer.empty(data);
-                    cartHead.html(data.cartHeader);
-                    cartContainer.html(data.html);
-                    $('.icon-header-noti').attr('data-notify', data.cartCount);
-                    cartTotal.text(data.total);
+                    if (data.success) {
+                        if (data.itemRemoved) {
+                            swal("Item removed", "The item has been removed from the cart", "success");
+                            $(buttonElement).closest('.cart-item').remove();
+                        } else {
+                            swal(data.name, "Quantity decreased!", "success");
+                        }
+                        $('.header-cart-content').html(data.cartHeader);
+                        $('.cart_product').empty().html(data.html);
+                        $('.icon-header-noti').attr('data-notify', data.cartCount);
+                        $('.js-select2').select2();
+                    } else {
+                        swal("Error", data.error, "error");
+                    }
+                },
+                error: function() {
+                    swal("Error", "Unable to decrement the item", "error");
                 }
             });
         }
+
 
         //-------------- Cart Quantity Change ------- //
 
@@ -442,6 +457,7 @@
                     cartHead.html(data.cartHeader);
                     cartContainer.html(data.html);
                     $('.icon-header-noti').attr('data-notify', data.cartCount);
+                    $('.js-select2').select2();
                 },
                 error: function(xhr) {
                     swal("Error", "There was an error: " + xhr.responseText, "error");

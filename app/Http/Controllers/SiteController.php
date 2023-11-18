@@ -150,27 +150,32 @@ class SiteController extends Controller
     public function cartIncrement($rowId)
     {
         $cart = session()->get('cart', []);
-        $cartName = $cart[$rowId]['name'];
 
-        if (isset($cart[$rowId])) {
-
-            $cart[$rowId]['quantity'] = $cart[$rowId]['quantity'] + 1;
-
-            session()->put('cart', $cart);
+        // Check if the item exists in the cart
+        if (!isset($cart[$rowId])) {
+            return response()->json(['error' => 'Item not found in cart'], 404);
         }
-        $cartCount = collect($cart)->sum('quantity');
-        $total = collect($cart)->sum(function ($item) {
-            return $item['price'] * $item['quantity'];
-        });
 
+        // Increment the quantity
+        $cart[$rowId]['quantity']++;
+
+        // Update the session
+        session()->put('cart', $cart);
+
+        // Calculate cart count and total
+        $cartCount = collect($cart)->sum('quantity');
+        $total = collect($cart)->sum(fn ($item) => $item['price'] * $item['quantity']);
+
+        // Prepare data for the views
         $data = [
             'cartItems' => $cart,
             'cartCount' => $cartCount,
             'total' => $total,
         ];
 
+        // Return the response
         return response()->json([
-            'name' => $cartName,
+            'name' => $cart[$rowId]['name'],
             'cartCount' => $cartCount,
             'total' => $total,
             'cartHeader' => view('layouts.cart-header', $data)->render(),
@@ -178,41 +183,47 @@ class SiteController extends Controller
             'success' => true,
         ]);
     }
-
 
     public function cartDecrement($rowId)
     {
         $cart = session()->get('cart', []);
-        $cartName = $cart[$rowId]['name'];
-
-        if (isset($cart[$rowId])) {
-
-            $cart[$rowId]['quantity'] = $cart[$rowId]['quantity'] - 1;
-            if ($cart[$rowId]['quantity'] == 0) {
-                unset($cart[$rowId]);
-            }
-            session()->put('cart', $cart);
+    
+        if (!isset($cart[$rowId])) {
+            return response()->json(['error' => 'Item not found in cart'], 404);
         }
+    
+        $cart[$rowId]['quantity']--;
+    
+        $itemRemoved = false;
+        if ($cart[$rowId]['quantity'] <= 0) {
+            unset($cart[$rowId]);
+            $itemRemoved = true;
+        }
+    
+        session()->put('cart', $cart);
+    
         $cartCount = collect($cart)->sum('quantity');
-        $total = collect($cart)->sum(function ($item) {
-            return $item['price'] * $item['quantity'];
-        });
-
+        $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+    
         $data = [
             'cartItems' => $cart,
             'cartCount' => $cartCount,
             'total' => $total,
         ];
-
+    
         return response()->json([
-            'name' => $cartName,
+            'name' => $itemRemoved ? 'Item removed' : $cart[$rowId]['name'],
             'cartCount' => $cartCount,
             'total' => $total,
             'cartHeader' => view('layouts.cart-header', $data)->render(),
             'html' => view('layouts.cart-table', $data)->render(),
+            'itemRemoved' => $itemRemoved,
             'success' => true,
         ]);
     }
+    
+
+
 
     public function cartQuantityChange(Request $request)
     {
@@ -221,27 +232,29 @@ class SiteController extends Controller
             return response()->json(['success' => false, 'error' => 'Item not found in cart']);
         }
 
-        $cartItem = &$cart[$request->id];
-        $cartItem['quantity'] = max($request->quantity, 0);
+        $cart[$request->id]['quantity'] = max($request->quantity, 0);
 
-        if ($cartItem['quantity'] == 0) {
+        if ($cart[$request->id]['quantity'] == 0) {
             unset($cart[$request->id]);
         }
 
         session()->put('cart', $cart);
-        $cartCount = array_sum(array_column($cart, 'quantity'));
-        $total = array_sum(array_map(function ($item) {
-            return $item['price'] * $item['quantity'];
-        }, $cart));
+
+        $cartCount = 0;
+        $total = 0;
+        foreach ($cart as $item) {
+            $cartCount += $item['quantity'];
+            $total += $item['price'] * $item['quantity'];
+        }
 
         $data = ['cartItems' => $cart, 'cartCount' => $cartCount, 'total' => $total];
         return response()->json([
-            'name' => $cartItem['name'] ?? '',
-            'cartCount' => $cartCount,
-            'total' => $total,
+            'name'       => $cart[$request->id]['name'] ?? '',
+            'cartCount'  => $cartCount,
+            'total'      => $total,
             'cartHeader' => view('layouts.cart-header', $data)->render(),
-            'html' => view('layouts.cart-table', $data)->render(),
-            'success' => true,
+            'html'       => view('layouts.cart-table', $data)->render(),
+            'success'    => true,
         ]);
     }
 

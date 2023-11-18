@@ -24,24 +24,22 @@
                             <td class="column-3">$ {{ $item['price'] }}</td>
                             <td class="column-4">
                                 <div class="wrap-num-product flex-w m-l-auto m-r-0">
-
                                     <button type="button" class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m"
-                                        id="{{ $id }}" onclick="decreaseCount(event, this, this.id)">
+                                        id="{{ $id }}"
+                                        onclick="decreaseCount(event, this, '{{ $id }}')">
                                         <i class="fs-16 zmdi zmdi-minus"></i>
                                     </button>
                                     <!-- Change Quantity -->
-
                                     <input id="{{ $id }}" min="1" name="quantity" type="number"
                                         value="{{ $item['quantity'] }}"
                                         class="mtext-104 cl3 txt-center num-product input-cart-qty"
                                         onchange="quantityChange(event, '{{ $id }}', this.value)" />
                                     <!-- Increment Quantity -->
-
                                     <button type="button" class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m"
-                                        id="{{ $id }}" onclick="increaseCount(event, this, this.id)">
+                                        id="{{ $id }}"
+                                        onclick="increaseCount(event, this, '{{ $id }}')">
                                         <i class="fs-16 zmdi zmdi-plus"></i>
                                     </button>
-
                                 </div>
                             </td>
                             <td class="column-5">$ {{ $item['price'] * $item['quantity'] }}</td>
@@ -160,3 +158,4 @@
         </button>
     </div>
 </div>
+
