@@ -9,7 +9,7 @@
         @foreach ($cartItems as $id => $cartItem)
             @php $total += $cartItem['price'] * $cartItem['quantity'] @endphp
             <li class="header-cart-item flex-w flex-t m-b-12">
-                <div class="header-cart-item-img" id="{{ $id }}" onClick='deleteRow(event, this, this.id)'>
+                <div class="header-cart-item-img" id="{{ $id }}" onclick="deleteRow(this.id)">
                     <img src="{{ asset('storage/' . $cartItem['image']) }}" alt="{{ $cartItem['name'] }}">
                 </div>
 

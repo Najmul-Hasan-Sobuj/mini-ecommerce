@@ -293,5 +293,8 @@
             </div>
         </div>
     </div>
-
+    @push('scripts')
+    @endpush
 </x-guest-layout>
+
+
