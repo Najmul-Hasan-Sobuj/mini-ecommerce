@@ -122,10 +122,11 @@
 
     <script src="{{ asset('admin/assets/js/app.js') }}"></script>
 
+	<script src="{{ asset('admin/assets/js/vendor/visualization/d3/d3_tooltip.js') }}"></script>
+    	<script src="{{ asset('admin/assets/demo/pages/widgets_stats.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/gallery_library.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/extra_sweetalert.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/components_buttons.js') }}"></script>
-    {{-- <script src="{{ asset('admin/assets/demo/pages/partials.js') }}"></script> --}}
     <script src="{{ asset('admin/assets/demo/pages/form_select2.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/form_multiselect.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/form_layouts.js') }}"></script>
@@ -143,17 +144,12 @@
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
     @stack('scripts')
 
-    {{-- <script src="{{ asset('admin/assets/demo/pages/dashboard.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/charts/pages/dashboard/streamgraph.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/charts/pages/dashboard/sparklines.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/charts/pages/dashboard/lines.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/charts/pages/dashboard/areas.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/charts/pages/dashboard/donuts.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/charts/pages/dashboard/bars.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/charts/pages/dashboard/progress.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/charts/pages/dashboard/heatmaps.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/charts/pages/dashboard/pies.js') }}"></script>
-    <script src="{{ asset('admin/assets/demo/charts/pages/dashboard/bullets.js') }}"></script> --}}
+
+    <script src="assets/js/app.js"></script>
+    <script src="{{ asset('admin/assets/demo/pages/user_pages_profile_tabbed.js') }}"></script>
+    <script src="{{ asset('admin/assets/demo/charts/echarts/bars/tornado_negative_stack.js') }}"></script>
+    <script src="{{ asset('admin/assets/demo/charts/pages/profile/balance_stats.js') }}"></script>
+    <script src="{{ asset('admin/assets/demo/charts/pages/profile/available_hours.js') }}"></script>
 </body>
 
 </html>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Product;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -36,7 +37,9 @@ class SiteController extends Controller
 
     public function profile()
     {
-        return view('profile');
+        return view('profile', [
+            // 'admins' => Admin::get(),
+        ]);
     }
 
     public function about()
@@ -187,30 +190,30 @@ class SiteController extends Controller
     public function cartDecrement($rowId)
     {
         $cart = session()->get('cart', []);
-    
+
         if (!isset($cart[$rowId])) {
             return response()->json(['error' => 'Item not found in cart'], 404);
         }
-    
+
         $cart[$rowId]['quantity']--;
-    
+
         $itemRemoved = false;
         if ($cart[$rowId]['quantity'] <= 0) {
             unset($cart[$rowId]);
             $itemRemoved = true;
         }
-    
+
         session()->put('cart', $cart);
-    
+
         $cartCount = collect($cart)->sum('quantity');
-        $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
-    
+        $total = collect($cart)->sum(fn ($item) => $item['price'] * $item['quantity']);
+
         $data = [
             'cartItems' => $cart,
             'cartCount' => $cartCount,
             'total' => $total,
         ];
-    
+
         return response()->json([
             'name' => $itemRemoved ? 'Item removed' : $cart[$rowId]['name'],
             'cartCount' => $cartCount,
@@ -221,7 +224,7 @@ class SiteController extends Controller
             'success' => true,
         ]);
     }
-    
+
 
 
 

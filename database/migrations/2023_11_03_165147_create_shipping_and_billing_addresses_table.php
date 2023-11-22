@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('address_type', ['shipping', 'billing']);  // Enum column for address type
             $table->string('street_address');
             $table->string('city');
-            $table->string('state');
+            $table->string('state'); //no need
             $table->string('country');
             $table->string('postal_code', 10);
             $table->timestamps();
@@ -36,3 +36,8 @@ return new class extends Migration
         Schema::dropIfExists('shipping_and_billing_addresses');
     }
 };
+
+
+//phone number
+//fname 
+//lname 

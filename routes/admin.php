@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\WebSettingController;
@@ -57,26 +58,26 @@ Route::prefix('admin')->group(static function () {
 
         Route::resources(
             [
-                'category'      => CategoryController::class, //done
-                'paymentMethod' => PaymentMethodController::class, // done
-                'faq'           => FaqController::class, // done
-                'coupon'       => CouponController::class, // done
+                'category'      => CategoryController::class,
+                'paymentMethod' => PaymentMethodController::class,
+                'faq'           => FaqController::class,
+                'coupon'        => CouponController::class,
             ],
             ['except' => ['create', 'show', 'edit'],]
         );
 
         Route::get('payment-transaction', [PaymentTransactionController::class, 'index'])->name('payment.transaction.index');
-        Route::post('/update-transaction-status/{id}', [PaymentTransactionController::class, 'updateStatus'])->name('transaction.updateStatus');
+        Route::post('update-transaction-status/{id}', [PaymentTransactionController::class, 'updateStatus'])->name('transaction.updateStatus');
         Route::delete('payment-transaction/{id}', [PaymentTransactionController::class, 'destroy'])->name('payment.transaction.destroy');
 
         Route::get('refund-policy', [RefundPolicyController::class, 'index'])->name('refund.policy.index');
         Route::put('refund-policy', [RefundPolicyController::class, 'refundPolicy'])->name('refund.policy.update.or.create');
 
-        Route::resource('brand', BrandController::class); //done
-        Route::resource('product', ProductController::class)->except(['show']); //done
+        Route::resource('brand', BrandController::class);
+        Route::resource('product', ProductController::class)->except(['show']);
 
-        // Route::resource('contact', ContactController::class)->except(['create', 'show', 'edit'])
-        //     ->middleware(['throttle:10,1', 'checkBan'], 'only', ['store']);
+        // Route to display the contact form
+        Route::get('contact', [ContactController::class, 'show'])->name('contact');
 
         // Route::get('/subscribers', [NewsletterController::class, 'index'])->name('newsletter.index');
         // Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
