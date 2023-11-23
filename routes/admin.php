@@ -77,7 +77,9 @@ Route::prefix('admin')->group(static function () {
         Route::resource('product', ProductController::class)->except(['show']);
 
         // Route to display the contact form
-        Route::get('contact', [ContactController::class, 'show'])->name('contact');
+        Route::get('contact-table', [ContactController::class, 'index'])->name('contact.index');
+        Route::post('update-contact-status/{id}', [ContactController::class, 'updateStatus'])->name('contact.updateStatus');
+        Route::delete('contact/{id}', [ContactController::class, 'destroy'])->name('contact.destroy');
 
         // Route::get('/subscribers', [NewsletterController::class, 'index'])->name('newsletter.index');
         // Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');

@@ -41,15 +41,27 @@
             'icon' => 'ph-gear-six',
             'label' => __('Payment Transaction'),
         ],
-        [
-            'route' => 'faq.index',
-            'icon' => 'ph-gear-six',
-            'label' => __('Faq'),
-        ],
+
         [
             'route' => 'refund.policy.index',
             'icon' => 'ph-gear-six',
             'label' => __('Refund Policy'),
+        ],
+        [
+            'icon' => 'ph-keyhole',
+            'label' => 'CRM',
+            'submenu' => [
+                [
+                    'route' => 'faq.index',
+                    'icon' => 'ph-gear-six',
+                    'label' => __('Faq'),
+                ],
+                [
+                    'route' => 'contact.index',
+                    'icon' => 'ph-gear-six',
+                    'label' => __('Contact'),
+                ],
+            ],
         ],
     ];
 

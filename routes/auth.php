@@ -34,6 +34,24 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.update');
+
+
+    // all site pages starting /
+    Route::get('about', [SiteController::class, 'about'])->name('about');
+    Route::get('shop', [SiteController::class, 'shop'])->name('shop');
+    Route::get('product-detail/{slug}', [SiteController::class, 'productDetails'])->name('product.detail');
+    Route::get('shoping-cart', [SiteController::class, 'shopingCart'])->name('shoping.cart');
+    // all site pages end /
+
+    Route::post('add-to-cart', [SiteController::class, 'addToCart'])->name('add.cart');
+    Route::get('cart-clear', [SiteController::class, 'cartClear'])->name('cart.clear');
+    Route::get('cart-remove/{id}', [SiteController::class, 'cartRemove'])->name('cart.remove');
+    Route::post('cart/quantity/change/{id}', [SiteController::class, 'cartQuantityChange'])->name('cart.quantity.change');
+    Route::get('cart-increment/{id}', [SiteController::class, 'cartIncrement'])->name('cart.increment');
+    Route::get('cart-decrement/{id}', [SiteController::class, 'cartDecrement'])->name('cart.decrement');
+
+    Route::get('contact', [ContactController::class, 'show'])->name('contact');
+    Route::post('contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
 });
 
 Route::middleware('auth')->group(function () {
@@ -56,21 +74,3 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
-
-// all site pages starting /
-Route::get('about', [SiteController::class, 'about'])->name('about');
-// Route::get('contact', [SiteController::class, 'contact'])->name('contact');
-Route::get('shop', [SiteController::class, 'shop'])->name('shop');
-Route::get('product-detail/{slug}', [SiteController::class, 'productDetails'])->name('product.detail');
-Route::get('shoping-cart', [SiteController::class, 'shopingCart'])->name('shoping.cart');
-// all site pages end /
-
-Route::post('add-to-cart', [SiteController::class, 'addToCart'])->name('add.cart');
-Route::get('cart-clear', [SiteController::class, 'cartClear'])->name('cart.clear');
-Route::get('cart-remove/{id}', [SiteController::class, 'cartRemove'])->name('cart.remove');
-Route::post('cart/quantity/change/{id}', [SiteController::class, 'cartQuantityChange'])->name('cart.quantity.change');
-Route::get('cart-increment/{id}', [SiteController::class, 'cartIncrement'])->name('cart.increment');
-Route::get('cart-decrement/{id}', [SiteController::class, 'cartDecrement'])->name('cart.decrement');
-
-// Route to handle the submission of the contact form
-Route::post('contact/submit', [ContactController::class, 'submit'])->name('contact.submit');

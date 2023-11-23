@@ -59,7 +59,7 @@ class BrandController extends Controller
 
         $data = [
             'name'         => $request->name,
-            'slug'         => Str::slug($request->name),
+            // 'slug'         => Str::slug($request->name),
             'image'        => $globalFunImage['status'] == 1 ? $globalFunImage['file_name'] : null,
         ];
         $this->brandRepository->storeBrand($data);
@@ -125,7 +125,7 @@ class BrandController extends Controller
 
         $data = [
             'name'         => $request->name,
-            'slug'         => Str::slug($request->name),
+            // 'slug'         => Str::slug($request->name),
             'image'        => $globalFunImage['status'] == 1 ? $globalFunImage['file_name'] : $brand->image,
         ];
 
