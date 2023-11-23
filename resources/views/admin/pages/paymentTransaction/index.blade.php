@@ -9,11 +9,11 @@
                             <thead>
                                 <tr class="bg-secondary border-secondary text-white">
                                     <th width="5%">#</th>
-                                    <th width="20%">payment_method_id</th>
-                                    <th width="15%">amount</th>
-                                    <th width="20%">transaction_id</th>
-                                    <th width="15%">status</th>
-                                    <th width="20%">created_at</th>
+                                    <th width="20%">Payment Method Name</th>
+                                    <th width="15%">Amount</th>
+                                    <th width="20%">Transaction Number</th>
+                                    <th width="15%">Status</th>
+                                    <th width="20%">Created At</th>
                                     <th class="text-center" width="5%">Action</th>
                                 </tr>
                             </thead>
@@ -27,8 +27,10 @@
                                             <td>{{ $paymentTransaction->transaction_id }}</td>
                                             <td>
                                                 <select name="status"
-                                                    class="form-control form-control-select2 status-selector"
+                                                    class="form-control form-control-sm select status-selector"
                                                     data-id="{{ $paymentTransaction->id }}"
+                                                    data-minimum-results-for-search="Infinity"
+                                                    data-container-css-class="select-sm"
                                                     data-current-status="{{ $paymentTransaction->status }}">
                                                     <option @selected($paymentTransaction->status == 'pending') value="pending">Pending
                                                     </option>
@@ -39,7 +41,7 @@
                                                     </option>
                                                 </select>
                                             </td>
-                                            <td>{{ $paymentTransaction->created_at }}</td>
+                                            <td>{{ $paymentTransaction->created_at->format('F d, Y h:i A') }}</td>
                                             <td>
                                                 <div class="d-inline-flex text-center">
                                                     <a href="{{ route('payment.transaction.destroy', $paymentTransaction->id) }}"

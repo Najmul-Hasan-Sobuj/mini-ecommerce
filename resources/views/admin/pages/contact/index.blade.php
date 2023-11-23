@@ -11,7 +11,8 @@
                                     <th width="5%">#</th>
                                     <th width="15%">Email</th>
                                     <th width="30%">Message</th>
-                                    <th width="15%">status</th>
+                                    <th width="15%">Status</th>
+                                    <th width="15%">Switch</th>
                                     <th width="30%">created_at</th>
                                     <th class="text-center" width="5%">Action</th>
                                 </tr>
@@ -23,18 +24,24 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $contact->email }}</td>
                                             <td>{{ $contact->msg }}</td>
+                                            <td> <span
+                                                    class="badge {{ $contact->is_banned == '1' ? 'bg-danger' : 'bg-success' }}">{{ $contact->is_banned == '1' ? 'Banned' : 'Not Banned' }}</span>
+                                            </td>
                                             <td>
                                                 <select name="is_banned"
-                                                    class="form-control form-control-select2 status-selector banned-status-selector"
+                                                    class="form-control form-control-sm select status-selector banned-status-selector"
                                                     data-id="{{ $contact->id }}"
+                                                    data-minimum-results-for-search="Infinity"
+                                                    data-container-css-class="select-sm"
                                                     data-current-status="{{ $contact->is_banned }}">
                                                     <option @selected($contact->is_banned == '0') value="0">Not Banned
                                                     </option>
                                                     <option @selected($contact->is_banned == '1') value="1">Banned
                                                     </option>
                                                 </select>
+                                                </select>
                                             </td>
-                                            <td>{{ $contact->created_at }}</td>
+                                            <td>{{ $contact->created_at->format('F d, Y h:i A') }}</td>
                                             <td>
                                                 <div class="d-inline-flex text-center">
                                                     <a href="{{ route('contact.destroy', $contact->id) }}"
@@ -64,7 +71,7 @@
                 columnDefs: [{
                     orderable: false,
                     width: 100,
-                    targets: [1, 2, 5],
+                    targets: [1, 2, 4, 6],
                 }],
             });
 

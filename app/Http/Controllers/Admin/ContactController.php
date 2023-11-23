@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use App\Mail\ContactReplyMail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\ContactRequest;
-use Illuminate\Support\Facades\Log; // Import the Log facade
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -40,30 +42,34 @@ class ContactController extends Controller
      * @param  \App\Http\Requests\ContactFormRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-
     public function submit(ContactRequest $request)
     {
         $email = $request->input('email');
         $ipAddress = $request->ip();
 
-        // Check if a contact with the same email or IP address is banned
-        $isBanned = Contact::where(function ($query) use ($email, $ipAddress) {
-            $query->where('email', $email)
-                ->orWhere('ip_address', $ipAddress);
-        })->where('is_banned', 1)->exists();
+        try {
+            $isBanned = Contact::where('is_banned', 1)
+                ->where(function ($query) use ($email, $ipAddress) {
+                    $query->where('email', $email)
+                        ->orWhere('ip_address', $ipAddress);
+                })->exists();
 
-        if ($isBanned) {
-            return back()->with('error', 'Your account is banned. You cannot send messages.');
+            if ($isBanned) {
+                return back()->with('error', 'Your account is banned. You cannot send messages.');
+            }
+
+            $contact = Contact::create($request->validated() + ['ip_address' => $ipAddress]);
+
+            Mail::to($contact->email)->queue(new ContactReplyMail($contact));
+
+            return back()->with('success', 'Message sent successfully!');
+        } catch (QueryException $e) {
+            Log::error("Database Query Exception: " . $e->getMessage());
+            return back()->with('error', 'There was an issue submitting your message. Please try again.');
+        } catch (Exception $e) {
+            Log::error("General Exception: " . $e->getMessage());
+            return back()->with('error', 'An unexpected error occurred. Please try again.');
         }
-
-        $validatedData = $request->validated();
-        $validatedData['ip_address'] = $ipAddress;
-
-        $contact = Contact::create($validatedData);
-
-        Mail::to($contact->email)->queue(new ContactReplyMail($contact));
-
-        return back()->with('success', 'Message sent successfully!');
     }
 
 

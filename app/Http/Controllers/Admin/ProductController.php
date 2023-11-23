@@ -37,6 +37,7 @@ class ProductController extends Controller
         return  view("admin.pages.product.create", [
             'categorys' => Category::get(['id', 'name']),
             'brands'    => Brand::get(['id', 'name']),
+            'products' => Product::get(['tags']),
         ]);
     }
 
@@ -48,11 +49,8 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        // Begin database transaction
         DB::beginTransaction();
-
         try {
-            // Upload and store the main product image
             $mainImageFile = $request->file('image');
             $mainImagePath = storage_path('app/public/');
             $mainImage = null;
@@ -64,7 +62,6 @@ class ProductController extends Controller
                 }
             }
 
-            // Prepare data for the main product
             $productData = [
                 'category_id' => $request->category_id,
                 'brand_id'    => $request->brand_id,
@@ -79,40 +76,31 @@ class ProductController extends Controller
                 'sizes'       => json_encode($request->sizes),
                 'colors'      => json_encode($request->colors),
                 'tags'        => json_encode($request->tags),
-                'created_by'  => auth()->id(), // Or another way to get the user ID
+                'created_by'  => auth()->id(),
             ];
 
-            // Store the main product
             $product = Product::create($productData);
 
-            // Upload and store additional product images if they exist
             $additionalImages = $request->file('images');
             if (!empty($additionalImages)) {
                 foreach ($additionalImages as $imageFile) {
                     $uploadImage = customUpload($imageFile, $mainImagePath);
                     if ($uploadImage['status'] == 1) {
-                        // Prepare data for product attachment
                         $attachmentData = [
                             'product_id' => $product->id,
                             'images'     => $uploadImage['file_name'],
                         ];
-                        // Store the product attachment
                         ProductAttachment::create($attachmentData);
                     }
                 }
             }
 
-            // If everything went well, commit the transaction
             DB::commit();
-            toastr()->success('Product has been saved successfully!');
+            return back()->success('Product has been saved successfully!');
         } catch (\Exception $e) {
-            // An error occurred; cancel the transaction
             DB::rollback();
-            toastr()->error('An error occurred while saving the product.');
-            // Optionally, log the error or handle it as needed
+            return back()->error('An error occurred while saving the product.');
         }
-
-        // Redirect back
         return redirect()->back();
     }
 

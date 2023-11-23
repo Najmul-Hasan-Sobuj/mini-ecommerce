@@ -31,14 +31,14 @@ class ProductRequest extends FormRequest
             'brand_id' => 'required|exists:brands,id',
             'name' => 'required|string|max:255',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
-            'sku' => "nullable|string|max:255|unique:products,sku,{$productId}",
+            'sku' => "required|string|max:255|unique:products,sku,{$productId}",
             'description' => 'required|string',
             'price' => 'required|numeric|between:1,999999.99',
-            'quantity' => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:1|max:10000',
             'status' => 'required|in:active,inactive',
-            'sizes' => 'nullable|array',
-            'colors' => 'nullable|array',
-            'tags' => 'nullable|array',
+            'sizes' => 'required|array',
+            'colors' => 'required|array',
+            'tags' => 'required|array',
             'product_attachments.*.images' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
@@ -111,32 +111,5 @@ class ProductRequest extends FormRequest
             'tags' => 'tags',
             'product_attachments.*.images' => 'product attachments images',
         ];
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        $this->recordErrorMessages($validator);
-        parent::failedValidation($validator);
-    }
-
-    /**
-     * Record the error messages displayed to the user.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     */
-    protected function recordErrorMessages(Validator $validator)
-    {
-        $errorMessages = $validator->errors()->all();
-
-        foreach ($errorMessages as $errorMessage) {
-            toastr()->error($errorMessage);
-        }
     }
 }
