@@ -95,9 +95,5 @@ Route::prefix('admin')->group(static function () {
         // })->name('newsletter.verify-failed');
 
         // Route::post('/unsubscribe', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
-
-        // Route::resource('contact', ContactController::class)->except(['create', 'show', 'edit']); //example
-
-
     });
 });

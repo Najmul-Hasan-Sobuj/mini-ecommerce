@@ -140,23 +140,18 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, $id)
     {
-        // Begin transaction
         DB::beginTransaction();
 
         try {
-            // Find the product by id
             $product = Product::findOrFail($id);
 
-            // Process the main product image
             $mainFile = $request->file('image');
             $filePath = storage_path('app/public/');
             $mainImageUpdate = false;
 
             if (!empty($mainFile)) {
-                // Upload the new main image
                 $globalFunImage = customUpload($mainFile, $filePath);
 
-                // Delete the old main image if new image upload is successful
                 if ($globalFunImage['status'] == 1) {
                     $mainImageUpdate = true;
                     $oldImagePath = $filePath . $product->image;
@@ -168,7 +163,6 @@ class ProductController extends Controller
                 $globalFunImage = ['status' => 0];
             }
 
-            // Prepare data for the main product update
             $product->update([
                 'category_id' => $request->category_id,
                 'brand_id'    => $request->brand_id,
@@ -183,27 +177,22 @@ class ProductController extends Controller
                 'sizes'       => json_encode($request->sizes),
                 'colors'      => json_encode($request->colors),
                 'tags'        => json_encode($request->tags),
-                'created_by'  => auth()->id(), // Or another way to get the user ID
             ]);
 
-            // Process additional images if they are provided
             if ($request->has('images')) {
-                // First, delete old attachment records and their files
                 $oldAttachments = ProductAttachment::where('product_id', $product->id)->get();
                 foreach ($oldAttachments as $oldAttachment) {
                     $oldAttachmentPath = $filePath . $oldAttachment->images;
                     if (File::exists($oldAttachmentPath)) {
                         File::delete($oldAttachmentPath);
                     }
-                    $oldAttachment->delete(); // This will delete the record from the database
+                    $oldAttachment->delete();
                 }
 
                 $additionalImages = $request->file('images');
                 foreach ($additionalImages as $imageFile) {
-                    // Upload and store each additional image
                     $uploadImage = customUpload($imageFile, $filePath);
                     if ($uploadImage['status'] == 1) {
-                        // Create new product attachments
                         ProductAttachment::create([
                             'product_id' => $product->id,
                             'images' => $uploadImage['file_name'],
@@ -215,13 +204,10 @@ class ProductController extends Controller
             DB::commit();
             toastr()->success('Product has been updated successfully!');
         } catch (\Exception $e) {
-            // An error occurred; rollback the transaction
             DB::rollback();
             toastr()->error('An error occurred while updating the product.');
-            // Optionally, log the error or handle it as needed
         }
 
-        // Redirect back
         return redirect()->back();
     }
 

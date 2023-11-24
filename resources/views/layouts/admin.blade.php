@@ -140,12 +140,12 @@
     <script src="{{ asset('admin/assets/demo/pages/form_controls_extended.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/picker_date.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/editor_ckeditor_classic.js') }}"></script>
-
+    
+    {{-- <script src="{{ asset('admin/assets/demo/pages/uploader_bootstrap.js') }}"></script> --}}
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
     @stack('scripts')
 
 
-    <script src="assets/js/app.js"></script>
     <script src="{{ asset('admin/assets/demo/pages/user_pages_profile_tabbed.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/charts/echarts/bars/tornado_negative_stack.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/charts/pages/profile/balance_stats.js') }}"></script>
@@ -153,3 +153,5 @@
 </body>
 
 </html>
+
+
