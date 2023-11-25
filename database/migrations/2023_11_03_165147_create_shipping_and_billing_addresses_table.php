@@ -16,10 +16,12 @@ return new class extends Migration
         Schema::create('shipping_and_billing_addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('address_type', ['shipping', 'billing']);  // Enum column for address type
+            $table->string('name');
+            $table->string('phone_number');
+            $table->enum('address_type', ['shipping', 'billing']);
             $table->string('street_address');
             $table->string('city');
-            $table->string('state'); //no need
+            $table->string('state')->nullable();
             $table->string('country');
             $table->string('postal_code', 10);
             $table->timestamps();
@@ -36,8 +38,3 @@ return new class extends Migration
         Schema::dropIfExists('shipping_and_billing_addresses');
     }
 };
-
-
-//phone number
-//fname 
-//lname 

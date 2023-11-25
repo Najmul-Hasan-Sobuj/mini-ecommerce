@@ -52,6 +52,10 @@ Route::middleware('guest')->group(function () {
 
     Route::get('contact', [ContactController::class, 'show'])->name('contact');
     Route::post('contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
+
+    Route::get('checkout', [SiteController::class, 'checkout'])->name('checkout');
+    Route::get('payment-confirmed', [SiteController::class, 'paymentConfirmed'])->name('payment.confirmed');
+    
 });
 
 Route::middleware('auth')->group(function () {
@@ -70,7 +74,7 @@ Route::middleware('auth')->group(function () {
         ->name('password.confirm');
 
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
-
+    
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });

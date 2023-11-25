@@ -89,4 +89,10 @@ class BrandRequest extends FormRequest
             toastr()->error($errorMessage);
         }
     }
+
+    // protected function recordErrorMessages(Validator $validator)
+    // {
+    //     $errorMessages = $validator->errors()->all();
+    //     session()->flash('error', $errorMessages);
+    // }
 }

@@ -81,6 +81,7 @@ class SiteController extends Controller
         return view('product-detail');
     }
 
+
     public function shopingCart()
     {
         $data = [
@@ -280,5 +281,14 @@ class SiteController extends Controller
             'html' => view('layouts.cart-table', $data)->render(),
             'success' => true,
         ]);
+    }
+
+    public function checkout()
+    {
+        return view('checkout');
+    }
+    public function paymentConfirmed()
+    {
+        return view('payment-confirmed');
     }
 }

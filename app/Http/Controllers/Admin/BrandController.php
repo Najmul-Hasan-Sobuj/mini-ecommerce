@@ -49,7 +49,7 @@ class BrandController extends Controller
     public function store(BrandRequest $request)
     {
         $mainFile = $request->file('image');
-        $filePath = storage_path('app/public/');
+        $filePath = storage_path('app/public/brand/');
         if (!empty($mainFile)) {
             $globalFunImage = customUpload($mainFile, $filePath,   44, 44);
         } else {
@@ -105,7 +105,7 @@ class BrandController extends Controller
         $brand =  $this->brandRepository->findBrand($id);
 
         $mainFile = $request->file('image');
-        $filePath = storage_path('app/public/');
+        $filePath = storage_path('app/public/brand/');
 
         if (!empty($mainFile)) {
             $globalFunImage = customUpload($mainFile, $filePath, 44, 44);
@@ -157,4 +157,3 @@ class BrandController extends Controller
         $this->brandRepository->destroyBrand($id);
     }
 }
-

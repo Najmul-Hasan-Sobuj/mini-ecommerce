@@ -1,4 +1,85 @@
+// Custom_style-start
+(function () {
+    "use strict";
+    window.addEventListener(
+        "load",
+        function () {
+            var form = document.getElementById("needs-validation");
+            form.addEventListener(
+                "submit",
+                function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add("was-validated");
+                },
+                false
+            );
+        },
+        false
+    );
+})();
+$(document).ready(function () {
+    // Add a change event listener to the radio buttons
+    $('input[type="radio"]').change(function () {
+        // Remove the 'selected-radio' class from all form-checks
+        $(".form-check").removeClass("selected-radio");
+        // Add the 'selected-radio' class to the form-check of the selected radio button
+        $(this).closest(".form-check").addClass("selected-radio");
+    });
+});
+$(document).ready(function () {
+    // Add a change event listener to the radio buttons
+    $(".section-radio").change(function () {
+        // Collapse all sections
+        $(".card .collapse").collapse("hide");
+        // Remove the 'active-option' class from all cards
+        $(".card").removeClass("active-option");
 
+        // Expand the selected section
+        var targetCollapse = $(this).data("target");
+        $(targetCollapse).collapse("show");
+
+        // Add the 'active-option' class to the card of the selected radio button
+        $(this).closest(".card").addClass("active-option");
+    });
+});
+$(document).ready(function () {
+    // Add a change event listener to the radio buttons in the Billing Address section
+    $(".section-radio-2").change(function () {
+        // If "Same as shipping address" is selected, unselect "Use a different billing address"
+        if (
+            $(this).prop("checked") &&
+            $(this).attr("name") === "same_shipping_address"
+        ) {
+            $("input[name='difrent_address']").prop("checked", false);
+        }
+
+        // If "Use a different billing address" is selected, unselect "Same as shipping address"
+        if (
+            $(this).prop("checked") &&
+            $(this).attr("name") === "difrent_address"
+        ) {
+            $("input[name='same_shipping_address']").prop("checked", false);
+        }
+
+        // Collapse all sections
+        $(".card .collapse").collapse("hide");
+        // Remove the 'active-option' class from all cards
+        $(".card").removeClass("active-option");
+
+        // Expand the selected section
+        var targetCollapse = $(this).data("target");
+        $(targetCollapse).collapse("show");
+
+        // Add the 'active-option' class to the card of the selected radio button
+        $(this).closest(".card").addClass("active-option");
+    });
+});
+
+
+{/* Custom  */ }
 (function ($) {
     "use strict";
 
@@ -266,5 +347,18 @@
             }
         });
     });
+
+    /*==================================================================
+    [ Show modal1 ]*/
+    $('.js-show-modal1').on('click', function (e) {
+        e.preventDefault();
+        $('.js-modal1').addClass('show-modal1');
+    });
+
+    $('.js-hide-modal1').on('click', function () {
+        $('.js-modal1').removeClass('show-modal1');
+    });
+
+
 
 })(jQuery);
