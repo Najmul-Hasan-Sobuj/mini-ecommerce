@@ -5,6 +5,7 @@ use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\SslCommerzPaymentController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
@@ -55,7 +56,22 @@ Route::middleware('guest')->group(function () {
 
     Route::get('checkout', [SiteController::class, 'checkout'])->name('checkout');
     Route::get('payment-confirmed', [SiteController::class, 'paymentConfirmed'])->name('payment.confirmed');
-    
+
+
+    // SSLCOMMERZ Start
+    Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+    Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+
+    Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
+    Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+
+    Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+    Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+    Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+
+    Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+    //SSLCOMMERZ END
+
 });
 
 Route::middleware('auth')->group(function () {
@@ -74,7 +90,7 @@ Route::middleware('auth')->group(function () {
         ->name('password.confirm');
 
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
-    
+
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
