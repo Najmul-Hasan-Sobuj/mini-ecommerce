@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ProductReview;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductReviewRequest;
 
 class ProductReviewController extends Controller
 {
@@ -33,9 +35,18 @@ class ProductReviewController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductReviewRequest $request)
     {
-        //
+        $data = [
+            'product_id'   => $request->product_id,
+            'user_id'      => $request->user_id,
+            'review_text'  => $request->review_text,
+            'rating_value' => $request->rating_value,
+            'is_verified'  => 'no',
+        ];
+        ProductReview::create($data);
+
+        return redirect()->back()->with('success', 'Review added successfully.');
     }
 
     /**

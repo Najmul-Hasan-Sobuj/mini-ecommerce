@@ -193,7 +193,7 @@
                         </li>
 
                         <li class="nav-item p-b-10">
-                            <a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Reviews (1)</a>
+                            <a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Reviews ({{ $reviews->count() }})</a>
                         </li>
                     </ul>
 
@@ -273,7 +273,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        {{-- @dump($reviews) --}}
                         <!-- - -->
                         <div class="tab-pane fade" id="reviews" role="tabpanel">
                             <div class="row">
@@ -281,36 +281,42 @@
                                     @auth
                                         <div class="p-b-30 m-lr-15-sm">
                                             <!-- Review -->
-                                            <div class="flex-w flex-t p-b-68">
-                                                <div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
-                                                    <img src="{{ asset('frontend/images/avatar-01.jpg') }}"
-                                                        alt="AVATAR">
-                                                </div>
-
-                                                <div class="size-207">
-                                                    <div class="flex-w flex-sb-m p-b-17">
-                                                        <span class="mtext-107 cl2 p-r-20">
-                                                            Ariana Grande
-                                                        </span>
-
-                                                        <span class="fs-18 cl11">
-                                                            <i class="zmdi zmdi-star"></i>
-                                                            <i class="zmdi zmdi-star"></i>
-                                                            <i class="zmdi zmdi-star"></i>
-                                                            <i class="zmdi zmdi-star"></i>
-                                                            <i class="zmdi zmdi-star-half"></i>
-                                                        </span>
+                                            @foreach ($reviews as $review)
+                                                <div class="flex-w flex-t p-b-68">
+                                                    <div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
+                                                        <img src="{{ asset('frontend/images/avatar-01.jpg') }}"
+                                                            alt="Avatar">
                                                     </div>
 
-                                                    <p class="stext-102 cl6">
-                                                        Quod autem in homine praestantissimum atque optimum est, id
-                                                        deseruit. Apud ceteros autem philosophos
-                                                    </p>
+                                                    <div class="size-207">
+                                                        <div class="flex-w flex-sb-m p-b-17">
+                                                            <span class="mtext-107 cl2 p-r-20">
+                                                                {{ $review->user_name ?? 'Anonymous' }}
+                                                            </span>
+
+                                                            <span class="fs-18 cl11">
+                                                                {{-- Display star ratings --}}
+                                                                @for ($i = 0; $i < 5; $i++)
+                                                                    @if ($i < $review->rating_value)
+                                                                        <i class="zmdi zmdi-star"></i>
+                                                                    @else
+                                                                        <i class="zmdi zmdi-star-outline"></i>
+                                                                    @endif
+                                                                @endfor
+                                                            </span>
+                                                        </div>
+
+                                                        <p class="stext-102 cl6">
+                                                            {{ $review->review_text }}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @endforeach
 
                                             <!-- Add review -->
-                                            <form class="w-full">
+                                            <form action="{{ route('product.review.store') }}" method="POST"
+                                                class="w-full">
+                                                @csrf
                                                 <h5 class="mtext-108 cl2 p-b-7">
                                                     Add a review
                                                 </h5>
@@ -319,9 +325,8 @@
                                                     Your email address will not be published. Required fields are marked *
                                                 </p>
 
-                                                <!-- Assuming product_id and user_id are handled in the backend or with hidden fields -->
-                                                <input type="hidden" name="product_id" value="your_product_id">
-                                                <input type="hidden" name="user_id" value="your_user_id">
+                                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
 
                                                 <div class="flex-w flex-m p-t-50 p-b-23">
                                                     <span class="stext-102 cl3 m-r-16">
@@ -334,26 +339,14 @@
                                                         <i class="item-rating pointer zmdi zmdi-star-outline"></i>
                                                         <i class="item-rating pointer zmdi zmdi-star-outline"></i>
                                                         <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                        <input class="dis-none" type="number" name="rating">
+                                                        <input class="dis-none" type="number" name="rating_value">
                                                     </span>
                                                 </div>
 
                                                 <div class="row p-b-25">
                                                     <div class="col-12 p-b-5">
                                                         <label class="stext-102 cl3" for="review">Your review</label>
-                                                        <textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10" id="review" name="review"></textarea>
-                                                    </div>
-
-                                                    <div class="col-sm-6 p-b-5">
-                                                        <label class="stext-102 cl3" for="name">Name</label>
-                                                        <input class="size-111 bor8 stext-102 cl2 p-lr-20" id="name"
-                                                            type="text" name="name">
-                                                    </div>
-
-                                                    <div class="col-sm-6 p-b-5">
-                                                        <label class="stext-102 cl3" for="email">Email</label>
-                                                        <input class="size-111 bor8 stext-102 cl2 p-lr-20" id="email"
-                                                            type="text" name="email">
+                                                        <textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10" id="review" name="review_text"></textarea>
                                                     </div>
                                                 </div>
 

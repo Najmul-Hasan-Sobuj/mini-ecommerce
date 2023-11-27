@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Product;
+use App\Models\ProductReview;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -78,7 +79,13 @@ class SiteController extends Controller
 
     public function productDetails($slug)
     {
-        return view('product-detail');
+        $data['product'] = Product::where('slug', $slug)->firstOrFail();
+        $data['reviews'] = ProductReview::join('users', 'product_reviews.user_id', '=', 'users.id')
+            ->where('product_reviews.product_id', $data['product']->id)
+            ->where('product_reviews.is_verified', 'no') // Only select verified reviews
+            ->get(['product_reviews.*', 'users.name as user_name']);
+
+        return view('product-detail', $data);
     }
 
 

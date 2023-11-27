@@ -308,46 +308,69 @@ $(document).ready(function () {
 
     /*==================================================================
     [ Rating ]*/
-    $('.wrap-rating').each(function () {
-        var item = $(this).find('.item-rating');
-        var rated = -1;
-        var input = $(this).find('input');
-        $(input).val(0);
+    // $('.wrap-rating').each(function () { //original code
+    //     var item = $(this).find('.item-rating');
+    //     var rated = -1;
+    //     var input = $(this).find('input');
+    //     $(input).val(0);
 
-        $(item).on('mouseenter', function () {
-            var index = item.index(this);
-            var i = 0;
-            for (i = 0; i <= index; i++) {
-                $(item[i]).removeClass('zmdi-star-outline');
-                $(item[i]).addClass('zmdi-star');
-            }
+    //     $(item).on('mouseenter', function () {
+    //         var index = item.index(this);
+    //         var i = 0;
+    //         for (i = 0; i <= index; i++) {
+    //             $(item[i]).removeClass('zmdi-star-outline');
+    //             $(item[i]).addClass('zmdi-star');
+    //         }
 
-            for (var j = i; j < item.length; j++) {
-                $(item[j]).addClass('zmdi-star-outline');
-                $(item[j]).removeClass('zmdi-star');
-            }
+    //         for (var j = i; j < item.length; j++) {
+    //             $(item[j]).addClass('zmdi-star-outline');
+    //             $(item[j]).removeClass('zmdi-star');
+    //         }
+    //     });
+
+    //     $(item).on('click', function () {
+    //         var index = item.index(this);
+    //         rated = index;
+    //         $(input).val(index + 1);
+    //     });
+
+    //     $(this).on('mouseleave', function () {
+    //         var i = 0;
+    //         for (i = 0; i <= rated; i++) {
+    //             $(item[i]).removeClass('zmdi-star-outline');
+    //             $(item[i]).addClass('zmdi-star');
+    //         }
+
+    //         for (var j = i; j < item.length; j++) {
+    //             $(item[j]).addClass('zmdi-star-outline');
+    //             $(item[j]).removeClass('zmdi-star');
+    //         }
+    //     });
+    // });
+
+    $(document).ready(function () {
+        $('.wrap-rating .item-rating').on('mouseenter', function () {
+            var index = $(this).index();
+            $(this).prevAll().addBack().removeClass('zmdi-star-outline').addClass('zmdi-star');
+            $(this).nextAll().removeClass('zmdi-star').addClass('zmdi-star-outline');
         });
 
-        $(item).on('click', function () {
-            var index = item.index(this);
-            rated = index;
-            $(input).val(index + 1);
+        $('.wrap-rating .item-rating').on('click', function () {
+            var rating = $(this).index() + 1;
+            $(this).parent().find('input[name="rating_value"]').val(rating);
         });
 
-        $(this).on('mouseleave', function () {
-            var i = 0;
-            for (i = 0; i <= rated; i++) {
-                $(item[i]).removeClass('zmdi-star-outline');
-                $(item[i]).addClass('zmdi-star');
-            }
-
-            for (var j = i; j < item.length; j++) {
-                $(item[j]).addClass('zmdi-star-outline');
-                $(item[j]).removeClass('zmdi-star');
-            }
+        $('.wrap-rating').on('mouseleave', function () {
+            var currentRating = $(this).find('input[name="rating_value"]').val();
+            $(this).find('.item-rating').each(function (index) {
+                if (index < currentRating) {
+                    $(this).removeClass('zmdi-star-outline').addClass('zmdi-star');
+                } else {
+                    $(this).removeClass('zmdi-star').addClass('zmdi-star-outline');
+                }
+            });
         });
     });
-
     /*==================================================================
     [ Show modal1 ]*/
     $('.js-show-modal1').on('click', function (e) {

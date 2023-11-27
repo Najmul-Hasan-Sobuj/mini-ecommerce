@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Admin\ContactController;
+use App\Http\Controllers\Admin\ProductReviewController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\SslCommerzPaymentController;
@@ -35,44 +36,42 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.update');
-
-
-    // all site pages starting /
-    Route::get('about', [SiteController::class, 'about'])->name('about');
-    Route::get('shop', [SiteController::class, 'shop'])->name('shop');
-    Route::get('product-detail/{slug}', [SiteController::class, 'productDetails'])->name('product.detail');
-    Route::get('shoping-cart', [SiteController::class, 'shopingCart'])->name('shoping.cart');
-    // all site pages end /
-
-    Route::post('add-to-cart', [SiteController::class, 'addToCart'])->name('add.cart');
-    Route::get('cart-clear', [SiteController::class, 'cartClear'])->name('cart.clear');
-    Route::get('cart-remove/{id}', [SiteController::class, 'cartRemove'])->name('cart.remove');
-    Route::post('cart/quantity/change/{id}', [SiteController::class, 'cartQuantityChange'])->name('cart.quantity.change');
-    Route::get('cart-increment/{id}', [SiteController::class, 'cartIncrement'])->name('cart.increment');
-    Route::get('cart-decrement/{id}', [SiteController::class, 'cartDecrement'])->name('cart.decrement');
-
-    Route::get('contact', [ContactController::class, 'show'])->name('contact');
-    Route::post('contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
-
-    Route::get('checkout', [SiteController::class, 'checkout'])->name('checkout');
-    Route::get('payment-confirmed', [SiteController::class, 'paymentConfirmed'])->name('payment.confirmed');
-
-
-    // SSLCOMMERZ Start
-    Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
-    Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
-
-    Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
-    Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
-
-    Route::post('/success', [SslCommerzPaymentController::class, 'success']);
-    Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
-    Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
-
-    Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
-    //SSLCOMMERZ END
-
 });
+
+// all site pages starting /
+Route::get('about', [SiteController::class, 'about'])->name('about');
+Route::get('shop', [SiteController::class, 'shop'])->name('shop');
+Route::get('product-detail/{slug}', [SiteController::class, 'productDetails'])->name('product.detail');
+Route::get('shoping-cart', [SiteController::class, 'shopingCart'])->name('shoping.cart');
+// all site pages end /
+Route::post('add-to-cart', [SiteController::class, 'addToCart'])->name('add.cart');
+Route::get('cart-clear', [SiteController::class, 'cartClear'])->name('cart.clear');
+Route::get('cart-remove/{id}', [SiteController::class, 'cartRemove'])->name('cart.remove');
+Route::post('cart/quantity/change/{id}', [SiteController::class, 'cartQuantityChange'])->name('cart.quantity.change');
+Route::get('cart-increment/{id}', [SiteController::class, 'cartIncrement'])->name('cart.increment');
+Route::get('cart-decrement/{id}', [SiteController::class, 'cartDecrement'])->name('cart.decrement');
+
+Route::get('contact', [ContactController::class, 'show'])->name('contact');
+Route::post('contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
+
+Route::get('checkout', [SiteController::class, 'checkout'])->name('checkout');
+Route::get('payment-confirmed', [SiteController::class, 'paymentConfirmed'])->name('payment.confirmed');
+
+Route::post('product-review', [ProductReviewController::class, 'store'])->name('product.review.store');
+
+// SSLCOMMERZ Start
+Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
+Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
+
+Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
+Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+
+Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+
+Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+//SSLCOMMERZ END
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])

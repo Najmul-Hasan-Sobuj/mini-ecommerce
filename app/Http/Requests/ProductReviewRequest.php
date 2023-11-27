@@ -27,9 +27,9 @@ class ProductReviewRequest extends FormRequest
         return [
             'product_id' => 'required|exists:products,id',
             'user_id' => 'required|exists:users,id',
-            'review_text' => 'nullable|string',
-            'rating_value' => 'nullable|integer|min:1|max:5',  // Assuming a rating scale of 1-5
-            'is_verified' => 'required|in:true,false',
+            'review_text' => 'required|string',
+            'rating_value' => 'required|integer|min:1|max:5',  // Assuming a rating scale of 1-5
+            'is_verified' => 'sometimes|in:yes,no',
         ];
     }
 
@@ -41,16 +41,7 @@ class ProductReviewRequest extends FormRequest
     public function messages()
     {
         return [
-            'product_id.required' => 'The Product ID field is required.',
-            'product_id.exists' => 'The specified Product ID does not exist.',
-            'user_id.required' => 'The User ID field is required.',
-            'user_id.exists' => 'The specified User ID does not exist.',
-            'review_text.string' => 'The Review Text must be a string.',
-            'rating_value.integer' => 'The Rating Value must be an integer.',
-            'rating_value.min' => 'The Rating Value must be at least 1.',
-            'rating_value.max' => 'The Rating Value may not be greater than 5.',
-            'is_verified.required' => 'The Is Verified field is required.',
-            'is_verified.in' => 'The Is Verified field must be either true or false.',
+            //
         ];
     }
 
