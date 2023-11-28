@@ -56,8 +56,8 @@ class CouponController extends Controller
             'description' => $request->description,
         ];
         $this->couponRepository->create($data);
-        toastr()->success('Data has been saved successfully!');
-        return redirect()->back();
+
+        return redirect()->back()->with('success', 'Data has been saved successfully!');
     }
 
     /**
@@ -102,8 +102,8 @@ class CouponController extends Controller
         ];
         $this->couponRepository->update($data, $id);
 
-        toastr()->success('Data has been updated successfully!');
-        return redirect()->back();
+
+        return redirect()->back()->with('success', 'Data has been updated successfully!');
     }
 
     /**
