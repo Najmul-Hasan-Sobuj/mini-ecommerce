@@ -80,7 +80,7 @@
     <!-- /page content -->
 
     <!-- Core JS files -->
-    {{-- <script src="{{ asset('admin/assets/demo/demo_configurator.js') }}"></script> --}}
+    <script src="{{ asset('admin/assets/demo/demo_configurator.js') }}"></script>
     <script src="{{ asset('admin/assets/js/bootstrap/bootstrap.bundle.min.js') }}"></script>
     <!-- /core JS files -->
 
@@ -95,6 +95,10 @@
 
     <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js" type="text/javascript"></script>
+
+    <script src="{{ asset('admin/assets/js/vendor/visualization/echarts/echarts.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/vendor/tables/datatables/extensions/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('admin/assets/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js') }}"></script>
 
     <script src="{{ asset('admin/assets/js/vendor/uploaders/fileinput/plugins/sortable.min.js') }}"></script>
     <script src="{{ asset('admin/assets/js/vendor/uploaders/fileinput/fileinput.min.js') }}"></script>
@@ -122,8 +126,11 @@
 
     <script src="{{ asset('admin/assets/js/app.js') }}"></script>
 
-	<script src="{{ asset('admin/assets/js/vendor/visualization/d3/d3_tooltip.js') }}"></script>
-    	<script src="{{ asset('admin/assets/demo/pages/widgets_stats.js') }}"></script>
+    <script src="{{ asset('admin/assets/demo/pages/ecommerce_customers.js') }}"></script>
+    <script src="{{ asset('admin/assets/demo/charts/pages/ecommerce/customers.js') }}"></script>
+
+    <script src="{{ asset('admin/assets/js/vendor/visualization/d3/d3_tooltip.js') }}"></script>
+    <script src="{{ asset('admin/assets/demo/pages/widgets_stats.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/gallery_library.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/extra_sweetalert.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/components_buttons.js') }}"></script>
@@ -140,10 +147,15 @@
     <script src="{{ asset('admin/assets/demo/pages/form_controls_extended.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/picker_date.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/editor_ckeditor_classic.js') }}"></script>
-    
+
     {{-- <script src="{{ asset('admin/assets/demo/pages/uploader_bootstrap.js') }}"></script> --}}
     <script src="{{ asset('admin/assets/js/custom.js') }}"></script>
     @stack('scripts')
+
+    <!-- Theme JS files -->
+
+
+
 
 
     <script src="{{ asset('admin/assets/demo/pages/user_pages_profile_tabbed.js') }}"></script>
@@ -153,5 +165,3 @@
 </body>
 
 </html>
-
-

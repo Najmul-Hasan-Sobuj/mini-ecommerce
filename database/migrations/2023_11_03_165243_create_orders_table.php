@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamp('shipped_date')->nullable();
             $table->enum('status', ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'return'])->default('pending');
             $table->unsignedDecimal('subtotal', 8, 2)->default(0.00);
-            $table->unsignedDecimal('tax', 8, 2)->default(0.00);
+            $table->unsignedDecimal('tax', 8, 2)->default(0.00); //no need
             $table->unsignedDecimal('shipping_cost', 8, 2)->default(0.00);
             $table->unsignedDecimal('total_price', 8, 2)->default(0.00);
             $table->date('return_date')->nullable();

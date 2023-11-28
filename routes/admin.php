@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\RefundPolicyController;
 use App\Http\Controllers\Admin\PaymentMethodController;
@@ -79,6 +80,7 @@ Route::prefix('admin')->group(static function () {
         Route::put('refund-policy', [RefundPolicyController::class, 'refundPolicy'])->name('refund.policy.update.or.create');
 
         Route::resource('brand', BrandController::class);
+        Route::resource('order', OrderController::class);
         Route::resource('product', ProductController::class)->except(['show']);
 
         // Route to display the contact form
