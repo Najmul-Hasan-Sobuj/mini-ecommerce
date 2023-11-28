@@ -25,6 +25,11 @@
                     'label' => __('Product'),
                 ],
                 [
+                    'route' => 'product.review.index',
+                    'icon' => 'ph-brandy',
+                    'label' => __('Product Review'),
+                ],
+                [
                     'route' => 'coupon.index',
                     'icon' => 'ph-brandy',
                     'label' => __('Coupon'),

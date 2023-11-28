@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\RefundPolicyController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\PaymentTransactionController;
+use App\Http\Controllers\Admin\ProductReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,10 @@ Route::prefix('admin')->group(static function () {
         Route::post('update-transaction-status/{id}', [PaymentTransactionController::class, 'updateStatus'])->name('transaction.updateStatus');
         Route::delete('payment-transaction/{id}', [PaymentTransactionController::class, 'destroy'])->name('payment.transaction.destroy');
 
+        Route::get('product-review', [ProductReviewController::class, 'index'])->name('product.review.index');
+        Route::post('update-review-status/{id}', [ProductReviewController::class, 'updateStatus'])->name('review.updateStatus');
+        Route::delete('product-review/{id}', [ProductReviewController::class, 'destroy'])->name('product.review.destroy');
+
         Route::get('refund-policy', [RefundPolicyController::class, 'index'])->name('refund.policy.index');
         Route::put('refund-policy', [RefundPolicyController::class, 'refundPolicy'])->name('refund.policy.update.or.create');
 
@@ -80,20 +85,5 @@ Route::prefix('admin')->group(static function () {
         Route::get('contact-table', [ContactController::class, 'index'])->name('contact.index');
         Route::post('update-contact-status/{id}', [ContactController::class, 'updateStatus'])->name('contact.updateStatus');
         Route::delete('contact/{id}', [ContactController::class, 'destroy'])->name('contact.destroy');
-
-        // Route::get('/subscribers', [NewsletterController::class, 'index'])->name('newsletter.index');
-        // Route::post('/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
-
-        // Route::get('/verify/{token}', [NewsletterController::class, 'verify'])->name('newsletter.verify');
-
-        // Route::get('/verified', function () {
-        //     return view('newsletter.verified');
-        // })->name('newsletter.verified');
-
-        // Route::get('/verify-failed', function () {
-        //     return view('newsletter.verify-failed');
-        // })->name('newsletter.verify-failed');
-
-        // Route::post('/unsubscribe', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
     });
 });

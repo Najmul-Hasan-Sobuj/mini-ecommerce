@@ -1,49 +1,47 @@
-<x-admin-layout :title="'Contact Information - ' . config('app.name')">
+<x-admin-layout :title="'Product Review Information - ' . config('app.name')">
     <div class="row">
         <div class="col-lg-12">
             <div class="card card-body">
                 <div class="row">
                     <div class="col-lg-12">
                         <table
-                            class="data-table-contact table datatable-responsive table-bordered table-striped table-hover">
+                            class="data-table-product-review table datatable-responsive table-bordered table-striped table-hover">
                             <thead>
                                 <tr class="bg-secondary border-secondary text-white">
                                     <th width="5%">#</th>
-                                    <th width="15%">Email</th>
-                                    <th width="30%">Message</th>
-                                    <th width="15%">Status</th>
-                                    <th width="15%">Switch</th>
-                                    <th width="30%">created_at</th>
-                                    <th class="text-center" width="5%">Action</th>
+                                    <th width="15%">User Name</th>
+                                    <th width="40%">Review Text</th>
+                                    <th width="5%">Rating</th>
+                                    <th width="10%">Verified</th>
+                                    <th width="15%">Created At</th>
+                                    <th class="text-center" width="10%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if ($contacts)
-                                    @foreach ($contacts as $contact)
+                                @if ($productReviews)
+                                    @foreach ($productReviews as $review)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $contact->email }}</td>
-                                            <td>{{ $contact->msg }}</td>
-                                            <td> <span
-                                                    class="badge {{ $contact->is_banned == '1' ? 'bg-danger' : 'bg-success' }}">{{ $contact->is_banned == '1' ? 'Banned' : 'Not Banned' }}</span>
-                                            </td>
+                                            <td>{{ $review->user_name }}</td> <!-- Displaying User Name -->
+                                            <td>{{ $review->review_text }}</td>
+                                            <td>{{ $review->rating_value }}</td>
                                             <td>
-                                                <select name="is_banned"
-                                                    class="form-control form-control-sm select status-selector banned-status-selector"
-                                                    data-id="{{ $contact->id }}"
+                                                <select name="is_verified"
+                                                    class="form-control form-control-sm select verification-selector"
+                                                    data-id="{{ $review->id }}"
                                                     data-minimum-results-for-search="Infinity"
                                                     data-container-css-class="select-sm"
-                                                    data-current-status="{{ $contact->is_banned }}">
-                                                    <option @selected($contact->is_banned == '0') value="0">Not Banned
+                                                    data-current-status="{{ $review->is_verified }}">
+                                                    <option @selected($review->is_verified == 'yes') value="yes">Verified
                                                     </option>
-                                                    <option @selected($contact->is_banned == '1') value="1">Banned
+                                                    <option @selected($review->is_verified == 'no') value="no">Not Verified
                                                     </option>
                                                 </select>
                                             </td>
-                                            <td>{{ $contact->created_at->format('F d, Y h:i A') }}</td>
+                                            <td>{{ $review->created_at->format('F d, Y h:i A') }}</td>
                                             <td>
                                                 <div class="d-inline-flex text-center">
-                                                    <a href="{{ route('contact.destroy', $contact->id) }}"
+                                                    <a href="{{ route('product.review.destroy', $review->id) }}"
                                                         class="text-danger delete">
                                                         <i class="ph-trash"></i>
                                                     </a>
@@ -61,7 +59,7 @@
     </div>
     @push('scripts')
         <script>
-            $('.data-table-contact').DataTable({
+            $('.data-table-product-review').DataTable({
                 dom: '<"datatable-header"fl><"datatable-scroll-wrap"t><"datatable-footer"ip>',
                 autoWidth: false,
                 responsive: true,
@@ -70,20 +68,20 @@
                 columnDefs: [{
                     orderable: false,
                     width: 100,
-                    targets: [1, 2, 4, 6],
+                    targets: [4, 6],
                 }],
             });
 
             $(document).ready(function() {
-                $(document).on('change', '.banned-status-selector', function() {
+                $(document).on('change', '.verification-selector', function() {
                     var newStatus = $(this).val();
                     var currentStatus = $(this).data('current-status');
-                    var contactId = $(this).data('id');
+                    var reviewId = $(this).data('id');
 
                     if (newStatus != currentStatus) {
                         swalInit.fire({
                             title: 'Are you sure?',
-                            text: 'Do you want to update the banned status?',
+                            text: 'Do you want to update the verification status?',
                             icon: 'warning',
                             showCancelButton: true,
                             confirmButtonColor: '#3085d6',
@@ -92,18 +90,19 @@
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 $.ajax({
-                                    url: '/admin/update-contact-status/' +
-                                        contactId, // Updated URL path
+                                    url: '/admin/update-review-status/' +
+                                        reviewId,
                                     type: 'POST',
                                     data: {
-                                        is_banned: newStatus,
+                                        is_verified: newStatus,
                                         _token: '{{ csrf_token() }}'
                                     },
                                     success: function(response) {
                                         swalInit.fire('Updated!',
-                                            'The banned status has been updated.',
+                                            'The verification status has been updated.',
                                             'success');
-                                        $(this).data('current-status', newStatus);
+                                        $(this).data('current-status',
+                                            newStatus);
                                     },
                                     error: function(xhr, status, error) {
                                         swalInit.fire('Error!',
@@ -118,4 +117,5 @@
             });
         </script>
     @endpush
+
 </x-admin-layout>

@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('product_reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->cascadeOnDelete();  
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();  
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->text('review_text')->nullable();  // Nullable as it may not be required always
             $table->unsignedTinyInteger('rating_value')->nullable();  // Nullable as it may not be required always
             $table->enum('is_verified', ['yes', 'no'])->default('no');
