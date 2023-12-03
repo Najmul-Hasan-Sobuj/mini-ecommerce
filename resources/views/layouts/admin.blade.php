@@ -128,6 +128,7 @@
 
     <script src="{{ asset('admin/assets/demo/pages/ecommerce_customers.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/charts/pages/ecommerce/customers.js') }}"></script>
+    <script src="{{ asset('admin/assets/demo/pages/ecommerce_orders_history.js') }}"></script>
 
     <script src="{{ asset('admin/assets/js/vendor/visualization/d3/d3_tooltip.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/pages/widgets_stats.js') }}"></script>
@@ -154,9 +155,10 @@
 
     <!-- Theme JS files -->
 
+	<!-- Theme JS files -->
 
-
-
+    
+    
 
     <script src="{{ asset('admin/assets/demo/pages/user_pages_profile_tabbed.js') }}"></script>
     <script src="{{ asset('admin/assets/demo/charts/echarts/bars/tornado_negative_stack.js') }}"></script>

@@ -28,6 +28,9 @@ class ShippingAndBillingAddressFactory extends Factory
         return [
             'user_id' => User::query()->inRandomOrder()->first()->id ?? User::factory()->create()->id,
             'address_type' => $this->faker->randomElement(['shipping', 'billing']),
+            'name' => $this->faker->name,
+            'phone_number' => $this->faker->phoneNumber,
+            'email' => $this->faker->email,
             'street_address' => $this->faker->streetAddress,
             'city' => $this->faker->city,
             'state' => $this->faker->state,

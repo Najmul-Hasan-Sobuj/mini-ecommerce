@@ -28,7 +28,7 @@
                         <div class="col-lg-12 col-sm-12 col-12 p-0">
                             <div class="bor8 bg0 m-b-10">
                                 <input type="text" class="stext-111 cl8 plh3 size-111 p-lr-15"
-                                    id="validationCustom01" placeholder="Email Or Mobile Phone Number" required />
+                                    id="validationCustom01" placeholder="Email Or Mobile Phone Number" />
                             </div>
                         </div>
                         <div class="col-lg-12 col-sm-12 col-12 p-0 pt-2">
@@ -50,16 +50,23 @@
                             <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
                                 <select class="js-select2" name="time">
                                     <option>Select a country...</option>
-                                    <option>USA</option>
-                                    <option>UK</option>
+                                    <option value="USA">USA</option>
+                                    <option value="UK">UK</option>
+                                    <option value="BD">BD</option>
                                 </select>
                                 <div class="dropDownSelect2"></div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-sm-12 col-12 pl-0 pr-1">
+                        <div class="col-lg-12 col-sm-12 col-12 pl-0 pr-1">
                             <div class="bor8 bg0 m-b-10">
                                 <input type="text" class="stext-111 cl8 plh3 size-111 p-lr-15"
-                                    id="validationCustom01" placeholder="First" required />
+                                    id="validationCustom01" placeholder="Name" required />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12 col-12 pl-0 pr-1">
+                            <div class="bor8 bg0 m-b-10">
+                                <input type="email" class="stext-111 cl8 plh3 size-111 p-lr-15"
+                                    id="validationCustom01" placeholder="Email" required />
                             </div>
                         </div>
                         <div class="col-lg-6 col-sm-12 col-12 pr-0 check-field">
@@ -344,16 +351,23 @@
                                                 <div class="rs1-select2 rs2-select2 bor8 bg0 m-b-12 m-t-9">
                                                     <select class="js-select2" name="time">
                                                         <option>Select a country...</option>
-                                                        <option>USA</option>
-                                                        <option>UK</option>
+                                                        <option value="USA">USA</option>
+                                                        <option value="UK">UK</option>
+                                                        <option value="BD">BD</option>
                                                     </select>
                                                     <div class="dropDownSelect2"></div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6 col-sm-12 col-12 pl-0 pr-1">
+                                            <div class="col-lg-12 col-sm-12 col-12 pl-0 pr-1">
                                                 <div class="bor8 bg0 m-b-10">
                                                     <input type="text" class="stext-111 cl8 plh3 size-111 p-lr-15"
-                                                        id="validationCustom01" placeholder="First Name" required />
+                                                        id="validationCustom01" placeholder="Name" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-12 col-12 pl-0 pr-1">
+                                                <div class="bor8 bg0 m-b-10">
+                                                    <input type="email" class="stext-111 cl8 plh3 size-111 p-lr-15"
+                                                        id="validationCustom01" placeholder="Email" required />
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-sm-12 col-12 pr-0">
@@ -389,10 +403,12 @@
 
                     <div class="row mt-5 mb-5">
                         <div class="col-lg-12 col-sm-12 col-12 text-center">
-                            <a href=""
-                                class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer">
-                                Proceed to Checkout
-                            </a>
+                            <button class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer"
+                                id="sslczPayBtn" token="if you have any token validation"
+                                postdata="your javascript arrays or objects which requires in backend"
+                                order="If you already have the transaction generated for current order"
+                                endpoint="{{ url('/pay-via-ajax') }}"> Pay Now
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -498,5 +514,29 @@
 
 
 @push('scripts')
-    {{-- empty --}}
+    <!-- If you want to use the popup integration, -->
+    <script>
+        var obj = {};
+        obj.cus_name = $('#customer_name').val();
+        obj.cus_phone = $('#mobile').val();
+        obj.cus_email = $('#email').val();
+        obj.cus_addr1 = $('#address').val();
+        obj.amount = $('#total_amount').val();
+
+        $('#sslczPayBtn').prop('postdata', obj);
+
+        (function(window, document) {
+            var loader = function() {
+                var script = document.createElement("script"),
+                    tag = document.getElementsByTagName("script")[0];
+                // script.src = "https://seamless-epay.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(7); // USE THIS FOR LIVE
+                script.src = "https://sandbox.sslcommerz.com/embed.min.js?" + Math.random().toString(36).substring(
+                    7); // USE THIS FOR SANDBOX
+                tag.parentNode.insertBefore(script, tag);
+            };
+
+            window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload",
+                loader);
+        })(window, document);
+    </script>
 @endpush

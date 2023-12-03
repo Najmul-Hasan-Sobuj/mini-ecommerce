@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\OrderItemController;
 use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\Admin\RefundPolicyController;
 use App\Http\Controllers\Admin\PaymentMethodController;
@@ -81,6 +82,7 @@ Route::prefix('admin')->group(static function () {
 
         Route::resource('brand', BrandController::class);
         Route::resource('order', OrderController::class);
+        Route::resource('order-item', OrderItemController::class);
         Route::resource('product', ProductController::class)->except(['show']);
 
         // Route to display the contact form

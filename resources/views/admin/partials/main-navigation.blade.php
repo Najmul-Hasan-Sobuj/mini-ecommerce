@@ -34,6 +34,11 @@
                     'icon' => 'ph-brandy',
                     'label' => __('Coupon'),
                 ],
+                [
+                    'route' => 'order.index',
+                    'icon' => 'ph-brandy',
+                    'label' => __('Orders'),
+                ],
             ],
         ],
         [
@@ -70,9 +75,11 @@
         ],
     ];
 
-    $currentRoute = request()
-        ->route()
-        ->getName();
+    $currentRoute = request()->route()
+        ? request()
+            ->route()
+            ->getName()
+        : null;
 @endphp
 
 <div class="sidebar-section">
@@ -80,31 +87,35 @@
         @foreach ($menuItems as $menuItem)
             @if (isset($menuItem['submenu']))
                 <li class="nav-item nav-item-submenu">
-                    <a href="#" class="nav-link">
+                    <a href="javascript:void(0)" class="nav-link">
                         <i class="{{ $menuItem['icon'] }}"></i>
                         <span>{{ $menuItem['label'] }}</span>
                     </a>
                     <ul
                         class="nav-group-sub collapse {{ collect($menuItem['submenu'])->pluck('route')->contains($currentRoute)? 'show': '' }}">
                         @foreach ($menuItem['submenu'] as $submenuItem)
-                            <li class="nav-item">
-                                <a href="{{ route($submenuItem['route']) }}"
-                                    class="nav-link {{ $currentRoute === $submenuItem['route'] ? 'active' : '' }}">
-                                    <i class="{{ $submenuItem['icon'] }}"></i>
-                                    {{ $submenuItem['label'] }}
-                                </a>
-                            </li>
+                            @if (Route::has($submenuItem['route']))
+                                <li class="nav-item">
+                                    <a href="{{ route($submenuItem['route']) }}"
+                                        class="nav-link {{ $currentRoute === $submenuItem['route'] ? 'active' : '' }}">
+                                        <i class="{{ $submenuItem['icon'] }}"></i>
+                                        {{ $submenuItem['label'] }}
+                                    </a>
+                                </li>
+                            @endif
                         @endforeach
                     </ul>
                 </li>
             @else
-                <li class="nav-item">
-                    <a href="{{ route($menuItem['route']) }}"
-                        class="nav-link {{ $currentRoute === $menuItem['route'] ? 'active' : '' }}">
-                        <i class="{{ $menuItem['icon'] }}"></i>
-                        <span>{{ $menuItem['label'] }}</span>
-                    </a>
-                </li>
+                @if (Route::has($menuItem['route']))
+                    <li class="nav-item">
+                        <a href="{{ route($menuItem['route']) }}"
+                            class="nav-link {{ $currentRoute === $menuItem['route'] ? 'active' : '' }}">
+                            <i class="{{ $menuItem['icon'] }}"></i>
+                            <span>{{ $menuItem['label'] }}</span>
+                        </a>
+                    </li>
+                @endif
             @endif
         @endforeach
     </ul>

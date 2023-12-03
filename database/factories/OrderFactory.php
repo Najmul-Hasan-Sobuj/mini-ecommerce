@@ -41,13 +41,13 @@ class OrderFactory extends Factory
             'shipped_date' => $shippedDate,
             'status' => $this->faker->randomElement(['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'return']),
             'subtotal' => $subtotal = $this->faker->randomFloat(2, 10, 1000),
-            'tax' => $tax = $subtotal * 0.1,
             'shipping_cost' => $shippingCost = $this->faker->randomFloat(2, 5, 50),
-            'total_price' => $subtotal + $tax + $shippingCost,
+            'total_price' => $subtotal + $shippingCost, // Updated total price calculation
             'return_date' => $shippedDate ? $shippedDate->copy()->addDays($this->faker->numberBetween(1, 15)) : null,
             'return_reason' => $this->faker->optional()->sentence,
             'return_amount' => $this->faker->optional()->randomFloat(2, 1, $subtotal),
             'notes' => $this->faker->optional()->sentence,
+            'transaction_id' => $this->faker->uuid, // Added transaction_id column
         ];
     }
 }

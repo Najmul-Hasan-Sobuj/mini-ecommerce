@@ -34,8 +34,6 @@ class SiteController extends Controller
         return view('welcome', ['categories' => $categories]);
     }
 
-
-
     public function profile()
     {
         return view('profile', [
@@ -162,29 +160,23 @@ class SiteController extends Controller
     {
         $cart = session()->get('cart', []);
 
-        // Check if the item exists in the cart
         if (!isset($cart[$rowId])) {
             return response()->json(['error' => 'Item not found in cart'], 404);
         }
 
-        // Increment the quantity
         $cart[$rowId]['quantity']++;
 
-        // Update the session
         session()->put('cart', $cart);
 
-        // Calculate cart count and total
         $cartCount = collect($cart)->sum('quantity');
         $total = collect($cart)->sum(fn ($item) => $item['price'] * $item['quantity']);
 
-        // Prepare data for the views
         $data = [
             'cartItems' => $cart,
             'cartCount' => $cartCount,
             'total' => $total,
         ];
 
-        // Return the response
         return response()->json([
             'name' => $cart[$rowId]['name'],
             'cartCount' => $cartCount,
@@ -294,6 +286,7 @@ class SiteController extends Controller
     {
         return view('checkout');
     }
+    
     public function paymentConfirmed()
     {
         return view('payment-confirmed');

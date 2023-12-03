@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('phone_number');
+            $table->string('email');
             $table->enum('address_type', ['shipping', 'billing']);
             $table->string('street_address');
             $table->string('city');
