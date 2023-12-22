@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SslCommerzPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,21 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [\App\Http\Controllers\SiteController::class, 'index'])
     ->name('index');
 
+// SSLCOMMERZ Start
+
+Route::post('/ssl-payment', [SslCommerzPaymentController::class, 'sslPayment'])->name('sslPayment');
+
+Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
+Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
+
+Route::post('/success', [SslCommerzPaymentController::class, 'success']);
+Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
+Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
+
+Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
+
 require __DIR__ . '/auth.php';
+require __DIR__ . '/admin.php';
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
@@ -27,3 +42,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware('password.confirm')
         ->name('profile');
 });
+
+// SSL Commerz

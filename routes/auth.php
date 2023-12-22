@@ -55,23 +55,12 @@ Route::get('contact', [ContactController::class, 'show'])->name('contact');
 Route::post('contact/submit', [ContactController::class, 'submit'])->name('contact.submit');
 
 Route::get('checkout', [SiteController::class, 'checkout'])->name('checkout');
+
 Route::get('payment-confirmed', [SiteController::class, 'paymentConfirmed'])->name('payment.confirmed');
 
 Route::post('product-review', [ProductReviewController::class, 'store'])->name('product.review.store');
 
-// SSLCOMMERZ Start
-Route::get('/example1', [SslCommerzPaymentController::class, 'exampleEasyCheckout']);
-Route::get('/example2', [SslCommerzPaymentController::class, 'exampleHostedCheckout']);
 
-Route::post('/pay', [SslCommerzPaymentController::class, 'index']);
-Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax']);
-
-Route::post('/success', [SslCommerzPaymentController::class, 'success']);
-Route::post('/fail', [SslCommerzPaymentController::class, 'fail']);
-Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel']);
-
-Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn']);
-//SSLCOMMERZ END
 
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
@@ -93,3 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
+
+
+
+

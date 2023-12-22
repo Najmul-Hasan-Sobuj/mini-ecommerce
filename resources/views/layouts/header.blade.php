@@ -72,7 +72,9 @@
                      </ul>
                  </div>
                  @php
-                     $cartTotal = collect(session('cart'))->sum('quantity');
+                     $cartAll = session()->get('cart', []);
+                     $cart = $cartAll['products'];
+                     $cartTotal = collect($cart)->sum('quantity');
                  @endphp
                  <!-- Icon header -->
                  <div class="wrap-icon-header flex-w flex-r-m">
