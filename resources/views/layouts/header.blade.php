@@ -72,9 +72,13 @@
                      </ul>
                  </div>
                  @php
-                     $cartAll = session()->get('cart', []);
-                     $cart = $cartAll['products'];
-                     $cartTotal = collect($cart)->sum('quantity');
+                     $cartAll = Session::get('cart');
+                     if (!empty($cartAll)) {
+                         $cart = $cartAll['products'];
+                         $cartTotal = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+                     } else {
+                         $cartTotal = 0;
+                     }
                  @endphp
                  <!-- Icon header -->
                  <div class="wrap-icon-header flex-w flex-r-m">

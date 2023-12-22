@@ -3,7 +3,7 @@
 <ul class="header-cart-wrapitem w-full">
     @php
         $cart = Session::get('cart');
-        $cartItems = $cart['products'];
+        $cartItems = !empty($cart) ? $cart['products'] : null;
         $total = 0;
     @endphp
     @if ($cartItems)

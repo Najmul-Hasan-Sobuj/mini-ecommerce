@@ -73,7 +73,7 @@
         </span>
     </div>
 
-   
+
 
     <!--===============================================================================================-->
     <script src="{{ asset('frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
@@ -123,9 +123,14 @@
     <script src="{{ asset('frontend/vendor/sweetalert/sweetalert.min.js') }}"></script>
     <script>
         @php
-            $cartAll = session()->get('cart', []);
-            $cart = $cartAll['products'];
-            $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+
+            $cartAll = Session::get('cart');
+            if (!empty($cartAll)) {
+                $cart = $cartAll['products'];
+                $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+            } else {
+                $total = 0;
+            }
         @endphp
         $(document).ready(function() {
             $('.shipping_method input[type="radio"]').change(function() {
@@ -373,7 +378,7 @@
 
 
     <!--===============================================================================================-->
-    
+
     @yield('scripts')
 
     <!--===============================================================================================-->
