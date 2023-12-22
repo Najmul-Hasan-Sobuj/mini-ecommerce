@@ -123,13 +123,11 @@
     <script src="{{ asset('frontend/vendor/sweetalert/sweetalert.min.js') }}"></script>
     <script>
         @php
-
-            $cartAll = Session::get('cart');
-            if (!empty($cartAll)) {
+            $cartAll = Session::get('cart', []);
+            $total = 0;
+            if (!empty($cartAll) && array_key_exists('products', $cartAll)) {
                 $cart = $cartAll['products'];
                 $total = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
-            } else {
-                $total = 0;
             }
         @endphp
         $(document).ready(function() {

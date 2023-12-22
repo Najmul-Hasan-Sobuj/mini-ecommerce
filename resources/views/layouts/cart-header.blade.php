@@ -1,11 +1,10 @@
 <!-- Cart -->
-
 <ul class="header-cart-wrapitem w-full">
     @php
-        $cart = Session::get('cart');
-        $cartItems = !empty($cart) ? $cart['products'] : null;
-        $total = 0;
-    @endphp
+    $cart = Session::get('cart');
+    $cartItems = !empty($cart) && array_key_exists('products', $cart) ? $cart['products'] : null;
+    $total = 0;
+@endphp
     @if ($cartItems)
         @foreach ($cartItems as $id => $cartItem)
             @php $total += $cartItem['price'] * $cartItem['quantity'] @endphp

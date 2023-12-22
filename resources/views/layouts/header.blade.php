@@ -71,15 +71,14 @@
                          </li>
                      </ul>
                  </div>
-                 @php
-                     $cartAll = Session::get('cart');
-                     if (!empty($cartAll)) {
-                         $cart = $cartAll['products'];
-                         $cartTotal = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
-                     } else {
-                         $cartTotal = 0;
-                     }
-                 @endphp
+                @php
+                    $cartAll = Session::get('cart');
+                    $cartTotal = 0;
+                    if (!empty($cartAll) && array_key_exists('products', $cartAll)) {
+                        $cart = $cartAll['products'];
+                        $cartTotal = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+                    }
+                @endphp
                  <!-- Icon header -->
                  <div class="wrap-icon-header flex-w flex-r-m">
                      <div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">

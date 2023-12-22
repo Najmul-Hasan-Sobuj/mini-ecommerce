@@ -16,7 +16,6 @@ class SslCommerzPaymentController extends Controller
         if (!empty($cartAll['shipping_cost'])) {
             $total = 0;
             $cartCount = 0;
-            // dd($cart['products']);
             foreach ($cart_items as $item) {
                 $cartCount += $item['quantity'];
                 $total += $item['price'] * $item['quantity'];
@@ -34,7 +33,6 @@ class SslCommerzPaymentController extends Controller
             session()->put('cart', $cart);
             $total = 0;
             $cartCount = 0;
-            // dd($cart['products']);
             foreach ($cart_items as $item) {
                 $cartCount += $item['quantity'];
                 $total += $item['price'] * $item['quantity'];
